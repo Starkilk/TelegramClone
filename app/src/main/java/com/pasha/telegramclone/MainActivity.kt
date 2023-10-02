@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     drawerItem: IDrawerItem<*>
                 ): Boolean {
-                    Toast.makeText(applicationContext, position,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, position.toString(),Toast.LENGTH_SHORT).show()
                     return false
                 }
 
