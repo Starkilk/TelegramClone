@@ -14,6 +14,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.pasha.telegramclone.databinding.ActivityMainBinding
+import com.pasha.telegramclone.ui.ChatsFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(mToolbar)//передаём НАШ тулбар на место тулбара по умолчанию
         createHeader()
         createDrawer()
+        //при запускек активити - открыть фрагмент с чатами
+        supportFragmentManager.beginTransaction().replace(R.id.dataContainer,ChatsFragment()).commit()
     }
 
 
