@@ -7,6 +7,7 @@ import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
+import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.pasha.telegramclone.databinding.ActivityMainBinding
@@ -35,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         createDrawer()
     }
 
+
+    //функция отрисовки Drawer menu
     private fun createDrawer() {
         mDrawer = DrawerBuilder()
             .withActivity(this)
@@ -43,11 +46,63 @@ class MainActivity : AppCompatActivity() {
             .withSelectedItem(-1)//какое меню будет открыто по умолчанию(Мы указываем, что никакое)
             .withAccountHeader(mHeader)
             .addDrawerItems(//собираем само выдвижное меню
-                PrimaryDrawerItem()
+                PrimaryDrawerItem()//СОЗДАТЬ ГРУППУ
                     .withIdentifier(100)//идентификационный номер пункта в меню
-                    .withIconTintingEnabled(true)//иконка
+                    .withIconTintingEnabled(true)//иконка вкл
                     .withName("New Group")//название пункта
                     .withSelectable(false)//выбран или нет
+                    .withIcon(R.drawable.ic_menu_create_groups),
+
+                PrimaryDrawerItem()//КОНТАКТЫ
+                    .withIdentifier(101)//идентификационный номер пункта в меню
+                    .withIconTintingEnabled(true)//иконка
+                    .withName("Contacts")//название пункта
+                    .withSelectable(false)//выбран или нет
+                    .withIcon(R.drawable.ic_menu_contacts),
+
+                PrimaryDrawerItem()//ЗВОНКИ
+                    .withIdentifier(102)//идентификационный номер пункта в меню
+                    .withIconTintingEnabled(true)//иконка
+                    .withName("Calls")//название пункта
+                    .withSelectable(false)//выбран или нет
+                    .withIcon(R.drawable.ic_menu_phone),
+
+                PrimaryDrawerItem()//СОЗДАТЬ КАНАЛ
+                    .withIdentifier(103)//идентификационный номер пункта в меню
+                    .withIconTintingEnabled(true)//иконка
+                    .withName("New channel")//название пункта
+                    .withSelectable(false)//выбран или нет
+                    .withIcon(R.drawable.ic_menu_create_channel),
+
+                PrimaryDrawerItem()//ИЗБРАННОЕ
+                    .withIdentifier(104)//идентификационный номер пункта в меню
+                    .withIconTintingEnabled(true)//иконка
+                    .withName("Saved Messages")//название пункта
+                    .withSelectable(false)//выбран или нет
+                    .withIcon(R.drawable.ic_menu_favorites),
+
+                PrimaryDrawerItem()//НАСТРОЙКИ
+                    .withIdentifier(105)//идентификационный номер пункта в меню
+                    .withIconTintingEnabled(true)//иконка
+                    .withName("Settings")//название пункта
+                    .withSelectable(false)//выбран или нет
+                    .withIcon(R.drawable.ic_menu_settings),
+
+                DividerDrawerItem(),//разделитель(линия)
+
+                PrimaryDrawerItem()//ПРИГЛАСИТЬ ДРУЗЕЙ
+                    .withIdentifier(106)//идентификационный номер пункта в меню
+                    .withIconTintingEnabled(true)//иконка
+                    .withName("Invite Friends")//название пункта
+                    .withSelectable(false)//выбран или нет
+                    .withIcon(R.drawable.ic_menu_invate),
+
+                PrimaryDrawerItem()//ВОПРОСЫ О ТЕЛЕГРАМ
+                    .withIdentifier(107)//идентификационный номер пункта в меню
+                    .withIconTintingEnabled(true)//иконка
+                    .withName("Telegram Features")//название пункта
+                    .withSelectable(false)//выбран или нет
+                    .withIcon(R.drawable.ic_menu_help),
             ).build()
     }
 
