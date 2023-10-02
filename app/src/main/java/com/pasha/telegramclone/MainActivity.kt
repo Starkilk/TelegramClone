@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import com.pasha.telegramclone.databinding.ActivityMainBinding
-import com.pasha.telegramclone.ui.ChatsFragment
+import com.pasha.telegramclone.ui.fragments.ChatsFragment
 import com.pasha.telegramclone.ui.objects.AppDrawer
 
 class MainActivity : AppCompatActivity() {
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         mAppDrawer.create()//вызвали методы, которы находятся в нашем классе AppDrawer
         //при запускек активити - открыть фрагмент с чатами
         supportFragmentManager.beginTransaction()
-            .replace(R.id.dataContainer,ChatsFragment()).commit()
+            .replace(R.id.dataContainer, ChatsFragment()).commit()
 
     }
 
