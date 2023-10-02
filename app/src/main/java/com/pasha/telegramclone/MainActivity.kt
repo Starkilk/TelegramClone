@@ -2,6 +2,8 @@ package com.pasha.telegramclone
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import android.widget.Toolbar
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
@@ -10,6 +12,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.pasha.telegramclone.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -103,7 +106,21 @@ class MainActivity : AppCompatActivity() {
                     .withName("Telegram Features")//название пункта
                     .withSelectable(false)//выбран или нет
                     .withIcon(R.drawable.ic_menu_help),
-            ).build()
+
+                //слушатель нажатий на пункты меню
+            ).withOnDrawerItemClickListener(object :Drawer.OnDrawerItemClickListener{
+                override fun onItemClick(
+                    view: View?,
+                    position: Int,
+                    drawerItem: IDrawerItem<*>
+                ): Boolean {
+                    Toast.makeText(applicationContext, position,Toast.LENGTH_SHORT).show()
+                    return false
+                }
+
+            }).build()
+
+
     }
 
     private fun createHeader() {//создали Header
