@@ -15,6 +15,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.pasha.telegramclone.databinding.ActivityMainBinding
 import com.pasha.telegramclone.ui.ChatsFragment
+import com.pasha.telegramclone.ui.SettingsFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -39,7 +40,8 @@ class MainActivity : AppCompatActivity() {
         createHeader()
         createDrawer()
         //при запускек активити - открыть фрагмент с чатами
-        supportFragmentManager.beginTransaction().replace(R.id.dataContainer,ChatsFragment()).commit()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.dataContainer,ChatsFragment()).commit()
     }
 
 
@@ -117,7 +119,12 @@ class MainActivity : AppCompatActivity() {
                     position: Int,
                     drawerItem: IDrawerItem<*>
                 ): Boolean {
-                    Toast.makeText(applicationContext, position.toString(),Toast.LENGTH_SHORT).show()
+                    //дейстрие при нажатии на пункт по позиции
+                    when(position){
+                        6 -> supportFragmentManager.beginTransaction()
+                            .addToBackStack(null)//поместили фрагмент в Бэк Стэк
+                            .replace(R.id.dataContainer,SettingsFragment()).commit()
+                    }
                     return false
                 }
 
