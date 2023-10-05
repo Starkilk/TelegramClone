@@ -18,16 +18,16 @@
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/settingsUserPhoto"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        android:layout_width="@dimen/settings_user_photo_width"
+        android:layout_height="@dimen/settings_user_photo_height"
         android:src="@drawable/default_photo"
-        app:civ_border_width="2dp"
+        app:civ_border_width="@dimen/settings_user_photo_border"
         app:civ_circle_background_color="@color/color_accent"
-        app:civ_border_color="#FF000000"
+
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"/>
+        android:layout_marginStart="@dimen/horizontal_margin"/>
 
     <TextView
         android:id="@+id/settingsUserName"
@@ -38,9 +38,9 @@
         app:layout_constraintStart_toEndOf="@id/settingsUserPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/settingsUserPhoto"
-        android:layout_marginTop="10dp"
-        android:textSize="16sp"
-        android:layout_marginStart="16dp"/>
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:textSize="@dimen/normalText"
+        android:layout_marginStart="@dimen/horizontal_margin"/>
 
         <TextView
             android:layout_width="0dp"
@@ -51,10 +51,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/settingsUserName"
 
-            android:textSize="14sp"
-            android:layout_marginStart="16dp"/>
+            android:textSize="@dimen/smallText"
+            android:layout_marginStart="@dimen/horizontal_margin"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/settingsTextAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_primary"
+        app:layout_constraintTop_toBottomOf="@id/settingsHeader"
+        android:text="@string/settings_account"
+        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/vertical_large_margin"
+        android:textStyle="bold"
+        android:textSize="@dimen/smallText"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
