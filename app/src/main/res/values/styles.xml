@@ -2,6 +2,8 @@
 <!--Стили. Их можно применять для однотипных вьюшек-->
 <resources>
 
+
+
     <style name="settingsButtons">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
