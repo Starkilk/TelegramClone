@@ -6,6 +6,7 @@
     <color name="color_primaryDark">#026CA1</color>
     <color name="color_accent">#FFFFFF</color>
     <color name="color_accent_darck">#C8C8C8</color>
+    <color name="color_grey">#939393</color>
 
 
     <!-- Material DEFAULT colors -->
