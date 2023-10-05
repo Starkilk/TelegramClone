@@ -67,6 +67,95 @@
         android:layout_marginTop="@dimen/vertical_large_margin"
         android:textStyle="bold"
         android:textSize="@dimen/smallText"/>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bSettingsChangeNumberPhone"
+        app:layout_constraintTop_toBottomOf="@id/settingsTextAccount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/settingsButtons">
+
+        <TextView
+            android:id="@+id/settingsPhoneNumber"
+            app:layout_constraintTop_toTopOf="@id/bSettingsChangeNumberPhone"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/setting_default_number"
+            style="@style/normalText" />
+
+        <TextView
+            android:id="@+id/settingsLabelPhoneNumber"
+            app:layout_constraintTop_toBottomOf="@id/settingsPhoneNumber"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/settings_lable_phone_number"
+            style="@style/smallText" />
+        
+        <View
+            app:layout_constraintTop_toBottomOf="@id/settingsLabelPhoneNumber"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/separator" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bSettingsChangeLogin"
+        app:layout_constraintTop_toBottomOf="@id/bSettingsChangeNumberPhone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/settingsButtons">
+
+        <TextView
+            android:id="@+id/settingsLogin"
+            app:layout_constraintTop_toTopOf="@id/bSettingsChangeLogin"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/settings_default_login"
+            style="@style/normalText" />
+
+        <TextView
+            android:id="@+id/settingsLabelLogin"
+            app:layout_constraintTop_toBottomOf="@id/settingsLogin"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/settings_lable_login"
+            style="@style/smallText" />
+
+        <View
+            app:layout_constraintTop_toBottomOf="@id/settingsLabelLogin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/separator" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bSettingsChangeBio"
+        app:layout_constraintTop_toBottomOf="@id/bSettingsChangeLogin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/settingsButtons">
+
+        <TextView
+            android:id="@+id/settingsBio"
+            app:layout_constraintTop_toTopOf="@id/bSettingsChangeBio"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/settings_default_bio"
+            style="@style/normalText" />
+
+        <TextView
+            android:id="@+id/settingsLabelBio"
+            app:layout_constraintTop_toBottomOf="@id/settingsBio"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/settings_lable_bio"
+            style="@style/smallText" />
+
+        <View
+            app:layout_constraintTop_toBottomOf="@id/settingsLabelBio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/separator" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
