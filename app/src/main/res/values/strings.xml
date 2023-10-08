@@ -15,4 +15,6 @@
     <string name="register_text_enter_code">Enter the cod</string>
     <string name="register_text_we_sent">We have sent an SMS with a code to Your phone</string>
     <string name="register_hint_default_code">_ _ _ _ _ _</string>
+    <string name="register_title_your_phone">Your phone number</string>
+    <string name="register_toast_enter_phone">Enter your phone number</string>
 </resources>
