@@ -11,4 +11,8 @@
     <string name="settings_lable_bio">Bio</string>
     <string name="settings_menu_edit_name">Edit Name</string>
     <string name="settings_menu_exit">Log Out</string>
+    <string name="cd_register_image">registerImage</string>
+    <string name="register_text_enter_code">Enter the cod</string>
+    <string name="register_text_we_sent">We have sent an SMS with a code to Your phone</string>
+    <string name="register_hint_default_code">_ _ _ _ _ _</string>
 </resources>
