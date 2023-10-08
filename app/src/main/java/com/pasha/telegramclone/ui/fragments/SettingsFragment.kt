@@ -16,6 +16,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)//включили наше меню в контексте
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
