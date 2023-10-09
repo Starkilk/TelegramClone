@@ -21,10 +21,17 @@ fun AppCompatActivity.replaceActivity(activity: AppCompatActivity){
 }
 
 //шаблонная функцияя для переключения между ФРАГМЕНТАМИ ИЗ АКТИВИТИ
-fun AppCompatActivity.replaceFragment(fragment: Fragment){
-    supportFragmentManager.beginTransaction()
-        .addToBackStack(null)
-        .replace(R.id.dataContainer, fragment).commit()
+fun AppCompatActivity.replaceFragment(fragment: Fragment, addStack:Boolean = true){
+    //если true, тогда добавляем фрагмент в стэк(сделали для того чтобы из старовых фрагментов на активити нельзя было выйти "Назад")
+    if(addStack){
+        supportFragmentManager.beginTransaction()
+            .addToBackStack(null)
+            .replace(R.id.dataContainer, fragment).commit()
+    }else{//иначе не добавляем
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.dataContainer, fragment).commit()
+    }
+
 }
 
 //шаблонная функцияя для переключения между ФРАГМЕНТАМИ ИЗ ФРАГМЕНТА
