@@ -25,6 +25,6 @@ class RegisterActivity : AppCompatActivity() {
         title = getString(R.string.register_title_your_phone)//установили заголовок на тулбар
 
         //при старте данного активити открываем фрагмент: EnterPhoneNumberFragment
-        replaceFragment(EnterPhoneNumberFragment())
+        replaceFragment(EnterPhoneNumberFragment(),false)
     }
 }
