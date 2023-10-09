@@ -14,6 +14,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.ui.fragments.SettingsFragment
+import com.pasha.telegramclone.utilits.replaceFragment
 
 class AppDrawer(val mainActivity:AppCompatActivity,  val toolbar: Toolbar) {
     private lateinit var mDrawer: Drawer//Drawer_layout выдвижное окно
@@ -101,9 +102,7 @@ class AppDrawer(val mainActivity:AppCompatActivity,  val toolbar: Toolbar) {
                 ): Boolean {
                     //дейстрие при нажатии на пункт по позиции
                     when(position){
-                        6 -> mainActivity.supportFragmentManager.beginTransaction()
-                            .addToBackStack(null)//поместили фрагмент в Бэк Стэк
-                            .replace(R.id.dataContainer, SettingsFragment()).commit()
+                        6 -> mainActivity.replaceFragment(SettingsFragment())
                     }
                     return false
                 }

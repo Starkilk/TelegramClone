@@ -8,6 +8,8 @@ import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.ActivityMainBinding
 import com.pasha.telegramclone.ui.fragments.ChatsFragment
 import com.pasha.telegramclone.ui.objects.AppDrawer
+import com.pasha.telegramclone.utilits.replaceActivity
+import com.pasha.telegramclone.utilits.replaceFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -33,15 +35,10 @@ class MainActivity : AppCompatActivity() {
             //если АВТОРИЗОВАН
             setSupportActionBar(mToolbar)//передаём НАШ тулбар на место тулбара по умолчанию
             mAppDrawer.create()//вызвали методы, которы находятся в нашем классе AppDrawer
-            //при запускек активити - открыть фрагмент с чатами
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.dataContainer,
-                    ChatsFragment())
-                .commit()
+            replaceFragment(ChatsFragment())//при запускек активити - открыть фрагмент с чатами
         }else{
             //если НЕ АВТОРИЗОВАН
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            replaceActivity(RegisterActivity())
         }
 
 

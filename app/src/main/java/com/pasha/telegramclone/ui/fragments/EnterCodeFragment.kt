@@ -11,6 +11,8 @@ import android.widget.Toast
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentEnterCodeBinding
 import com.pasha.telegramclone.databinding.FragmentEnterPhoneNumberBinding
+import com.pasha.telegramclone.utilits.AppTextWatcher
+import com.pasha.telegramclone.utilits.showToast
 
 
 class EnterCodeFragment : Fragment() {
@@ -25,26 +27,16 @@ class EnterCodeFragment : Fragment() {
     }
     override fun onStart() {
         super.onStart()
-        binding.registerInputCode.addTextChangedListener(object :TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
+        //слушатель введённого текста в EditText c помощью выведеного нами в отдельный класс:TextWatcher(а)
+        binding.registerInputCode.addTextChangedListener(AppTextWatcher{//передаём лямда функцию
                 val string = binding.registerInputCode.text.toString()
                 if(string.length == 6){
                     verifiCode()
                 }
-            }
-
         })
     }
 
     private fun verifiCode() {
-        Toast.makeText(activity,"Okey",Toast.LENGTH_SHORT).show()
+        showToast("Okey")
     }
 }

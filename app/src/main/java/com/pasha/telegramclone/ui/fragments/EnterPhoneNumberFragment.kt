@@ -5,9 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentEnterPhoneNumberBinding
+import com.pasha.telegramclone.utilits.replaceFragment
+import com.pasha.telegramclone.utilits.showToast
 
 
 class EnterPhoneNumberFragment : Fragment() {
@@ -17,7 +18,7 @@ private lateinit var binding: FragmentEnterPhoneNumberBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentEnterPhoneNumberBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -30,13 +31,10 @@ private lateinit var binding: FragmentEnterPhoneNumberBinding
     private fun sendCode() {
         //если номер не введён:
         if(binding.registerInputPhoneNumber.text.toString().isEmpty()){
-            Toast.makeText(activity, getString(R.string.register_toast_enter_phone),Toast.LENGTH_SHORT).show()
+            showToast(getString(R.string.register_toast_enter_phone))
         }else{
             //если введён, то открываем: EnterCodeFragment
-            fragmentManager?.beginTransaction()
-                ?.replace(R.id.registerDataContainer,EnterCodeFragment())
-                ?.addToBackStack(null)//записали в back stack
-                ?.commit()
+            replaceFragment(EnterCodeFragment())
         }
     }
 
