@@ -10,6 +10,7 @@ import com.pasha.telegramclone.databinding.ActivityMainBinding
 import com.pasha.telegramclone.ui.fragments.ChatsFragment
 import com.pasha.telegramclone.ui.objects.AppDrawer
 import com.pasha.telegramclone.utilits.AUTH
+import com.pasha.telegramclone.utilits.initFirebase
 import com.pasha.telegramclone.utilits.replaceActivity
 import com.pasha.telegramclone.utilits.replaceFragment
 
@@ -55,6 +56,9 @@ class MainActivity : AppCompatActivity() {
         mAppDrawer = AppDrawer(this,mToolbar)
         //проиниалицировали объект FirebaseAuth
         AUTH = FirebaseAuth.getInstance()
+
+        //инициализируем базу данных
+        initFirebase()
     }
 
 }

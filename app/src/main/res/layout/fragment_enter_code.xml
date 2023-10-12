@@ -44,8 +44,9 @@
         app:layout_constraintTop_toBottomOf="@id/registerTextEnterCode" />
 
     <EditText
+        android:layout_width="wrap_content"
         android:id="@+id/registerInputCode"
-        style="@style/edinRegisterText"
+        style="@style/editRegisterText"
         android:autofillHints=""
         android:gravity="center"
         android:hint="@string/register_hint_default_code"

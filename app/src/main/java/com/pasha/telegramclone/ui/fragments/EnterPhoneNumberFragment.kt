@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.activities.MainActivity
@@ -78,8 +79,14 @@ class EnterPhoneNumberFragment : Fragment() {
 
     private fun authUser() {
         mPhoneNumber = binding.registerInputPhoneNumber.text.toString()
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            mPhoneNumber, 60, TimeUnit.SECONDS, activity as RegisterActivity, mCallback
+        PhoneAuthProvider.verifyPhoneNumber(
+            PhoneAuthOptions
+                .newBuilder(FirebaseAuth.getInstance())
+                .setActivity(activity as RegisterActivity)
+                .setPhoneNumber(mPhoneNumber)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setCallbacks(mCallback)
+                .build()
         )
     }
 

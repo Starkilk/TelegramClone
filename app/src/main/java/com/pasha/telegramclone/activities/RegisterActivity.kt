@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.ActivityRegisterBinding
 import com.pasha.telegramclone.ui.fragments.EnterPhoneNumberFragment
+import com.pasha.telegramclone.utilits.initFirebase
 import com.pasha.telegramclone.utilits.replaceFragment
 
 class RegisterActivity : AppCompatActivity() {
@@ -15,6 +16,8 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //инициализируем базу данных
+        initFirebase()
     }
 
     //при старте данного активити открываем фрагмент: EnterPhoneNumberFragment

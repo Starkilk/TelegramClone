@@ -8,11 +8,12 @@
 
 
     <EditText
+        android:hint="@string/register_phone_hint"
         android:id="@+id/registerInputPhoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/edinRegisterText" />
+        style="@style/editRegisterText" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/bRegisterNext"
