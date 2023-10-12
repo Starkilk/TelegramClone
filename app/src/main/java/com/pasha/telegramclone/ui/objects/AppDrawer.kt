@@ -3,6 +3,7 @@ package com.pasha.telegramclone.ui.objects
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
@@ -19,11 +20,33 @@ import com.pasha.telegramclone.utilits.replaceFragment
 class AppDrawer(val mainActivity:AppCompatActivity,  val toolbar: Toolbar) {
     private lateinit var mDrawer: Drawer//Drawer_layout выдвижное окно
     private lateinit var mHeader: AccountHeader//часть в Drawer где будет аватар, имя аккаунта и тд
+    private lateinit var mDrawerLayout: DrawerLayout
 
     //метод, который мы вызовем на MainActivity после создания экземпляра этого класса
     fun create(){
         createHeader()
         createDrawer()
+        mDrawerLayout = mDrawer.drawerLayout
+    }
+
+    //функция, которая будет откулючать выдвижное меню
+    fun disableDrawer(){
+        mDrawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false//отключили гамбургер
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)//на место гамбургера поставили кнопку "Назад"
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)//заблокировали Drawer в закрытом состоянии
+        toolbar.setNavigationOnClickListener {//что делаеть принажатии кнопки "Назад"(возвращаемся назад по стеку)
+            mainActivity.supportFragmentManager.popBackStack()
+        }
+    }
+
+    //функция, которая будет включать выдвижное меню
+    fun enableDrawer(){
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)//отключили кнопку "Назад"
+        mDrawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = true//включили гамбургер
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)//разблокировали Drawer\
+        toolbar.setNavigationOnClickListener {
+            mDrawer.openDrawer()//открываем Drawer
+        }
     }
 
     //функция отрисовки Drawer menu

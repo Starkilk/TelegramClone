@@ -17,7 +17,7 @@ import com.pasha.telegramclone.utilits.replaceFragment
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var mToolbar: Toolbar
-    private lateinit var mAppDrawer: AppDrawer//передали в мэйн активити наш класс AppDrawer
+     lateinit var mAppDrawer: AppDrawer//передали в мэйн активити наш класс AppDrawer
 
 
 

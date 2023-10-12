@@ -18,6 +18,12 @@ import com.pasha.telegramclone.utilits.replaceActivity
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
+    override fun onStart() {
+        super.onStart()
+        //при запуске фрагмента настроек Draewer отключается
+        (activity as MainActivity).mAppDrawer.disableDrawer()
+    }
+
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)//включили наше меню в контексте
@@ -37,5 +43,11 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
             }
         }
         return true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //при остановке фрагмента настроек Draewer включается
+        (activity as MainActivity).mAppDrawer.enableDrawer()
     }
 }

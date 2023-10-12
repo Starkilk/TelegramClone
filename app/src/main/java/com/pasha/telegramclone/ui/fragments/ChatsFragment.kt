@@ -7,9 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentChatsBinding
+import com.pasha.telegramclone.databinding.FragmentEnterCodeBinding
 
 
-class ChatsFragment : BaseFragment(R.layout.fragment_chats) {
+class ChatsFragment : Fragment(R.layout.fragment_chats) {
+
+    private lateinit var binding: FragmentChatsBinding
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentChatsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onResume() {
         super.onResume()

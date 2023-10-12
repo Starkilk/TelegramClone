@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.pasha.telegramclone.R
+import com.pasha.telegramclone.activities.MainActivity
 
 
 open class BaseFragment(val layout:Int) : Fragment() {
@@ -19,9 +20,6 @@ open class BaseFragment(val layout:Int) : Fragment() {
         return mRootView
     }
 
-    override fun onStart() {
-        super.onStart()
 
-    }
 
 }
