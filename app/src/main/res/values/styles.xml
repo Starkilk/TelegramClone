@@ -45,7 +45,7 @@
         <item name="android:background">@color/color_primary</item>
     </style>
 
-    <style name="editRegisterText">
+    <style name="editText">
         <item name="android:textColorHint">@color/color_grey</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

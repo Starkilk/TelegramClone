@@ -14,6 +14,7 @@ import com.pasha.telegramclone.activities.RegisterActivity
 import com.pasha.telegramclone.databinding.FragmentSettingsBinding
 import com.pasha.telegramclone.utilits.AUTH
 import com.pasha.telegramclone.utilits.replaceActivity
+import com.pasha.telegramclone.utilits.replaceFragment
 
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
@@ -41,6 +42,8 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
                 AUTH.signOut()//выходим из аккаунта
                 (activity as MainActivity).replaceActivity(RegisterActivity())
             }
+            //при виборе "Edit name" открываем ChangeNameFragment()
+            R.id.settingsMenuChangeName -> replaceFragment(ChangeNameFragment())
         }
         return true
     }

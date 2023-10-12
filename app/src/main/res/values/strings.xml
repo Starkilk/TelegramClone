@@ -18,4 +18,6 @@
     <string name="register_title_your_phone">Your phone number</string>
     <string name="register_toast_enter_phone">Enter your phone number</string>
     <string name="register_phone_hint">+11111111111</string>
+    <string name="settings_hint_input_name">Name</string>
+    <string name="settings_hint_input_sername">Surname</string>
 </resources>

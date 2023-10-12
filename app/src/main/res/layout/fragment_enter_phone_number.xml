@@ -13,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/editRegisterText" />
+        style="@style/editText" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/bRegisterNext"
