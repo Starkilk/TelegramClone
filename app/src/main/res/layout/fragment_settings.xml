@@ -31,7 +31,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Pavel"
+        tools:text="Pavel"
         app:layout_constraintStart_toEndOf="@id/settingsUserPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/settingsUserPhoto"
@@ -40,10 +40,11 @@
         android:layout_marginStart="@dimen/horizontal_margin"/>
 
         <TextView
+            android:id="@+id/settingStatus"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/color_accent_darck"
-            android:text="online"
+            tools:text="online"
             app:layout_constraintStart_toEndOf="@id/settingsUserPhoto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/settingsFullName"
@@ -76,7 +77,7 @@
             android:id="@+id/settingsPhoneNumber"
             app:layout_constraintTop_toTopOf="@id/bSettingsChangeNumberPhone"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/setting_default_number"
+            tools:text="@string/setting_default_number"
             style="@style/normalText" />
 
         <TextView
@@ -105,7 +106,7 @@
             android:id="@+id/settingsUsername"
             app:layout_constraintTop_toTopOf="@id/bSettingsChangeUsername"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/settings_default_login"
+            tools:text="@string/settings_default_login"
             style="@style/normalText" />
 
         <TextView
@@ -134,7 +135,7 @@
             android:id="@+id/settingsBio"
             app:layout_constraintTop_toTopOf="@id/bSettingsChangeBio"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/settings_default_bio"
+            tools:text="@string/settings_default_bio"
             style="@style/normalText" />
 
         <TextView
