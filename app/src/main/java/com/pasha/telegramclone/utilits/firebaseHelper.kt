@@ -7,17 +7,17 @@ import com.pasha.telegramclone.models.User
 
 lateinit var AUTH:FirebaseAuth
 lateinit var REF_DATABASE_ROOT: DatabaseReference
-lateinit var USER:User
-
+lateinit var USER:User//наш юзер
+lateinit var UID:String//уникальный идэнтификатор пользователя
 
 
 //константы в которые мы запишем данные польхователя(для работы с Database)
 const val NODE_USERS = "users"
-lateinit var UID:String
+
 const val CHILD_ID = "id"
 const val CHILD_PHONE = "phone"
 const val CHILD_USERNAME = "username"
-const val CHILD_FULLNAME = "fulname"
+const val CHILD_FULLNAME = "fullname"
 
 fun initFirebase(){
     AUTH = FirebaseAuth.getInstance()
