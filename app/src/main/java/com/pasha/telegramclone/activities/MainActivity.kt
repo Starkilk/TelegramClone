@@ -5,11 +5,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.ActivityMainBinding
+import com.pasha.telegramclone.models.User
 import com.pasha.telegramclone.ui.fragments.ChatsFragment
 import com.pasha.telegramclone.ui.objects.AppDrawer
 import com.pasha.telegramclone.utilits.AUTH
+import com.pasha.telegramclone.utilits.AppValueEventListener
+import com.pasha.telegramclone.utilits.NODE_USERS
+import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
+import com.pasha.telegramclone.utilits.UID
+import com.pasha.telegramclone.utilits.USER
 import com.pasha.telegramclone.utilits.initFirebase
 import com.pasha.telegramclone.utilits.replaceActivity
 import com.pasha.telegramclone.utilits.replaceFragment
@@ -59,6 +68,14 @@ class MainActivity : AppCompatActivity() {
 
         //инициализируем базу данных
         initFirebase()
+        initUser()
+    }
+
+    private fun initUser() {
+        REF_DATABASE_ROOT.child(NODE_USERS).child(UID)
+            .addListenerForSingleValueEvent(AppValueEventListener{
+                USER = it.getValue(User::class.java) ?:User()
+            })
     }
 
 }

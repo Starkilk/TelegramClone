@@ -20,4 +20,6 @@
     <string name="register_phone_hint">+11111111111</string>
     <string name="settings_hint_input_name">Name</string>
     <string name="settings_hint_input_sername">Surname</string>
+    <string name="setting_toast_name_is_empty">Имя не может быть пустым</string>
+    <string name="toast_data_update">Данные обновлены</string>
 </resources>

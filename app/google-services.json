@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "542186006829",
-    "project_id": "telegramclone-74316",
-    "storage_bucket": "telegramclone-74316.appspot.com"
+    "project_number": "648605244032",
+    "firebase_url": "https://telegram-c5118-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "telegram-c5118",
+    "storage_bucket": "telegram-c5118.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:542186006829:android:e64b4cc0d4d4c105234ba4",
+        "mobilesdk_app_id": "1:648605244032:android:b82505161bbe7d16d32465",
         "android_client_info": {
           "package_name": "com.pasha.telegramclone"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBVjoMmFX8SPhCVSNA-07TsOoeBqW4-Cew"
+          "current_key": "AIzaSyBg9SEV7r_OZujFd4Xjryq827whMnDlgoA"
         }
       ],
       "services": {

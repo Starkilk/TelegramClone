@@ -46,13 +46,14 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) : Fragment() {
     }
 
     private fun enterCode() {
-        val code = binding.registerInputCode.text.toString()//получаем код который юзер ввёл в EditText
+        val code =
+            binding.registerInputCode.text.toString()//получаем код который юзер ввёл в EditText
         val credential = PhoneAuthProvider.getCredential(id, code)//передаём id и code
 
         //авторизация/регистрация пользователя
         AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {//если позьзователь авторизировался и всё хорошо
-                /*val uid = AUTH.currentUser?.uid.toString()//проинициализировали id
+                val uid = AUTH.currentUser?.uid.toString()//проинициализировали id
                 //вписываем все данные о пользователи в объект mutableMapOf, чтобы передать этот объект в БД
                 //это всё выглядит наглядно в самом Firebase(сайт)
                 val dateMap = mutableMapOf<String, Any>()
@@ -64,16 +65,18 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) : Fragment() {
                 //передали данные о пользователе в БД(создали ноду id пользователя и у него заполнили все данные)
                 REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dateMap)
                     .addOnCompleteListener { taskSecond ->
-                       //действия после занесенияя данных в БД
-                        if (taskSecond.isSuccessful) {//если task2.всё хорошо, то :*/
+                        //действия после занесенияя данных в БД
+                        if (taskSecond.isSuccessful) {//если task2.всё хорошо, то :
                             showToast("Welcome!")
                             (activity as RegisterActivity).replaceActivity(MainActivity())
-                        //} else showToast("Mistake")//если не всё хорошо, то покажет проблему
+                            //} else showToast("Mistake")//если не всё хорошо, то покажет проблему
 
 
-                    }else showToast("Mistake")//если произошла ошибка
+                        } else showToast("Mistake")//если произошла ошибка
 
 
+                    }
+            }
         }
     }
 }

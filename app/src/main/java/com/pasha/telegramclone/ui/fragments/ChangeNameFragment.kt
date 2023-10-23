@@ -11,6 +11,12 @@ import android.view.ViewGroup
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.activities.MainActivity
 import com.pasha.telegramclone.databinding.FragmentChangeNameBinding
+import com.pasha.telegramclone.utilits.CHILD_FULLNAME
+import com.pasha.telegramclone.utilits.NODE_USERS
+import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
+import com.pasha.telegramclone.utilits.UID
+import com.pasha.telegramclone.utilits.USER
+import com.pasha.telegramclone.utilits.showToast
 
 
 class ChangeNameFragment : Fragment() {
@@ -27,6 +33,9 @@ class ChangeNameFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)//включили наше меню c галочкой
+        val fullnameList = USER.fullname.split(" ")
+        binding.settingsInputName.setText(fullnameList[0])
+        binding.settingsInputSurname.setText(fullnameList[1])
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -44,6 +53,21 @@ class ChangeNameFragment : Fragment() {
     private fun changeName() {
         val name = binding.settingsInputName.text.toString()
         val sername = binding.settingsInputSurname.text.toString()
+
+        if(name.isEmpty()){//если поле name пустое, то Toast
+            showToast(getString(R.string.setting_toast_name_is_empty))
+        }else{
+            //иначе заменяем fullname в Firebase(на сайте)
+            val fullname = "$name $sername"
+            REF_DATABASE_ROOT.child(NODE_USERS).child(UID).child(CHILD_FULLNAME)
+                .setValue(fullname).addOnCompleteListener{
+                    if(it.isSuccessful){
+                        showToast(getString(R.string.toast_data_update))
+                        USER.fullname = fullname
+                        fragmentManager?.popBackStack()
+                    }
+                }
+        }
     }
 
 }
