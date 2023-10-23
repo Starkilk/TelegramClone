@@ -28,9 +28,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mToolbar: Toolbar
      lateinit var mAppDrawer: AppDrawer//передали в мэйн активити наш класс AppDrawer
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -71,10 +68,11 @@ class MainActivity : AppCompatActivity() {
         initUser()
     }
 
+    //считываем данные из бд в объект User
     private fun initUser() {
-        REF_DATABASE_ROOT.child(NODE_USERS).child(UID)
-            .addListenerForSingleValueEvent(AppValueEventListener{
-                USER = it.getValue(User::class.java) ?:User()
+        REF_DATABASE_ROOT.child(NODE_USERS).child(UID)//добрались до данных о польхователе
+            .addListenerForSingleValueEvent(AppValueEventListener{//слушатель, который смотрит информацию из БД
+                USER = it.getValue(User::class.java) ?:User()//вписали в нашего USER(a) данные из бд
             })
     }
 
