@@ -29,10 +29,16 @@ class ChangeNameFragment : Fragment() {
         binding  = FragmentChangeNameBinding.inflate(inflater, container, false)
         return binding.root
     }
+    override fun onStart() {
+        super.onStart()
+        //при запуске фрагмента настроек Draewer отключается
+        (activity as MainActivity).mAppDrawer.disableDrawer()
+    }
 
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)//включили наше меню c галочкой
+        //достали имя и фамилию из USER и при открытии Edit Name данные уже будут в поляях
         val fullnameList = USER.fullname.split(" ")
         binding.settingsInputName.setText(fullnameList[0])
         binding.settingsInputSurname.setText(fullnameList[1])
@@ -50,6 +56,7 @@ class ChangeNameFragment : Fragment() {
         return true
     }
 
+    //функция октивируемая при нажатии на галочку(сохранить изменённое имя)
     private fun changeName() {
         val name = binding.settingsInputName.text.toString()
         val sername = binding.settingsInputSurname.text.toString()
@@ -59,15 +66,20 @@ class ChangeNameFragment : Fragment() {
         }else{
             //иначе заменяем fullname в Firebase(на сайте)
             val fullname = "$name $sername"
-            REF_DATABASE_ROOT.child(NODE_USERS).child(UID).child(CHILD_FULLNAME)
-                .setValue(fullname).addOnCompleteListener{
+            REF_DATABASE_ROOT.child(NODE_USERS).child(UID).child(CHILD_FULLNAME)//добрались до пункта fullname в БД
+                .setValue(fullname).addOnCompleteListener{//обновляем fullname
                     if(it.isSuccessful){
                         showToast(getString(R.string.toast_data_update))
-                        USER.fullname = fullname
-                        fragmentManager?.popBackStack()
+                        USER.fullname = fullname//обновили fullname
+                        parentFragmentManager.popBackStack()//вернулись назад по стэку
                     }
                 }
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        //при остановке фрагмента настроек Draewer включается
+        (activity as MainActivity).mAppDrawer.enableDrawer()
+    }
 }
