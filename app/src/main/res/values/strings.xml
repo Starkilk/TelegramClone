@@ -22,4 +22,5 @@
     <string name="settings_hint_input_sername">Surname</string>
     <string name="setting_toast_name_is_empty">Имя не может быть пустым</string>
     <string name="toast_data_update">Данные обновлены</string>
+    <string name="settings_hint_input_username">username</string>
 </resources>
