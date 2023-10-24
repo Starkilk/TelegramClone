@@ -50,6 +50,9 @@ private lateinit var binding:FragmentSettingsBinding
         binding.settingsPhoneNumber.text = USER.phone
         binding.settingStatus.text = USER.status
         binding.settingsUsername.text = USER.username
+
+        //переход на фрагмент изменения уникального имени пользователя
+        binding.bSettingsChangeUsername.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
