@@ -38,10 +38,16 @@ class ChangeNameFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         setHasOptionsMenu(true)//включили наше меню c галочкой
-        //достали имя и фамилию из USER и при открытии Edit Name данные уже будут в поляях
+        //достали имя и фамилию из USER и при открытии Edit Name данные уже будут в полях
         val fullnameList = USER.fullname.split(" ")
-        binding.settingsInputName.setText(fullnameList[0])
-        binding.settingsInputSurname.setText(fullnameList[1])
+        //проверка, чтобы приложение не крашилась при отсутствии ветки fullname в БД у пользователя
+        if (fullnameList.size > 1){
+            binding.settingsInputName.setText(fullnameList[0])
+            binding.settingsInputSurname.setText(fullnameList[1])
+        }else{
+            binding.settingsInputName.setText(fullnameList[0])
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
