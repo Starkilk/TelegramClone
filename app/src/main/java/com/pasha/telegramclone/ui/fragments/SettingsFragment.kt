@@ -53,6 +53,9 @@ private lateinit var binding:FragmentSettingsBinding
 
         //переход на фрагмент изменения уникального имени пользователя
         binding.bSettingsChangeUsername.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
+
+        //переход на фрагмент изменения информации о пользователе
+        binding.bSettingsChangeBio.setOnClickListener { replaceFragment(ChangeBioFragment()) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
