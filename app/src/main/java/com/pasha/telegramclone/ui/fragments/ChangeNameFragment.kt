@@ -19,7 +19,7 @@ import com.pasha.telegramclone.utilits.USER
 import com.pasha.telegramclone.utilits.showToast
 
 
-class ChangeNameFragment : Fragment() {
+class ChangeNameFragment : BaseChangeFragment() {
   private lateinit var binding: FragmentChangeNameBinding
 
     override fun onCreateView(
@@ -31,13 +31,17 @@ class ChangeNameFragment : Fragment() {
     }
     override fun onStart() {
         super.onStart()
-        //при запуске фрагмента настроек Draewer отключается
-        (activity as MainActivity).mAppDrawer.disableDrawer()
+
     }
 
     override fun onResume() {
         super.onResume()
-        setHasOptionsMenu(true)//включили наше меню c галочкой
+
+        initFullname()
+
+    }
+
+    private fun initFullname() {
         //достали имя и фамилию из USER и при открытии Edit Name данные уже будут в полях
         val fullnameList = USER.fullname.split(" ")
         //проверка, чтобы приложение не крашилась при отсутствии ветки fullname в БД у пользователя
@@ -47,23 +51,11 @@ class ChangeNameFragment : Fragment() {
         }else{
             binding.settingsInputName.setText(fullnameList[0])
         }
-
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        (activity as MainActivity).menuInflater.inflate(R.menu.settings_menu_confirm,menu)//надулим разметку нашего меню
-
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.settings_confirm_change -> changeName()
-        }
-        return true
-    }
 
     //функция октивируемая при нажатии на галочку(сохранить изменённое имя)
-    private fun changeName() {
+    override fun change() {
         val name = binding.settingsInputName.text.toString()
         val sername = binding.settingsInputSurname.text.toString()
 
@@ -85,7 +77,6 @@ class ChangeNameFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        //при остановке фрагмента настроек Draewer включается
-        (activity as MainActivity).mAppDrawer.enableDrawer()
+
     }
 }

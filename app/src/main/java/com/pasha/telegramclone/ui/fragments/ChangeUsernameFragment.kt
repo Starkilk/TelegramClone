@@ -24,7 +24,7 @@ import com.pasha.telegramclone.utilits.showToast
 import java.util.Locale
 
 
-class ChangeUsernameFragment : Fragment() {
+class ChangeUsernameFragment : BaseChangeFragment() {
     private lateinit var binding:FragmentChangeUsernameBinding
 
     lateinit var mNewUsername: String
@@ -39,31 +39,17 @@ class ChangeUsernameFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        //при запуске фрагмента настроек Draewer отключается
-        (activity as MainActivity).mAppDrawer.disableDrawer()
+
     }
     override fun onResume() {
         super.onResume()
-        setHasOptionsMenu(true)
         //устанавливаем в поле для ввода нового идентификатора старое имя пользователя
         binding.settingsInputUsername.setText(USER.username)
     }
 
-    //метод который делают нам галочку в правом верхнем углу
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        (activity as MainActivity).menuInflater.inflate(R.menu.settings_menu_confirm,menu)//надулим разметку нашего меню
 
-    }
 
-    //слушатель нажатия на галочку
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.settings_confirm_change -> change()
-        }
-        return true
-    }
-
-    private fun change() {
+    override fun change() {//метод из BaseChangeFragment
         //поместили в переменную то, что пользователь ввёл
         mNewUsername = binding.settingsInputUsername.text.toString().lowercase(Locale.getDefault())
         if(mNewUsername.isEmpty()){
@@ -120,7 +106,6 @@ class ChangeUsernameFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        //при остановке фрагмента настроек Draewer включается
-        (activity as MainActivity).mAppDrawer.enableDrawer()
+
     }
 }
