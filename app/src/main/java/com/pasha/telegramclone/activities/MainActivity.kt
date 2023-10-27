@@ -37,14 +37,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-    }
 
-    override fun onStart() {
-        super.onStart()
         APP_ACTIVITY = this
         initFields()//иницифлизировать поля
         initFunc()//инициализация функциональности активити
     }
+
+
 
     private fun initFunc() {
         //проверка на авторизованность пользователя
@@ -82,35 +81,7 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
-            && resultCode == RESULT_OK && data != null){
 
-            val uri = CropImage.getActivityResult(data).uri//получаем результат обрезания
-            val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)//путь
-                .child(CURRENT_UID)
-            path.putFile(uri).addOnCompleteListener{task1->//передали в storage наше фото
-
-                if (task1.isSuccessful){
-                    path.downloadUrl.addOnCompleteListener {task2->
-
-                        if(task2.isSuccessful){
-                            val photoUrl = task2.result.toString()//получаем адрес в интернете, по которому мы обращаемся к картинке
-                            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
-                                .child(CHILD_PHOTO_URL).setValue(photoUrl)//в БД поместили url нашей фотографии
-                                .addOnCompleteListener {
-                                    if (it.isSuccessful){
-                                        showToast(getString(R.string.toast_data_update))
-                                        USER.photoUrl = photoUrl//в объект записали url нашей фотографии
-                                    }
-                                }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     //метод, который сворацивает клавиатуру после подтверждения введённых данных
     fun hideKeyboard(){

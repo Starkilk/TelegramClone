@@ -16,9 +16,12 @@ import com.pasha.telegramclone.activities.RegisterActivity
 import com.pasha.telegramclone.databinding.FragmentSettingsBinding
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AUTH
+import com.pasha.telegramclone.utilits.CHILD_PHOTO_URL
 import com.pasha.telegramclone.utilits.FOLDER_PROFILE_IMAGE
 import com.pasha.telegramclone.utilits.REF_STORAGE_ROOT
 import com.pasha.telegramclone.utilits.CURRENT_UID
+import com.pasha.telegramclone.utilits.NODE_USERS
+import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
 import com.pasha.telegramclone.utilits.USER
 import com.pasha.telegramclone.utilits.replaceActivity
 import com.pasha.telegramclone.utilits.replaceFragment
@@ -74,7 +77,7 @@ private lateinit var binding:FragmentSettingsBinding
             .setAspectRatio(1,1)//указали, что кропер будет пропорционален
             .setRequestedSize(600,600)//обрезаем картинку, чтобы она занимала меньше места
             .setCropShape(CropImageView.CropShape.OVAL)//делаем картинку овальной
-            .start(APP_ACTIVITY)
+            .start(APP_ACTIVITY, this)
     }
 
 
@@ -100,5 +103,35 @@ private lateinit var binding:FragmentSettingsBinding
         super.onStop()
         //при остановке фрагмента настроек Draewer включается
         (activity as MainActivity).mAppDrawer.enableDrawer()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+            && resultCode == RESULT_OK && data != null){
+
+            val uri = CropImage.getActivityResult(data).uri//получаем результат обрезания
+            val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)//путь
+                .child(CURRENT_UID)
+            path.putFile(uri).addOnCompleteListener{task1->//передали в storage наше фото
+
+                if (task1.isSuccessful){
+                    path.downloadUrl.addOnCompleteListener {task2->
+
+                        if(task2.isSuccessful){
+                            val photoUrl = task2.result.toString()//получаем адрес в интернете, по которому мы обращаемся к картинке
+                            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
+                                .child(CHILD_PHOTO_URL).setValue(photoUrl)//в БД поместили url нашей фотографии
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful){
+                                        showToast(getString(R.string.toast_data_update))
+                                        USER.photoUrl = photoUrl//в объект записали url нашей фотографии
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
