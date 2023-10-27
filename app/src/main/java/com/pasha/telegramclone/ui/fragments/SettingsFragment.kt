@@ -23,9 +23,11 @@ import com.pasha.telegramclone.utilits.CURRENT_UID
 import com.pasha.telegramclone.utilits.NODE_USERS
 import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
 import com.pasha.telegramclone.utilits.USER
+import com.pasha.telegramclone.utilits.donwloadAndSetImage
 import com.pasha.telegramclone.utilits.replaceActivity
 import com.pasha.telegramclone.utilits.replaceFragment
 import com.pasha.telegramclone.utilits.showToast
+import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 
@@ -124,6 +126,8 @@ private lateinit var binding:FragmentSettingsBinding
                                 .child(CHILD_PHOTO_URL).setValue(photoUrl)//в БД поместили url нашей фотографии
                                 .addOnCompleteListener {
                                     if (it.isSuccessful){
+                                        binding.settingsUserPhoto.donwloadAndSetImage(photoUrl)//установка картинки
+
                                         showToast(getString(R.string.toast_data_update))
                                         USER.photoUrl = photoUrl//в объект записали url нашей фотографии
                                     }

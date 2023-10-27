@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.activities.RegisterActivity
 import com.pasha.telegramclone.ui.fragments.ChatsFragment
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 
 //шаблонная функция которая фозволяет вызывать Toast во фрагментах
 fun showToast(message: String){
@@ -47,4 +49,12 @@ fun Fragment.replaceFragment(fragment: Fragment){
 fun hideKeyboard(){
     val imm: InputMethodManager = APP_ACTIVITY.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(APP_ACTIVITY.window.decorView.windowToken,0)
+}
+
+fun CircleImageView.donwloadAndSetImage(url:String){
+    //УСТАНОВКА КАРТИНКИ
+    Picasso.get()
+        .load(url)//скачиваем картинку, которую установим на аватарку
+        .placeholder(R.drawable.default_photo)//картинка, которая установится, если нет интернета
+        .into(this)//указываем в какое View устанавливать картинку
 }
