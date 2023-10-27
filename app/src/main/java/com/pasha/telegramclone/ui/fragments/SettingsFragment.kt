@@ -2,6 +2,7 @@ package com.pasha.telegramclone.ui.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.storage.StorageReference
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.activities.MainActivity
 import com.pasha.telegramclone.activities.RegisterActivity
@@ -24,6 +26,9 @@ import com.pasha.telegramclone.utilits.NODE_USERS
 import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
 import com.pasha.telegramclone.utilits.USER
 import com.pasha.telegramclone.utilits.donwloadAndSetImage
+import com.pasha.telegramclone.utilits.getUrlFromStorage
+import com.pasha.telegramclone.utilits.putImageToStorage
+import com.pasha.telegramclone.utilits.putUrlToDatabase
 import com.pasha.telegramclone.utilits.replaceActivity
 import com.pasha.telegramclone.utilits.replaceFragment
 import com.pasha.telegramclone.utilits.showToast
@@ -115,27 +120,21 @@ private lateinit var binding:FragmentSettingsBinding
             val uri = CropImage.getActivityResult(data).uri//получаем результат обрезания
             val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)//путь
                 .child(CURRENT_UID)
-            path.putFile(uri).addOnCompleteListener{task1->//передали в storage наше фото
-
-                if (task1.isSuccessful){
-                    path.downloadUrl.addOnCompleteListener {task2->
-
-                        if(task2.isSuccessful){
-                            val photoUrl = task2.result.toString()//получаем адрес в интернете, по которому мы обращаемся к картинке
-                            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)
-                                .child(CHILD_PHOTO_URL).setValue(photoUrl)//в БД поместили url нашей фотографии
-                                .addOnCompleteListener {
-                                    if (it.isSuccessful){
-                                        binding.settingsUserPhoto.donwloadAndSetImage(photoUrl)//установка картинки
-
-                                        showToast(getString(R.string.toast_data_update))
-                                        USER.photoUrl = photoUrl//в объект записали url нашей фотографии
-                                    }
-                                }
-                        }
+            
+            putImageToStorage(uri,path){
+                //этот код запистится после отработки слушателя
+                getUrlFromStorage(path){ourUrl ->
+                    putUrlToDatabase(ourUrl){
+                        binding.settingsUserPhoto.donwloadAndSetImage(ourUrl)//установка картинки
+                        showToast(getString(R.string.toast_data_update))
+                        USER.photoUrl = ourUrl//в объект записали url нашей фотографии
                     }
                 }
             }
+
+
         }
     }
+
+
 }
