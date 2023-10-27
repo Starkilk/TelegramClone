@@ -76,6 +76,9 @@ private lateinit var binding:FragmentSettingsBinding
 
         //слушатель нажатия на кнопу изменения фотографии
         binding.settingsChangePhoto.setOnClickListener { changePhotoUser() }
+
+        //установка картинки при открытии меню настроек
+        binding.settingsUserPhoto.donwloadAndSetImage(USER.photoUrl)
     }
 
     //метод изменения фото
