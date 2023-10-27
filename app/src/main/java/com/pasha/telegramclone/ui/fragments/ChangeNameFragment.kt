@@ -1,20 +1,15 @@
 package com.pasha.telegramclone.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.pasha.telegramclone.R
-import com.pasha.telegramclone.activities.MainActivity
 import com.pasha.telegramclone.databinding.FragmentChangeNameBinding
 import com.pasha.telegramclone.utilits.CHILD_FULLNAME
 import com.pasha.telegramclone.utilits.NODE_USERS
 import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
-import com.pasha.telegramclone.utilits.UID
+import com.pasha.telegramclone.utilits.CURRENT_UID
 import com.pasha.telegramclone.utilits.USER
 import com.pasha.telegramclone.utilits.showToast
 
@@ -64,7 +59,7 @@ class ChangeNameFragment : BaseChangeFragment() {
         }else{
             //иначе заменяем fullname в Firebase(на сайте)
             val fullname = "$name $sername"
-            REF_DATABASE_ROOT.child(NODE_USERS).child(UID).child(CHILD_FULLNAME)//добрались до пункта fullname в БД
+            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_FULLNAME)//добрались до пункта fullname в БД
                 .setValue(fullname).addOnCompleteListener{//обновляем fullname
                     if(it.isSuccessful){
                         showToast(getString(R.string.toast_data_update))

@@ -9,8 +9,8 @@ import com.pasha.telegramclone.activities.RegisterActivity
 import com.pasha.telegramclone.ui.fragments.ChatsFragment
 
 //шаблонная функция которая фозволяет вызывать Toast во фрагментах
-fun Fragment.showToast(message: String){
-    Toast.makeText(this.context,message,Toast.LENGTH_SHORT).show()
+fun showToast(message: String){
+    Toast.makeText(APP_ACTIVITY,message,Toast.LENGTH_SHORT).show()
 }
 
 //шаблонная функция для переключения между АКТИВИТИ

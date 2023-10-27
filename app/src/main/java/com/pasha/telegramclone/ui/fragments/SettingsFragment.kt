@@ -1,5 +1,7 @@
 package com.pasha.telegramclone.ui.fragments
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,13 +13,18 @@ import android.view.ViewGroup
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.activities.MainActivity
 import com.pasha.telegramclone.activities.RegisterActivity
-import com.pasha.telegramclone.databinding.ActivityMainBinding
-import com.pasha.telegramclone.databinding.FragmentChangeNameBinding
 import com.pasha.telegramclone.databinding.FragmentSettingsBinding
+import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AUTH
+import com.pasha.telegramclone.utilits.FOLDER_PROFILE_IMAGE
+import com.pasha.telegramclone.utilits.REF_STORAGE_ROOT
+import com.pasha.telegramclone.utilits.CURRENT_UID
 import com.pasha.telegramclone.utilits.USER
 import com.pasha.telegramclone.utilits.replaceActivity
 import com.pasha.telegramclone.utilits.replaceFragment
+import com.pasha.telegramclone.utilits.showToast
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 
 
 class SettingsFragment : Fragment() {
@@ -56,7 +63,21 @@ private lateinit var binding:FragmentSettingsBinding
 
         //переход на фрагмент изменения информации о пользователе
         binding.bSettingsChangeBio.setOnClickListener { replaceFragment(ChangeBioFragment()) }
+
+        //слушатель нажатия на кнопу изменения фотографии
+        binding.settingsChangePhoto.setOnClickListener { changePhotoUser() }
     }
+
+    //метод изменения фото
+    private fun changePhotoUser() {
+        CropImage.activity()
+            .setAspectRatio(1,1)//указали, что кропер будет пропорционален
+            .setRequestedSize(600,600)//обрезаем картинку, чтобы она занимала меньше места
+            .setCropShape(CropImageView.CropShape.OVAL)//делаем картинку овальной
+            .start(APP_ACTIVITY)
+    }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         activity?.menuInflater?.inflate(R.menu.settings_action_menu,menu)//определили меню на этом фрагменте

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.activities.MainActivity
+import com.pasha.telegramclone.utilits.APP_ACTIVITY
 
 //фрагмет, от которого будут наследоваться все фрагменты в которых происходит изменение информации о пользователе
 open class BaseChangeFragment : Fragment() {//open, чтобы можно было наследоваться от него о overid(ить) методы
@@ -25,6 +26,7 @@ open class BaseChangeFragment : Fragment() {//open, чтобы можно был
         super.onStop()
         //при остановке фрагмента настроек Draewer включается
         (activity as MainActivity).mAppDrawer.enableDrawer()
+        APP_ACTIVITY.hideKeyboard()
     }
 
     //галочка
