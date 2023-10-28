@@ -2,10 +2,12 @@ package com.pasha.telegramclone.activities
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.ActivityMainBinding
@@ -21,14 +23,20 @@ import com.pasha.telegramclone.utilits.NODE_USERS
 import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
 import com.pasha.telegramclone.utilits.CURRENT_UID
 import com.pasha.telegramclone.utilits.FOLDER_PROFILE_IMAGE
+import com.pasha.telegramclone.utilits.READ_CONTACTS
 import com.pasha.telegramclone.utilits.REF_STORAGE_ROOT
 import com.pasha.telegramclone.utilits.USER
+import com.pasha.telegramclone.utilits.checkPermissions
 import com.pasha.telegramclone.utilits.initFirebase
 import com.pasha.telegramclone.utilits.initUser
 import com.pasha.telegramclone.utilits.replaceActivity
 import com.pasha.telegramclone.utilits.replaceFragment
 import com.pasha.telegramclone.utilits.showToast
 import com.theartofdev.edmodo.cropper.CropImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -42,12 +50,25 @@ class MainActivity : AppCompatActivity() {
 
         APP_ACTIVITY = this
         initFirebase()//инициализация переменных
+
         //запускается инициализация пользователя и только после этого выполнятся последующие инициализации
         initUser{//инициализация пользователя
+
+            //пролизводим считываниек контактов в отдельной корутине
+            //CoroutineScope(Dispatchers.IO).launch {
+                initContacts()//разрешение на считывание контактов пользователя
+            //}
+
             initFields()//инициализация полей
             initFunc()//инициализация функциональности активити
         }
 
+    }
+
+    private fun initContacts() {
+        if(checkPermissions(READ_CONTACTS)){//смотрит дано ли разрешение, если нет, то справшивает
+            showToast("read contacts")//если дано, то выполняем код
+        }
     }
 
     //отработает, когда разворачиваем приложение
@@ -91,13 +112,22 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-
-
-
     //метод, который сворацивает клавиатуру после подтверждения введённых данных
     fun hideKeyboard(){
         val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(window.decorView.windowToken,0)
+    }
+
+    //получает результат разрешения и обробатывает разрешение или запрет пользователя
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        //если доступ к контактам предоставлен
+        if(ContextCompat.checkSelfPermission(APP_ACTIVITY, READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+            initContacts()
+        }
     }
 }

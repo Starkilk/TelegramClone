@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--разрешение на чтение контоктов с устройства пользователя-->
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <!--image cropper - разрешения для работы с памятью-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
