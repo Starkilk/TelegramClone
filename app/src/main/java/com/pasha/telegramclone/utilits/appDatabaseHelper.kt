@@ -1,11 +1,14 @@
 package com.pasha.telegramclone.utilits
 
+import android.annotation.SuppressLint
 import android.net.Uri
+import android.provider.ContactsContract
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.models.User
 
 lateinit var AUTH:FirebaseAuth
@@ -66,7 +69,7 @@ inline fun putImageToStorage(uri: Uri, path: StorageReference,crossinline functi
 
 //считываем данные из бд в объект User
 inline fun initUser(crossinline function: () -> Unit) {
-    REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)//добрались до данных о польхователе
+    REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)//добрались до данных о пользователе
         .addListenerForSingleValueEvent(AppValueEventListener{//слушатель, который смотрит информацию из БД
             USER = it.getValue(User::class.java) ?:User()//вписали в нашего USER(a) данные из бд
             if (USER.username.isEmpty()){
@@ -74,4 +77,32 @@ inline fun initUser(crossinline function: () -> Unit) {
             }
             function()
         })
+}
+
+ @SuppressLint("Range")
+ fun initContacts() {
+    if(checkPermissions(READ_CONTACTS)){//смотрит дано ли разрешение, если нет, то справшивает
+        var arrayContacts = arrayListOf<CommonModel>()
+        //курсор  нужен дляя считыванияя данных из БД
+        val cursor = APP_ACTIVITY.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            null,
+        )
+
+        cursor?.let {//считывает элементы из cursor только если  они не null
+            //пока в курсоре есть следующие элементы - двигаемся
+            while(it.moveToNext()){
+                val fullName = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))//считали имя контакта из тел. книги
+                val phoneNumber = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))//считали номер контакта из книги
+                val newModel = CommonModel()//создали объект нашей модели
+                newModel.fullname = fullName//заполнили поля
+                newModel.phone = phoneNumber.replace(Regex("[\\s,-]"),"")//заменяем пробелы и слэш на ничего
+                arrayContacts.add(newModel)//добавили контакт из тел. книги в arrayListOf
+            }
+        }
+        cursor?.close()//после считывания данных закрываем cursor
+    }
 }

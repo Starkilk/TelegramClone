@@ -27,6 +27,7 @@ import com.pasha.telegramclone.utilits.READ_CONTACTS
 import com.pasha.telegramclone.utilits.REF_STORAGE_ROOT
 import com.pasha.telegramclone.utilits.USER
 import com.pasha.telegramclone.utilits.checkPermissions
+import com.pasha.telegramclone.utilits.initContacts
 import com.pasha.telegramclone.utilits.initFirebase
 import com.pasha.telegramclone.utilits.initUser
 import com.pasha.telegramclone.utilits.replaceActivity
@@ -65,11 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun initContacts() {
-        if(checkPermissions(READ_CONTACTS)){//смотрит дано ли разрешение, если нет, то справшивает
-            showToast("read contacts")//если дано, то выполняем код
-        }
-    }
+
 
     //отработает, когда разворачиваем приложение
     override fun onStart() {
