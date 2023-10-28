@@ -3,12 +3,11 @@ package com.pasha.telegramclone.utilits
 import android.content.Context
 import android.content.Intent
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.pasha.telegramclone.R
-import com.pasha.telegramclone.activities.RegisterActivity
-import com.pasha.telegramclone.ui.fragments.ChatsFragment
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -51,10 +50,11 @@ fun hideKeyboard(){
     imm.hideSoftInputFromWindow(APP_ACTIVITY.window.decorView.windowToken,0)
 }
 
-fun CircleImageView.donwloadAndSetImage(url:String){
+fun ImageView.downloadAndSetImage(url:String){
     //УСТАНОВКА КАРТИНКИ
     Picasso.get()
         .load(url)//скачиваем картинку, которую установим на аватарку
+        .fit()
         .placeholder(R.drawable.default_photo)//картинка, которая установится, если нет интернета
         .into(this)//указываем в какое View устанавливать картинку
 }

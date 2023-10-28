@@ -23,6 +23,7 @@ import com.pasha.telegramclone.utilits.FOLDER_PROFILE_IMAGE
 import com.pasha.telegramclone.utilits.REF_STORAGE_ROOT
 import com.pasha.telegramclone.utilits.USER
 import com.pasha.telegramclone.utilits.initFirebase
+import com.pasha.telegramclone.utilits.initUser
 import com.pasha.telegramclone.utilits.replaceActivity
 import com.pasha.telegramclone.utilits.replaceFragment
 import com.pasha.telegramclone.utilits.showToast
@@ -39,8 +40,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         APP_ACTIVITY = this
-        initFields()//иницифлизировать поля
-        initFunc()//инициализация функциональности активити
+        initFirebase()//инициализация переменных
+        //запускается инициализация пользователя и только после этого выполнятся последующие инициализации
+        initUser{//инициализация пользователя
+            initFields()//инициализация полей
+            initFunc()//инициализация функциональности активити
+        }
+
     }
 
 
@@ -65,21 +71,13 @@ class MainActivity : AppCompatActivity() {
         mToolbar = binding.mainToolbar
         //проинициализировали наш класс с методами Drawer(а) передали туда наше активити и наш Toolbar
         mAppDrawer = AppDrawer(this,mToolbar)
-        //проиниалицировали объект FirebaseAuth
-        AUTH = FirebaseAuth.getInstance()
-
         //инициализируем базу данных
-        initFirebase()
-        initUser()
+
+
+
     }
 
-    //считываем данные из бд в объект User
-    private fun initUser() {
-        REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)//добрались до данных о польхователе
-            .addListenerForSingleValueEvent(AppValueEventListener{//слушатель, который смотрит информацию из БД
-                USER = it.getValue(User::class.java) ?:User()//вписали в нашего USER(a) данные из бд
-            })
-    }
+
 
 
 

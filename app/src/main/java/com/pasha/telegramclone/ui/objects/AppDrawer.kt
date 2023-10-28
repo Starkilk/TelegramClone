@@ -1,6 +1,9 @@
 package com.pasha.telegramclone.ui.objects
 
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -13,17 +16,23 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
+import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.ui.fragments.SettingsFragment
+import com.pasha.telegramclone.utilits.USER
+import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.utilits.replaceFragment
 
 class AppDrawer(val mainActivity:AppCompatActivity,  val toolbar: Toolbar) {
     private lateinit var mDrawer: Drawer//Drawer_layout выдвижное окно
     private lateinit var mHeader: AccountHeader//часть в Drawer где будет аватар, имя аккаунта и тд
     private lateinit var mDrawerLayout: DrawerLayout
+    private lateinit var mCurrentProfile: ProfileDrawerItem//итем нашего профиля(что уникального в нашем профиле, типо картинка, имя и тд)
 
     //метод, который мы вызовем на MainActivity после создания экземпляра этого класса
     fun create(){
+        initLoader()
         createHeader()
         createDrawer()
         mDrawerLayout = mDrawer.drawerLayout
@@ -136,13 +145,36 @@ class AppDrawer(val mainActivity:AppCompatActivity,  val toolbar: Toolbar) {
     }
 
     private fun createHeader() {//создали Header
+        mCurrentProfile = ProfileDrawerItem()//заполнили данные профиля
+            .withName(USER.fullname)
+            .withEmail(USER.phone)
+            .withIcon(USER.photoUrl)
+            .withIdentifier(200)
+
         mHeader = AccountHeaderBuilder()
             .withActivity(mainActivity)
             .withHeaderBackground(R.drawable.header)
             .addProfiles(
-                ProfileDrawerItem()
-                    .withName("Pavel")
-                    .withEmail("+743244113")
+               mCurrentProfile//данные поместили во view драйвер меню
             ).build()
+    }
+
+    //метод обновляет данные в Header
+    fun updateHeader(){
+        mCurrentProfile//заполнили данные профиля
+            .withName(USER.fullname)
+            .withEmail(USER.phone)
+            .withIcon(USER.photoUrl)
+
+        mHeader.updateProfile(mCurrentProfile)
+    }
+
+    private fun initLoader(){
+        DrawerImageLoader.init(object :AbstractDrawerImageLoader(){
+            override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable) {//метод который вставит во view картинку скаченую с интернета
+                imageView.downloadAndSetImage(uri.toString())
+            }
+        })
+
     }
 }

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentChangeNameBinding
+import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.CHILD_FULLNAME
 import com.pasha.telegramclone.utilits.NODE_USERS
 import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
@@ -64,6 +65,7 @@ class ChangeNameFragment : BaseChangeFragment() {
                     if(it.isSuccessful){
                         showToast(getString(R.string.toast_data_update))
                         USER.fullname = fullname//обновили fullname
+                        APP_ACTIVITY.mAppDrawer.updateHeader()//обновляем информацию в Header
                         parentFragmentManager.popBackStack()//вернулись назад по стэку
                     }
                 }

@@ -61,3 +61,15 @@ inline fun putImageToStorage(uri: Uri, path: StorageReference,crossinline functi
         .addOnSuccessListener {function()}
         .addOnFailureListener{ showToast(it.message.toString())/*живой шаблон ste*/ }//если ошибка
 }
+
+//считываем данные из бд в объект User
+inline fun initUser(crossinline function: () -> Unit) {
+    REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)//добрались до данных о польхователе
+        .addListenerForSingleValueEvent(AppValueEventListener{//слушатель, который смотрит информацию из БД
+            USER = it.getValue(User::class.java) ?:User()//вписали в нашего USER(a) данные из бд
+            if (USER.username.isEmpty()){
+                USER.username = CURRENT_UID
+            }
+            function()
+        })
+}
