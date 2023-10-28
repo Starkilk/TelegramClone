@@ -14,6 +14,7 @@ import com.pasha.telegramclone.ui.fragments.ChatsFragment
 import com.pasha.telegramclone.ui.objects.AppDrawer
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AUTH
+import com.pasha.telegramclone.utilits.AppStates
 import com.pasha.telegramclone.utilits.AppValueEventListener
 import com.pasha.telegramclone.utilits.CHILD_PHOTO_URL
 import com.pasha.telegramclone.utilits.NODE_USERS
@@ -46,6 +47,19 @@ class MainActivity : AppCompatActivity() {
             initFields()//инициализация полей
             initFunc()//инициализация функциональности активити
         }
+
+    }
+
+    //отработает, когда разворачиваем приложение
+    override fun onStart() {
+        super.onStart()
+        AppStates.updateState(AppStates.ONLINE)
+    }
+
+    //отработает, когда сворачиваем приложение
+    override fun onStop() {
+        super.onStop()
+        AppStates.updateState(AppStates.OFFLINE)
 
     }
 

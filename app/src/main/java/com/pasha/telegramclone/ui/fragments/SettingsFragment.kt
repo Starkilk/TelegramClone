@@ -59,7 +59,7 @@ private lateinit var binding:FragmentSettingsBinding
         binding.settingsBio.text = USER.bio
         binding.settingsFullName.text = USER.fullname
         binding.settingsPhoneNumber.text = USER.phone
-        binding.settingStatus.text = USER.status
+        binding.settingStatus.text = USER.state
         binding.settingsUsername.text = USER.username
 
         //переход на фрагмент изменения уникального имени пользователя
