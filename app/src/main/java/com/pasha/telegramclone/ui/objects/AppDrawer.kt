@@ -19,12 +19,14 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.pasha.telegramclone.R
+import com.pasha.telegramclone.ui.fragments.ContactsFragment
 import com.pasha.telegramclone.ui.fragments.SettingsFragment
+import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.USER
 import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.utilits.replaceFragment
 
-class AppDrawer(val mainActivity:AppCompatActivity,  val toolbar: Toolbar) {
+class AppDrawer() {
     private lateinit var mDrawer: Drawer//Drawer_layout выдвижное окно
     private lateinit var mHeader: AccountHeader//часть в Drawer где будет аватар, имя аккаунта и тд
     private lateinit var mDrawerLayout: DrawerLayout
@@ -41,19 +43,19 @@ class AppDrawer(val mainActivity:AppCompatActivity,  val toolbar: Toolbar) {
     //функция, которая будет откулючать выдвижное меню
     fun disableDrawer(){
         mDrawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false//отключили гамбургер
-        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)//на место гамбургера поставили кнопку "Назад"
+        APP_ACTIVITY.supportActionBar?.setDisplayHomeAsUpEnabled(true)//на место гамбургера поставили кнопку "Назад"
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)//заблокировали Drawer в закрытом состоянии
-        toolbar.setNavigationOnClickListener {//что делаеть принажатии кнопки "Назад"(возвращаемся назад по стеку)
-            mainActivity.supportFragmentManager.popBackStack()
+        APP_ACTIVITY.mToolbar.setNavigationOnClickListener {//что делаеть принажатии кнопки "Назад"(возвращаемся назад по стеку)
+            APP_ACTIVITY.supportFragmentManager.popBackStack()
         }
     }
 
     //функция, которая будет включать выдвижное меню
     fun enableDrawer(){
-        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)//отключили кнопку "Назад"
+        APP_ACTIVITY.supportActionBar?.setDisplayHomeAsUpEnabled(false)//отключили кнопку "Назад"
         mDrawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = true//включили гамбургер
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)//разблокировали Drawer\
-        toolbar.setNavigationOnClickListener {
+        APP_ACTIVITY.mToolbar.setNavigationOnClickListener {
             mDrawer.openDrawer()//открываем Drawer
         }
     }
@@ -61,8 +63,8 @@ class AppDrawer(val mainActivity:AppCompatActivity,  val toolbar: Toolbar) {
     //функция отрисовки Drawer menu
     private fun createDrawer() {
         mDrawer = DrawerBuilder()
-            .withActivity(mainActivity)
-            .withToolbar(toolbar)
+            .withActivity(APP_ACTIVITY)
+            .withToolbar( APP_ACTIVITY.mToolbar)
             .withActionBarDrawerToggle(true)//три полоски на toolbar чтобы вызвать выдвижное меню
             .withSelectedItem(-1)//какое меню будет открыто по умолчанию(Мы указываем, что никакое)
             .withAccountHeader(mHeader)
@@ -133,15 +135,18 @@ class AppDrawer(val mainActivity:AppCompatActivity,  val toolbar: Toolbar) {
                     drawerItem: IDrawerItem<*>
                 ): Boolean {
                     //дейстрие при нажатии на пункт по позиции
-                    when(position){
-                        6 -> mainActivity.replaceFragment(SettingsFragment())
-                    }
+                    clickToItem(position)
                     return false
                 }
 
             }).build()
-
-
+    }
+    private fun clickToItem(position:Int){
+        //дейстрие при нажатии на пункт по позиции
+        when(position){
+            6 -> APP_ACTIVITY.replaceFragment(SettingsFragment())
+            2 -> APP_ACTIVITY.replaceFragment(ContactsFragment())
+        }
     }
 
     private fun createHeader() {//создали Header
@@ -152,7 +157,7 @@ class AppDrawer(val mainActivity:AppCompatActivity,  val toolbar: Toolbar) {
             .withIdentifier(200)
 
         mHeader = AccountHeaderBuilder()
-            .withActivity(mainActivity)
+            .withActivity(APP_ACTIVITY)
             .withHeaderBackground(R.drawable.header)
             .addProfiles(
                mCurrentProfile//данные поместили во view драйвер меню
