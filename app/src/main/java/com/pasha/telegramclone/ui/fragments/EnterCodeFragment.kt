@@ -14,6 +14,7 @@ import com.pasha.telegramclone.utilits.AppTextWatcher
 import com.pasha.telegramclone.utilits.CHILD_ID
 import com.pasha.telegramclone.utilits.CHILD_PHONE
 import com.pasha.telegramclone.utilits.CHILD_USERNAME
+import com.pasha.telegramclone.utilits.NODE_PHONES
 import com.pasha.telegramclone.utilits.NODE_USERS
 import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
 import com.pasha.telegramclone.utilits.replaceActivity
@@ -61,22 +62,23 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) : Fragment() {
                 dateMap[CHILD_PHONE] = phoneNumber
                 dateMap[CHILD_USERNAME] = uid
 
-                //ЭТА СТРОЧКА ЛОМАЕТ
-                //передали данные о пользователе в БД(создали ноду id пользователя и у него заполнили все данные)
-                REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dateMap)
-                    .addOnCompleteListener { taskSecond ->
-                        //действия после занесенияя данных в БД
-                        if (taskSecond.isSuccessful) {//если task2.всё хорошо, то :
-                            showToast("Welcome!")
-                            (activity as RegisterActivity).replaceActivity(MainActivity())
-                            //} else showToast("Mistake")//если не всё хорошо, то покажет проблему
+                //нода, которая будет содержать (ключ-номер пользователя), (значение-id пользователя)-для поиска пользователей, которые есть в тел. книге
+                REF_DATABASE_ROOT.child(NODE_PHONES).child(phoneNumber).setValue(uid)
+                    .addOnFailureListener { showToast(it.message.toString()) }//сообщение,  если что-то не так
 
-
-                        } else showToast("Mistake")//если произошла ошибка
-
+                    .addOnSuccessListener {
+                        //передали данные о пользователе в БД(создали ноду id пользователя и у него заполнили все данные)
+                        REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dateMap)
+                            .addOnSuccessListener {
+                                showToast("Welcome!")
+                                (activity as RegisterActivity).replaceActivity(MainActivity())
+                            }
+                            .addOnFailureListener { showToast(it.message.toString()) }
 
                     }
-            }
+
+
+            } else showToast("Mistake")//если произошла ошибка
         }
     }
 }
