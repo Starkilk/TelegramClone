@@ -45,6 +45,7 @@ private lateinit var binding:FragmentSettingsBinding
 
     override fun onResume() {
         super.onResume()
+        APP_ACTIVITY.title = ""
         setHasOptionsMenu(true)//включили наше меню в контексте
 
         initFields()//инициализация текстовых блоков в окне настроек

@@ -24,6 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
+        android:id="@+id/contactsState"
         style="@style/smallText"
         tools:text="online"
         app:layout_constraintStart_toEndOf="@id/contactPhoto"
