@@ -31,7 +31,7 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 
 
-class SettingsFragment : Fragment() {
+class SettingsFragment : BaseFragment() {
 
 private lateinit var binding:FragmentSettingsBinding
     override fun onCreateView(
@@ -41,11 +41,7 @@ private lateinit var binding:FragmentSettingsBinding
         binding  = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
-    override fun onStart() {
-        super.onStart()
-        //при запуске фрагмента настроек Draewer отключается
-        (activity as MainActivity).mAppDrawer.disableDrawer()
-    }
+
 
     override fun onResume() {
         super.onResume()
@@ -103,11 +99,7 @@ private lateinit var binding:FragmentSettingsBinding
         return true
     }
 
-    override fun onStop() {
-        super.onStop()
-        //при остановке фрагмента настроек Draewer включается
-        (activity as MainActivity).mAppDrawer.enableDrawer()
-    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

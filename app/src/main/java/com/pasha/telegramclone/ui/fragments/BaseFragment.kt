@@ -7,19 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.activities.MainActivity
+import com.pasha.telegramclone.utilits.APP_ACTIVITY
 
 
-open class BaseFragment(val layout:Int) : Fragment() {
-    private lateinit var mRootView: View
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        mRootView = inflater.inflate(layout,container,false)
-        return mRootView
+open class BaseFragment() : Fragment() {
+    override fun onStart() {
+        super.onStart()
+        APP_ACTIVITY.mAppDrawer.disableDrawer()
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        APP_ACTIVITY.mAppDrawer.enableDrawer()
+    }
 
 }
