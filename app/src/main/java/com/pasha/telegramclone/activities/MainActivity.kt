@@ -43,11 +43,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var mToolbar: Toolbar
     lateinit var mAppDrawer: AppDrawer//передали в мэйн активити наш класс AppDrawer
+    lateinit var mToolbarInfo: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         APP_ACTIVITY = this
         initFirebase()//инициализация переменных
@@ -78,7 +80,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         AppStates.updateState(AppStates.OFFLINE)
-
     }
 
 
@@ -101,6 +102,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initFields() {
         mToolbar = binding.mainToolbar
+        mToolbarInfo = binding.mainToolbar
         //проинициализировали наш класс с методами Drawer(а)
         mAppDrawer = AppDrawer()
         //инициализируем базу данных

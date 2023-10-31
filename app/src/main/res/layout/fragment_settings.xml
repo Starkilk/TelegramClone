@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="@dimen/horizontal_margin"/>
+        android:layout_marginStart="@dimen/app_margin"/>
 
     <TextView
         android:id="@+id/settingsFullName"
@@ -35,9 +35,9 @@
         app:layout_constraintStart_toEndOf="@id/settingsUserPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/settingsUserPhoto"
-        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_marginTop="@dimen/app_small_margin"
         android:textSize="@dimen/normalText"
-        android:layout_marginStart="@dimen/horizontal_margin"/>
+        android:layout_marginStart="@dimen/app_margin"/>
 
         <TextView
             android:id="@+id/settingStatus"
@@ -50,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@id/settingsFullName"
 
             android:textSize="@dimen/smallText"
-            android:layout_marginStart="@dimen/horizontal_margin"/>
+            android:layout_marginStart="@dimen/app_margin"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -61,7 +61,7 @@
         android:textColor="@color/color_primary"
         app:layout_constraintTop_toBottomOf="@id/settingsHeader"
         android:text="@string/settings_account"
-        android:layout_marginStart="@dimen/horizontal_margin"
+        android:layout_marginStart="@dimen/app_margin"
         android:layout_marginTop="@dimen/vertical_large_margin"
         android:textStyle="bold"
         android:textSize="@dimen/smallText"/>
@@ -164,7 +164,7 @@
         app:layout_constraintTop_toBottomOf="@+id/settingsHeader"
         app:civ_border_color="@color/color_grey"
         app:civ_border_width="1dp"
-        android:layout_marginEnd="@dimen/horizontal_margin"/>
+        android:layout_marginEnd="@dimen/app_margin"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

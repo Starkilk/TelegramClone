@@ -7,6 +7,8 @@
     <color name="color_accent">#FFFFFF</color>
     <color name="color_accent_darck">#C8C8C8</color>
     <color name="color_grey">#939393</color>
+    <color name="color_green">#9EDF71</color>
+    <color name="color_blue_wish">#83E8F1</color>
 
 
     <!-- Material DEFAULT colors -->
