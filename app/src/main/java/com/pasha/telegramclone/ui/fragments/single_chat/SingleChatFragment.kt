@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.fragments
+package com.pasha.telegramclone.ui.fragments.single_chat
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,42 +6,75 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentSingleChatBinding
 import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.models.UserModel
+import com.pasha.telegramclone.ui.fragments.BaseFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
+import com.pasha.telegramclone.utilits.CURRENT_UID
+import com.pasha.telegramclone.utilits.NODE_MESSAGES
 import com.pasha.telegramclone.utilits.NODE_USERS
 import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
 import com.pasha.telegramclone.utilits.TYPE_TEXT
 import com.pasha.telegramclone.utilits.downloadAndSetImage
+import com.pasha.telegramclone.utilits.getCommonModel
 import com.pasha.telegramclone.utilits.getUserModel
 import com.pasha.telegramclone.utilits.sendMessage
 import com.pasha.telegramclone.utilits.showToast
 import de.hdodenhof.circleimageview.CircleImageView
 
-                        //contact - наш собеседник(все его данные)
+//contact - наш собеседник(все его данные)
 class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     private lateinit var binding: FragmentSingleChatBinding
-    private lateinit var mListenerInfoToolbar:AppValueEventListener
+    private lateinit var mListenerInfoToolbar: AppValueEventListener
     private lateinit var mReceivingUser: UserModel
-    private lateinit var mToolbarInfo:View
+    private lateinit var mToolbarInfo: View
     private lateinit var mRefUser: DatabaseReference
+
+    //блок для отображения сообщений в чате
+    private lateinit var mRefMessages: DatabaseReference
+    private lateinit var mAdapter: SingleChatAdapter
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mMessagesListener: AppValueEventListener
+    private var mListMessages = emptyList<CommonModel>()
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSingleChatBinding.inflate(inflater,container, false)
+        binding = FragmentSingleChatBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    //при открытии чата менять инфу на тулбаре
+
     override fun onResume() {
         super.onResume()
+        initToolbar()
+        initRecyclerViev()
+    }
+
+    private fun initRecyclerViev() {
+        mRecyclerView = binding.chatRecyclerView
+        mAdapter = SingleChatAdapter()
+        mRecyclerView.adapter = mAdapter
+        mRefMessages = REF_DATABASE_ROOT.child(NODE_MESSAGES).child(CURRENT_UID).child(contact.id)
+
+        //слушатель изменений в чате
+        mMessagesListener = AppValueEventListener { dataSnapshot ->
+            mListMessages = dataSnapshot.children.map { it.getCommonModel() }//добавляем\обноваляем список с сообщениями в чате(для адаптера)
+            mAdapter.setList(mListMessages)//передаём список в адаптер
+            mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)//листаем rcView к последнему элементу(чисто визуальноя часть, чтобы час не приходилось листать при новом сообщении)
+        }
+        mRefMessages.addValueEventListener(mMessagesListener)//подключили слушатель к  пути(показали что именно нужно слушать)
+    }
+
+    //при открытии чата менять инфу на тулбаре
+    private fun initToolbar() {
         mToolbarInfo = APP_ACTIVITY.mToolbar.findViewById<ConstraintLayout>(R.id.toolbarInfo)
         mToolbarInfo.visibility = View.VISIBLE
 
@@ -66,14 +99,19 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
         }
     }
-       //присвоили нашему toolbar(у) информацию о пользователе (Картинка, Имя, Статус)
-    private fun initInfoToolbar() {
-        if (mReceivingUser.fullname.isEmpty()){//если пользователь не назвал себя
-            mToolbarInfo.findViewById<TextView>(R.id.toolbarContactChatFullname).text = contact.fullname//имя из тел. книги
-        }else mToolbarInfo.findViewById<TextView>(R.id.toolbarContactChatFullname).text = mReceivingUser.fullname//иначе имя из БД
 
-        mToolbarInfo.findViewById<CircleImageView>(R.id.toolbarChatImage).downloadAndSetImage(mReceivingUser.photoUrl)
-        mToolbarInfo.findViewById<TextView>(R.id.toolbarContactsChatState).text = mReceivingUser.state
+    //присвоили нашему toolbar(у) информацию о пользователе (Картинка, Имя, Статус)
+    private fun initInfoToolbar() {
+        if (mReceivingUser.fullname.isEmpty()) {//если пользователь не назвал себя
+            mToolbarInfo.findViewById<TextView>(R.id.toolbarContactChatFullname).text =
+                contact.fullname//имя из тел. книги
+        } else mToolbarInfo.findViewById<TextView>(R.id.toolbarContactChatFullname).text =
+            mReceivingUser.fullname//иначе имя из БД
+
+        mToolbarInfo.findViewById<CircleImageView>(R.id.toolbarChatImage)
+            .downloadAndSetImage(mReceivingUser.photoUrl)
+        mToolbarInfo.findViewById<TextView>(R.id.toolbarContactsChatState).text =
+            mReceivingUser.state
     }
 
 
@@ -83,6 +121,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
         //при выходе из чата отключаем слушатель данных собеседника
         mRefUser.removeEventListener(mListenerInfoToolbar)
+        mRefMessages.removeEventListener(mMessagesListener)
 
     }
 

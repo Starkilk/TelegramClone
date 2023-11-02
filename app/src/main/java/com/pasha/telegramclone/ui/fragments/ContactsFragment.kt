@@ -13,6 +13,7 @@ import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.ContactItemBinding
 import com.pasha.telegramclone.databinding.FragmentContactsBinding
 import com.pasha.telegramclone.models.CommonModel
+import com.pasha.telegramclone.ui.fragments.single_chat.SingleChatFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
 import com.pasha.telegramclone.utilits.CURRENT_UID
