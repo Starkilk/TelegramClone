@@ -53,8 +53,11 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
     //присвоили нашему toolbar(у) информацию о пользователе (Картинка, Имя, Статус)
     private fun initInfoToolbar() {
+        if (mReceivingUser.fullname.isEmpty()){//если пользователь не назвал себя
+            mToolbarInfo.findViewById<TextView>(R.id.toolbarContactChatFullname).text = contact.fullname//имя из тел. книги
+        }else mToolbarInfo.findViewById<TextView>(R.id.toolbarContactChatFullname).text = mReceivingUser.fullname//иначе имя из БД
+
         mToolbarInfo.findViewById<CircleImageView>(R.id.toolbarChatImage).downloadAndSetImage(mReceivingUser.photoUrl)
-        mToolbarInfo.findViewById<TextView>(R.id.toolbarContactChatFullname).text = mReceivingUser.fullname
         mToolbarInfo.findViewById<TextView>(R.id.toolbarContactsChatState).text = mReceivingUser.state
     }
 

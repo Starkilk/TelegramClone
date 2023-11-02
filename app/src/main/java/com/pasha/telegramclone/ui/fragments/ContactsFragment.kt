@@ -80,11 +80,14 @@ private var mapListeners = hashMapOf<DatabaseReference, AppValueEventListener>()
                     val contact = it.getCommonModel()//получили данные контакта, записав их в модель
 
                     //заполнем item контакта
-                    holder.name.text = contact.fullname
+                    if (contact.fullname.isEmpty()){//если  у пользователят нет имени в БД, то берём его имя с модели(его имя из тел. книги)
+                        holder.name.text = model.fullname
+                    }else holder.name.text = contact.fullname
+
                     holder.status.text = contact.state
                     holder.photo.downloadAndSetImage(contact.photoUrl)
                     //добавляем слушатель нажатия на каждого пользователя. при нажатии открываем фрагмент чата и пиередаём на него информацию о нажатом пользователе
-                    holder.itemView.setOnClickListener { replaceFragment(SingleChatFragment(contact)) }
+                    holder.itemView.setOnClickListener { replaceFragment(SingleChatFragment(model)) }
                 }
 
                 //применили слушатель
