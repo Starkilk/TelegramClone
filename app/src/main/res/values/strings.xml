@@ -24,4 +24,5 @@
     <string name="toast_data_update">Data update</string>
     <string name="settings_hint_input_username">username</string>
     <string name="settings_input_bio">bio</string>
+    <string name="chat_enter_a_message">Enter a message</string>
 </resources>

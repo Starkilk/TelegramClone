@@ -2,11 +2,17 @@ package com.pasha.telegramclone.models
 
 //модель данных пользователя
 data class CommonModel(
-    val id:String = "",
-    var username:String = "",
-    var bio:String = "",
-    var fullname:String = "",
-    var state:String = "",
-    var phone:String = "",
-    var photoUrl:String = "empty"
+    val id: String = "",
+    var username: String = "",
+    var bio: String = "",
+    var fullname: String = "",
+    var state: String = "",
+    var phone: String = "",
+    var photoUrl: String = "empty",
+
+    //поля отвечающие за сообщенияя в чатах
+    var text: String = "",
+    var type: String = "",
+    var from: String = "",
+    var timeStamp: String = ""
 )

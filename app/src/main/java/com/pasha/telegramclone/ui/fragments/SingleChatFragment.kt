@@ -15,11 +15,14 @@ import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
 import com.pasha.telegramclone.utilits.NODE_USERS
 import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
+import com.pasha.telegramclone.utilits.TYPE_TEXT
 import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.utilits.getUserModel
+import com.pasha.telegramclone.utilits.sendMessage
+import com.pasha.telegramclone.utilits.showToast
 import de.hdodenhof.circleimageview.CircleImageView
 
-
+                        //contact - наш собеседник(все его данные)
 class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     private lateinit var binding: FragmentSingleChatBinding
     private lateinit var mListenerInfoToolbar:AppValueEventListener
@@ -39,19 +42,31 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     //при открытии чата менять инфу на тулбаре
     override fun onResume() {
         super.onResume()
-        mToolbarInfo =  APP_ACTIVITY.mToolbar.findViewById<ConstraintLayout>(R.id.toolbarInfo)
+        mToolbarInfo = APP_ACTIVITY.mToolbar.findViewById<ConstraintLayout>(R.id.toolbarInfo)
         mToolbarInfo.visibility = View.VISIBLE
 
         //слушатель изменений в БД
-        mListenerInfoToolbar = AppValueEventListener {//it - пользователь из списка контактов на который мы нажали
-            mReceivingUser = it.getUserModel()//записали данныен из БД в объект
-            initInfoToolbar()
-        }
-        mRefUser = REF_DATABASE_ROOT.child(NODE_USERS).child(contact.id)//путь до данных пользователя, чат с которым открыли
+        mListenerInfoToolbar =
+            AppValueEventListener {//it - пользователь из списка контактов на который мы нажали
+                mReceivingUser = it.getUserModel()//записали данныен из БД в объект
+                initInfoToolbar()
+            }
+        mRefUser = REF_DATABASE_ROOT.child(NODE_USERS)
+            .child(contact.id)//путь до данных пользователя, чат с которым открыли
         mRefUser.addValueEventListener(mListenerInfoToolbar)//подключили слушатель к данному пользователю
-    }
 
-    //присвоили нашему toolbar(у) информацию о пользователе (Картинка, Имя, Статус)
+        //слушатель кнопки "оправки сообщения"
+        binding.bChatSendMessage.setOnClickListener {
+            val message = binding.chatInputMessage.text.toString()//получили введённое сообщение
+            if (message.isEmpty()) {
+                showToast(getString(R.string.chat_enter_a_message))
+            } else sendMessage(message, contact.id, TYPE_TEXT) {
+                binding.chatInputMessage.setText("")//чистим поле после отправки текста
+            }
+
+        }
+    }
+       //присвоили нашему toolbar(у) информацию о пользователе (Картинка, Имя, Статус)
     private fun initInfoToolbar() {
         if (mReceivingUser.fullname.isEmpty()){//если пользователь не назвал себя
             mToolbarInfo.findViewById<TextView>(R.id.toolbarContactChatFullname).text = contact.fullname//имя из тел. книги
