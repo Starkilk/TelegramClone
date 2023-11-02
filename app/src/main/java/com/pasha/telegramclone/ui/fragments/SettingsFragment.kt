@@ -16,6 +16,7 @@ import com.pasha.telegramclone.activities.RegisterActivity
 import com.pasha.telegramclone.databinding.FragmentSettingsBinding
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AUTH
+import com.pasha.telegramclone.utilits.AppStates
 import com.pasha.telegramclone.utilits.FOLDER_PROFILE_IMAGE
 import com.pasha.telegramclone.utilits.REF_STORAGE_ROOT
 import com.pasha.telegramclone.utilits.CURRENT_UID
@@ -91,6 +92,7 @@ private lateinit var binding:FragmentSettingsBinding
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){//слошаем что нажал юзер
             R.id.settingsMenuExit->{//если нажал выйти
+                AppStates.updateState(AppStates.OFFLINE)//при выходе из аккаунта принудительно ставим статус Offline
                 AUTH.signOut()//выходим из аккаунта
                 (activity as MainActivity).replaceActivity(RegisterActivity())
             }

@@ -1,13 +1,16 @@
 package com.pasha.telegramclone.utilits
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.provider.ContactsContract
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.pasha.telegramclone.R
+import com.pasha.telegramclone.models.CommonModel
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -57,4 +60,37 @@ fun ImageView.downloadAndSetImage(url:String){
         .fit()
         .placeholder(R.drawable.default_photo)//картинка, которая установится, если нет интернета
         .into(this)//указываем в какое View устанавливать картинку
+}
+
+@SuppressLint("Range")
+fun initContacts() {
+    if (checkPermissions(READ_CONTACTS)) {//смотрит дано ли разрешение, если нет, то справшивает
+        var arrayContacts = arrayListOf<CommonModel>()
+        //курсор  нужен дляя считыванияя данных из БД
+        val cursor = APP_ACTIVITY.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            null,
+        )
+
+        cursor?.let {//считывает элементы из cursor только если  они не null
+            //пока в курсоре есть следующие элементы - двигаемся
+            while (it.moveToNext()) {
+                val fullName =
+                    it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))//считали имя контакта из тел. книги
+                val phoneNumber =
+                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))//считали номер контакта из книги
+                val newModel = CommonModel()//создали объект нашей модели
+                newModel.fullname = fullName//заполнили поля
+                newModel.phone =
+                    phoneNumber.replace(Regex("[\\s,-]"), "")//заменяем пробелы и слэш на ничего
+                arrayContacts.add(newModel)//добавили контакт из тел. книги в arrayListOf
+            }
+        }
+        cursor?.close()//после считывания данных закрываем cursor\
+        updatePhonesToDataBase(arrayContacts)
+
+    }
 }
