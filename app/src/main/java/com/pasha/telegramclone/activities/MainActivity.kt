@@ -1,43 +1,24 @@
 package com.pasha.telegramclone.activities
 
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import com.google.firebase.auth.FirebaseAuth
-import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.ActivityMainBinding
-import com.pasha.telegramclone.models.User
 import com.pasha.telegramclone.ui.fragments.ChatsFragment
 import com.pasha.telegramclone.ui.objects.AppDrawer
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AUTH
 import com.pasha.telegramclone.utilits.AppStates
-import com.pasha.telegramclone.utilits.AppValueEventListener
-import com.pasha.telegramclone.utilits.CHILD_PHOTO_URL
-import com.pasha.telegramclone.utilits.NODE_USERS
-import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
-import com.pasha.telegramclone.utilits.CURRENT_UID
-import com.pasha.telegramclone.utilits.FOLDER_PROFILE_IMAGE
 import com.pasha.telegramclone.utilits.READ_CONTACTS
-import com.pasha.telegramclone.utilits.REF_STORAGE_ROOT
-import com.pasha.telegramclone.utilits.USER
-import com.pasha.telegramclone.utilits.checkPermissions
 import com.pasha.telegramclone.utilits.initContacts
 import com.pasha.telegramclone.utilits.initFirebase
 import com.pasha.telegramclone.utilits.initUser
 import com.pasha.telegramclone.utilits.replaceActivity
 import com.pasha.telegramclone.utilits.replaceFragment
-import com.pasha.telegramclone.utilits.showToast
-import com.theartofdev.edmodo.cropper.CropImage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

@@ -1,7 +1,7 @@
 package com.pasha.telegramclone.models
 
 //модель данных пользователя
-data class User(
+data class UserModel(
     val id:String = "",
     var username:String = "",
     var bio:String = "",

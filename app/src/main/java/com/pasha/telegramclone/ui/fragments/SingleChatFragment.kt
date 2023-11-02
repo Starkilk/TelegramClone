@@ -1,47 +1,70 @@
 package com.pasha.telegramclone.ui.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.firebase.database.DatabaseReference
 import com.pasha.telegramclone.R
-import com.pasha.telegramclone.databinding.ActivityMainBinding
 import com.pasha.telegramclone.databinding.FragmentSingleChatBinding
-import com.pasha.telegramclone.databinding.ToolbarInfoBinding
 import com.pasha.telegramclone.models.CommonModel
+import com.pasha.telegramclone.models.UserModel
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
+import com.pasha.telegramclone.utilits.AppValueEventListener
+import com.pasha.telegramclone.utilits.NODE_USERS
+import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
+import com.pasha.telegramclone.utilits.downloadAndSetImage
+import com.pasha.telegramclone.utilits.getUserModel
+import de.hdodenhof.circleimageview.CircleImageView
 
 
-class SingleChatFragment(contact: CommonModel) : BaseFragment() {
+class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     private lateinit var binding: FragmentSingleChatBinding
+    private lateinit var mListenerInfoToolbar:AppValueEventListener
+    private lateinit var mReceivingUser: UserModel
+    private lateinit var mToolbarInfo:View
+    private lateinit var mRefUser: DatabaseReference
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSingleChatBinding.inflate(inflater,container, false)
-
         return binding.root
     }
 
-    //РАЗОБРАТЬСЯ
+    //при открытии чата менять инфу на тулбаре
     override fun onResume() {
         super.onResume()
-        APP_ACTIVITY.mToolbar.findViewById<ConstraintLayout>(R.id.toolbarInfo).visibility = View.VISIBLE
+        mToolbarInfo =  APP_ACTIVITY.mToolbar.findViewById<ConstraintLayout>(R.id.toolbarInfo)
+        mToolbarInfo.visibility = View.VISIBLE
+
+        //слушатель изменений в БД
+        mListenerInfoToolbar = AppValueEventListener {//it - пользователь из списка контактов на который мы нажали
+            mReceivingUser = it.getUserModel()//записали данныен из БД в объект
+            initInfoToolbar()
+        }
+        mRefUser = REF_DATABASE_ROOT.child(NODE_USERS).child(contact.id)//путь до данных пользователя, чат с которым открыли
+        mRefUser.addValueEventListener(mListenerInfoToolbar)//подключили слушатель к данному пользователю
+    }
+
+    //присвоили нашему toolbar(у) информацию о пользователе (Картинка, Имя, Статус)
+    private fun initInfoToolbar() {
+        mToolbarInfo.findViewById<CircleImageView>(R.id.toolbarChatImage).downloadAndSetImage(mReceivingUser.photoUrl)
+        mToolbarInfo.findViewById<TextView>(R.id.toolbarContactChatFullname).text = mReceivingUser.fullname
+        mToolbarInfo.findViewById<TextView>(R.id.toolbarContactsChatState).text = mReceivingUser.state
     }
 
 
     override fun onPause() {
         super.onPause()
-        APP_ACTIVITY.mToolbar.findViewById<ConstraintLayout>(R.id.toolbarInfo).visibility = View.GONE
+        mToolbarInfo.visibility = View.GONE
 
-
+        //при выходе из чата отключаем слушатель данных собеседника
+        mRefUser.removeEventListener(mListenerInfoToolbar)
 
     }
 

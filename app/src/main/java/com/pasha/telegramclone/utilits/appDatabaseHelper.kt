@@ -10,12 +10,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.pasha.telegramclone.models.CommonModel
-import com.pasha.telegramclone.models.User
+import com.pasha.telegramclone.models.UserModel
 
 lateinit var AUTH: FirebaseAuth
 lateinit var REF_DATABASE_ROOT: DatabaseReference
 lateinit var REF_STORAGE_ROOT: StorageReference//связь со Storage в Firebase
-lateinit var USER: User//наш юзер
+lateinit var USER: UserModel//наш юзер
 lateinit var CURRENT_UID: String//уникальный идэнтификатор пользователя
 
 
@@ -38,7 +38,7 @@ const val CHILD_STATE = "state"
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
     REF_DATABASE_ROOT = FirebaseDatabase.getInstance().reference
-    USER = User()
+    USER = UserModel()
     CURRENT_UID = AUTH.currentUser?.uid.toString()
     REF_STORAGE_ROOT = FirebaseStorage.getInstance().reference
 
@@ -74,7 +74,7 @@ inline fun putImageToStorage(uri: Uri, path: StorageReference, crossinline funct
 inline fun initUser(crossinline function: () -> Unit) {
     REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID)//добрались до данных о пользователе
         .addListenerForSingleValueEvent(AppValueEventListener {//слушатель, который смотрит информацию из БД
-            USER = it.getValue(User::class.java) ?: User()//вписали в нашего USER(a) данные из бд
+            USER = it.getValue(UserModel::class.java) ?: UserModel()//вписали в нашего USER(a) данные из бд
             if (USER.username.isEmpty()) {
                 USER.username = CURRENT_UID
             }
@@ -135,4 +135,7 @@ fun updatePhonesToDataBase(arrayContacts: ArrayList<CommonModel>) {
 
 //метод получет контакт и записывает его данные в модель CommonModel | ?: CommonModel() - если null, то создать пустой объект
 fun DataSnapshot.getCommonModel(): CommonModel = this.getValue(CommonModel::class.java)?: CommonModel()
+
+//преобразовывает полученые данные из Firebase в модель UserModel
+fun DataSnapshot.getUserModel(): UserModel = this.getValue(UserModel::class.java)?: UserModel()
 
