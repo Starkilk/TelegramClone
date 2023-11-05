@@ -133,12 +133,9 @@ fun DataSnapshot.getUserModel(): UserModel = this.getValue(UserModel::class.java
 
 //в БД видно какую структуру строит этот код
 fun sendMessage(message: String, receivingUserId: String, typeText: String, function: () -> Unit) {
-    val refDialogUser =
-        "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"//путь: сообщения->наш id->id собеседника
-    val refDialogReceivingUser =
-        "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"//путь: сообщения->id собеседника->наш id
-    val messageKey =
-        REF_DATABASE_ROOT.child(refDialogUser).push().key//уникальный ключ для каждого сообзения
+    val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"//путь: сообщения->наш id->id собеседника
+    val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"//путь: сообщения->id собеседника->наш id
+    val messageKey = REF_DATABASE_ROOT.child(refDialogUser).push().key//уникальный ключ для каждого сообзения
 
     //мапа, которую заполняем данными одного сообщения
     val mapMessage = hashMapOf<String, Any>()//ключ, значение

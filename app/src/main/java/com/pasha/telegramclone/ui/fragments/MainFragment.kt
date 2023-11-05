@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.pasha.telegramclone.databinding.FragmentChatsBinding
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
+import com.pasha.telegramclone.utilits.hideKeyboard
 
 
 class MainFragment : Fragment() {
@@ -25,6 +26,7 @@ class MainFragment : Fragment() {
         super.onResume()
         APP_ACTIVITY.title = "Telegram"
         APP_ACTIVITY.mAppDrawer.enableDrawer()
+        hideKeyboard()
     }
 
 

@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentSingleChatBinding
@@ -24,6 +27,7 @@ import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.database.getCommonModel
 import com.pasha.telegramclone.database.getUserModel
 import com.pasha.telegramclone.database.sendMessage
+import com.pasha.telegramclone.utilits.AppChildEventListener
 import com.pasha.telegramclone.utilits.showToast
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -39,8 +43,8 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     private lateinit var mRefMessages: DatabaseReference
     private lateinit var mAdapter: SingleChatAdapter
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mMessagesListener: AppValueEventListener
-    private var mListMessages = emptyList<CommonModel>()
+    private lateinit var mMessagesListener: ChildEventListener//слушатель изменений ребёнка основной ноды
+    private var mListMessages = mutableListOf<CommonModel>()
 
 
     override fun onCreateView(
@@ -65,12 +69,14 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         mRefMessages = REF_DATABASE_ROOT.child(NODE_MESSAGES).child(CURRENT_UID).child(contact.id)
 
         //слушатель изменений в чате
-        mMessagesListener = AppValueEventListener { dataSnapshot ->
-            mListMessages = dataSnapshot.children.map { it.getCommonModel() }//добавляем\обноваляем список с сообщениями в чате(для адаптера)
-            mAdapter.setList(mListMessages)//передаём список в адаптер
+        mMessagesListener = AppChildEventListener{
+            mAdapter.addItem(it.getCommonModel())//передаём в адаптер одно по одному новому сообщению
             mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)//листаем rcView к последнему элементу(чисто визуальноя часть, чтобы час не приходилось листать при новом сообщении)
+
         }
-        mRefMessages.addValueEventListener(mMessagesListener)//подключили слушатель к  пути(показали что именно нужно слушать)
+
+
+        mRefMessages.addChildEventListener(mMessagesListener)//подключили слушатель к  пути(показали что именно нужно слушать)
     }
 
     //при открытии чата менять инфу на тулбаре
