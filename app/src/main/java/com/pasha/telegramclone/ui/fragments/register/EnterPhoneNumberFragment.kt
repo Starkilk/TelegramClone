@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.fragments
+package com.pasha.telegramclone.ui.fragments.register
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,12 +11,11 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.pasha.telegramclone.R
-import com.pasha.telegramclone.activities.MainActivity
-import com.pasha.telegramclone.activities.RegisterActivity
 import com.pasha.telegramclone.databinding.FragmentEnterPhoneNumberBinding
-import com.pasha.telegramclone.utilits.AUTH
-import com.pasha.telegramclone.utilits.replaceActivity
+import com.pasha.telegramclone.utilits.APP_ACTIVITY
+import com.pasha.telegramclone.database.AUTH
 import com.pasha.telegramclone.utilits.replaceFragment
+import com.pasha.telegramclone.utilits.restartActivity
 import com.pasha.telegramclone.utilits.showToast
 import java.util.concurrent.TimeUnit
 
@@ -46,7 +45,7 @@ class EnterPhoneNumberFragment : Fragment() {
                 AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
                     if (task.isSuccessful) {//если позьзователь авторизировался и всё хорошо
                         showToast("Welcome!")
-                        (activity as RegisterActivity).replaceActivity(MainActivity())
+                        restartActivity()//перезапуск активити
                     } else showToast(task.exception?.message.toString())//если произошла ошибка
                 }
             }
@@ -82,7 +81,7 @@ class EnterPhoneNumberFragment : Fragment() {
         PhoneAuthProvider.verifyPhoneNumber(
             PhoneAuthOptions
                 .newBuilder(FirebaseAuth.getInstance())
-                .setActivity(activity as RegisterActivity)
+                .setActivity(APP_ACTIVITY)
                 .setPhoneNumber(mPhoneNumber)
                 .setTimeout(60L, TimeUnit.SECONDS)
                 .setCallbacks(mCallback)

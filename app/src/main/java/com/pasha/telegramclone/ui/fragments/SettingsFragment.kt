@@ -3,7 +3,6 @@ package com.pasha.telegramclone.ui.fragments
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -11,22 +10,20 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.pasha.telegramclone.R
-import com.pasha.telegramclone.activities.MainActivity
-import com.pasha.telegramclone.activities.RegisterActivity
 import com.pasha.telegramclone.databinding.FragmentSettingsBinding
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
-import com.pasha.telegramclone.utilits.AUTH
+import com.pasha.telegramclone.database.AUTH
 import com.pasha.telegramclone.utilits.AppStates
-import com.pasha.telegramclone.utilits.FOLDER_PROFILE_IMAGE
-import com.pasha.telegramclone.utilits.REF_STORAGE_ROOT
-import com.pasha.telegramclone.utilits.CURRENT_UID
-import com.pasha.telegramclone.utilits.USER
+import com.pasha.telegramclone.database.FOLDER_PROFILE_IMAGE
+import com.pasha.telegramclone.database.REF_STORAGE_ROOT
+import com.pasha.telegramclone.database.CURRENT_UID
+import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.utilits.downloadAndSetImage
-import com.pasha.telegramclone.utilits.getUrlFromStorage
-import com.pasha.telegramclone.utilits.putImageToStorage
-import com.pasha.telegramclone.utilits.putUrlToDatabase
-import com.pasha.telegramclone.utilits.replaceActivity
+import com.pasha.telegramclone.database.getUrlFromStorage
+import com.pasha.telegramclone.database.putImageToStorage
+import com.pasha.telegramclone.database.putUrlToDatabase
 import com.pasha.telegramclone.utilits.replaceFragment
+import com.pasha.telegramclone.utilits.restartActivity
 import com.pasha.telegramclone.utilits.showToast
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -94,7 +91,7 @@ private lateinit var binding:FragmentSettingsBinding
             R.id.settingsMenuExit->{//если нажал выйти
                 AppStates.updateState(AppStates.OFFLINE)//при выходе из аккаунта принудительно ставим статус Offline
                 AUTH.signOut()//выходим из аккаунта
-                (activity as MainActivity).replaceActivity(RegisterActivity())
+                restartActivity()
             }
             //при виборе "Edit name" открываем ChangeNameFragment()
             R.id.settingsMenuChangeName -> replaceFragment(ChangeNameFragment())

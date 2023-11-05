@@ -8,16 +8,16 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.pasha.telegramclone.databinding.ActivityMainBinding
-import com.pasha.telegramclone.ui.fragments.ChatsFragment
+import com.pasha.telegramclone.ui.fragments.MainFragment
+import com.pasha.telegramclone.ui.fragments.register.EnterPhoneNumberFragment
 import com.pasha.telegramclone.ui.objects.AppDrawer
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
-import com.pasha.telegramclone.utilits.AUTH
+import com.pasha.telegramclone.database.AUTH
 import com.pasha.telegramclone.utilits.AppStates
 import com.pasha.telegramclone.utilits.READ_CONTACTS
 import com.pasha.telegramclone.utilits.initContacts
-import com.pasha.telegramclone.utilits.initFirebase
-import com.pasha.telegramclone.utilits.initUser
-import com.pasha.telegramclone.utilits.replaceActivity
+import com.pasha.telegramclone.database.initFirebase
+import com.pasha.telegramclone.database.initUser
 import com.pasha.telegramclone.utilits.replaceFragment
 
 class MainActivity : AppCompatActivity() {
@@ -31,13 +31,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         APP_ACTIVITY = this
         initFirebase()//инициализация переменных
 
         //запускается инициализация пользователя и только после этого выполнятся последующие инициализации
         initUser{//инициализация пользователя
 
+            //КАРУТИНА НЕ РОБИТ
             //пролизводим считываниек контактов в отдельной корутине
             //CoroutineScope(Dispatchers.IO).launch {
                 initContacts()//разрешение на считывание контактов пользователя
@@ -49,35 +49,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-
-    //отработает, когда разворачиваем приложение
-    override fun onStart() {
-        super.onStart()
-        AppStates.updateState(AppStates.ONLINE)
-    }
-
-    //отработает, когда сворачиваем приложение
-    override fun onStop() {
-        super.onStop()
-        AppStates.updateState(AppStates.OFFLINE)
-    }
-
-
-
     private fun initFunc() {
         //проверка на авторизованность пользователя
+        setSupportActionBar(mToolbar)//передаём НАШ тулбар на место тулбара по умолчанию
         if(AUTH.currentUser != null){
             //если АВТОРИЗОВАН
-            setSupportActionBar(mToolbar)//передаём НАШ тулбар на место тулбара по умолчанию
             mAppDrawer.create()//вызвали методы, которы находятся в нашем классе AppDrawer
-            replaceFragment(ChatsFragment(),false)//при запускек активити - открыть фрагмент с чатами
+            replaceFragment(MainFragment(),false)//при запускек активити - открыть фрагмент с чатами
         }else{
             //если НЕ АВТОРИЗОВАН
-            replaceActivity(RegisterActivity())
+            replaceFragment(EnterPhoneNumberFragment(), false)
         }
-
-
 
     }
 
@@ -87,8 +69,6 @@ class MainActivity : AppCompatActivity() {
         //проинициализировали наш класс с методами Drawer(а)
         mAppDrawer = AppDrawer()
         //инициализируем базу данных
-
-
 
     }
 
@@ -109,5 +89,17 @@ class MainActivity : AppCompatActivity() {
         if(ContextCompat.checkSelfPermission(APP_ACTIVITY, READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
             initContacts()
         }
+    }
+
+    //отработает, когда разворачиваем приложение
+    override fun onStart() {
+        super.onStart()
+        AppStates.updateState(AppStates.ONLINE)
+    }
+
+    //отработает, когда сворачиваем приложение
+    override fun onStop() {
+        super.onStop()
+        AppStates.updateState(AppStates.OFFLINE)
     }
 }

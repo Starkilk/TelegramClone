@@ -15,15 +15,15 @@ import com.pasha.telegramclone.models.UserModel
 import com.pasha.telegramclone.ui.fragments.BaseFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
-import com.pasha.telegramclone.utilits.CURRENT_UID
-import com.pasha.telegramclone.utilits.NODE_MESSAGES
-import com.pasha.telegramclone.utilits.NODE_USERS
-import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
-import com.pasha.telegramclone.utilits.TYPE_TEXT
+import com.pasha.telegramclone.database.CURRENT_UID
+import com.pasha.telegramclone.database.NODE_MESSAGES
+import com.pasha.telegramclone.database.NODE_USERS
+import com.pasha.telegramclone.database.REF_DATABASE_ROOT
+import com.pasha.telegramclone.database.TYPE_TEXT
 import com.pasha.telegramclone.utilits.downloadAndSetImage
-import com.pasha.telegramclone.utilits.getCommonModel
-import com.pasha.telegramclone.utilits.getUserModel
-import com.pasha.telegramclone.utilits.sendMessage
+import com.pasha.telegramclone.database.getCommonModel
+import com.pasha.telegramclone.database.getUserModel
+import com.pasha.telegramclone.database.sendMessage
 import com.pasha.telegramclone.utilits.showToast
 import de.hdodenhof.circleimageview.CircleImageView
 

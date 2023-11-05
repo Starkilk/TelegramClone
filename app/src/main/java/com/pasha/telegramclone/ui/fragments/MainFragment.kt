@@ -5,13 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentChatsBinding
-import com.pasha.telegramclone.databinding.FragmentEnterCodeBinding
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 
 
-class ChatsFragment : Fragment() {
+class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentChatsBinding
 
@@ -26,6 +24,7 @@ class ChatsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         APP_ACTIVITY.title = "Telegram"
+        APP_ACTIVITY.mAppDrawer.enableDrawer()
     }
 
 

@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.fragments
+package com.pasha.telegramclone.ui.fragments.register
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,18 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.auth.PhoneAuthProvider
-import com.pasha.telegramclone.activities.MainActivity
-import com.pasha.telegramclone.activities.RegisterActivity
 import com.pasha.telegramclone.databinding.FragmentEnterCodeBinding
-import com.pasha.telegramclone.utilits.AUTH
+import com.pasha.telegramclone.utilits.APP_ACTIVITY
+import com.pasha.telegramclone.database.AUTH
 import com.pasha.telegramclone.utilits.AppTextWatcher
-import com.pasha.telegramclone.utilits.CHILD_ID
-import com.pasha.telegramclone.utilits.CHILD_PHONE
-import com.pasha.telegramclone.utilits.CHILD_USERNAME
-import com.pasha.telegramclone.utilits.NODE_PHONES
-import com.pasha.telegramclone.utilits.NODE_USERS
-import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
-import com.pasha.telegramclone.utilits.replaceActivity
+import com.pasha.telegramclone.database.CHILD_ID
+import com.pasha.telegramclone.database.CHILD_PHONE
+import com.pasha.telegramclone.database.CHILD_USERNAME
+import com.pasha.telegramclone.database.NODE_PHONES
+import com.pasha.telegramclone.database.NODE_USERS
+import com.pasha.telegramclone.database.REF_DATABASE_ROOT
+import com.pasha.telegramclone.utilits.restartActivity
 import com.pasha.telegramclone.utilits.showToast
 
 
@@ -35,7 +34,7 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        (activity as RegisterActivity).title = phoneNumber
+        APP_ACTIVITY.title = phoneNumber
         //слушатель введённого текста в EditText c помощью выведеного нами в отдельный класс:TextWatcher(а)
         binding.registerInputCode.addTextChangedListener(AppTextWatcher {//передаём лямда функцию
             val string = binding.registerInputCode.text.toString()
@@ -71,7 +70,7 @@ class EnterCodeFragment(val phoneNumber: String, val id: String) : Fragment() {
                         REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(dateMap)
                             .addOnSuccessListener {
                                 showToast("Welcome!")
-                                (activity as RegisterActivity).replaceActivity(MainActivity())
+                                restartActivity()//перезапускаем активити(ранешь открывали MainActivity за место RegisterActivity)
                             }
                             .addOnFailureListener { showToast(it.message.toString()) }
 

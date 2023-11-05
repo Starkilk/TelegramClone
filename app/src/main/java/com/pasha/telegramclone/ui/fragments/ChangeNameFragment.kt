@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentChangeNameBinding
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
-import com.pasha.telegramclone.utilits.CHILD_FULLNAME
-import com.pasha.telegramclone.utilits.NODE_USERS
-import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
-import com.pasha.telegramclone.utilits.CURRENT_UID
-import com.pasha.telegramclone.utilits.USER
+import com.pasha.telegramclone.database.CHILD_FULLNAME
+import com.pasha.telegramclone.database.NODE_USERS
+import com.pasha.telegramclone.database.REF_DATABASE_ROOT
+import com.pasha.telegramclone.database.CURRENT_UID
+import com.pasha.telegramclone.database.USER
+import com.pasha.telegramclone.database.setNameToDatabase
 import com.pasha.telegramclone.utilits.showToast
 
 
@@ -25,18 +26,11 @@ class ChangeNameFragment : BaseChangeFragment() {
         binding  = FragmentChangeNameBinding.inflate(inflater, container, false)
         return binding.root
     }
-    override fun onStart() {
-        super.onStart()
-
-    }
 
     override fun onResume() {
         super.onResume()
-
         initFullname()
-
     }
-
     private fun initFullname() {
         //достали имя и фамилию из USER и при открытии Edit Name данные уже будут в полях
         val fullnameList = USER.fullname.split(" ")
@@ -60,20 +54,15 @@ class ChangeNameFragment : BaseChangeFragment() {
         }else{
             //иначе заменяем fullname в Firebase(на сайте)
             val fullname = "$name $sername"
-            REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_FULLNAME)//добрались до пункта fullname в БД
-                .setValue(fullname).addOnCompleteListener{//обновляем fullname
-                    if(it.isSuccessful){
-                        showToast(getString(R.string.toast_data_update))
-                        USER.fullname = fullname//обновили fullname
-                        APP_ACTIVITY.mAppDrawer.updateHeader()//обновляем информацию в Header
-                        parentFragmentManager.popBackStack()//вернулись назад по стэку
-                    }
-                }
+            setNameToDatabase(fullname)
+
         }
     }
 
-    override fun onStop() {
-        super.onStop()
 
-    }
+
+
+
+
+
 }

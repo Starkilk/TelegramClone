@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.MessageItemBinding
 import com.pasha.telegramclone.models.CommonModel
-import com.pasha.telegramclone.utilits.CURRENT_UID
+import com.pasha.telegramclone.database.CURRENT_UID
 import com.pasha.telegramclone.utilits.asTime
 
 

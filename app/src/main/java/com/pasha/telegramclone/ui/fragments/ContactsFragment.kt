@@ -16,12 +16,12 @@ import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.ui.fragments.single_chat.SingleChatFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
-import com.pasha.telegramclone.utilits.CURRENT_UID
-import com.pasha.telegramclone.utilits.NODE_PHONES_CONTACTS
-import com.pasha.telegramclone.utilits.NODE_USERS
-import com.pasha.telegramclone.utilits.REF_DATABASE_ROOT
+import com.pasha.telegramclone.database.CURRENT_UID
+import com.pasha.telegramclone.database.NODE_PHONES_CONTACTS
+import com.pasha.telegramclone.database.NODE_USERS
+import com.pasha.telegramclone.database.REF_DATABASE_ROOT
 import com.pasha.telegramclone.utilits.downloadAndSetImage
-import com.pasha.telegramclone.utilits.getCommonModel
+import com.pasha.telegramclone.database.getCommonModel
 import com.pasha.telegramclone.utilits.replaceFragment
 import de.hdodenhof.circleimageview.CircleImageView
 

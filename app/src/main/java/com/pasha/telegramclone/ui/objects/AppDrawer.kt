@@ -4,8 +4,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 
 import com.mikepenz.materialdrawer.AccountHeader
@@ -22,7 +20,7 @@ import com.pasha.telegramclone.R
 import com.pasha.telegramclone.ui.fragments.ContactsFragment
 import com.pasha.telegramclone.ui.fragments.SettingsFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
-import com.pasha.telegramclone.utilits.USER
+import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.utilits.replaceFragment
 
@@ -144,8 +142,8 @@ class AppDrawer() {
     private fun clickToItem(position:Int){
         //дейстрие при нажатии на пункт по позиции
         when(position){
-            6 -> APP_ACTIVITY.replaceFragment(SettingsFragment())
-            2 -> APP_ACTIVITY.replaceFragment(ContactsFragment())
+            6 -> replaceFragment(SettingsFragment())
+            2 -> replaceFragment(ContactsFragment())
         }
     }
 

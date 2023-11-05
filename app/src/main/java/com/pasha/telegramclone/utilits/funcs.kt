@@ -7,12 +7,12 @@ import android.provider.ContactsContract
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.pasha.telegramclone.R
+import com.pasha.telegramclone.activities.MainActivity
+import com.pasha.telegramclone.database.updatePhonesToDataBase
 import com.pasha.telegramclone.models.CommonModel
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -23,32 +23,28 @@ fun showToast(message: String) {
 }
 
 //шаблонная функция для переключения между АКТИВИТИ
-fun AppCompatActivity.replaceActivity(activity: AppCompatActivity) {
-    val intent = Intent(this, activity::class.java)
-    startActivity(intent)
-    this.finish()
+fun restartActivity() {
+    val intent = Intent(APP_ACTIVITY, MainActivity::class.java)
+    APP_ACTIVITY.startActivity(intent)
+    APP_ACTIVITY.finish()
 }
 
 //шаблонная функцияя для переключения между ФРАГМЕНТАМИ ИЗ АКТИВИТИ
-fun AppCompatActivity.replaceFragment(fragment: Fragment, addStack: Boolean = true) {
+fun replaceFragment(fragment: Fragment, addStack: Boolean = true) {
     //если true, тогда добавляем фрагмент в стэк(сделали для того чтобы из старовых фрагментов на активити нельзя было выйти "Назад")
     if (addStack) {
-        supportFragmentManager.beginTransaction()
+        APP_ACTIVITY.supportFragmentManager.beginTransaction()
             .addToBackStack(null)
             .replace(R.id.dataContainer, fragment).commit()
     } else {//иначе не добавляем
-        supportFragmentManager.beginTransaction()
+        APP_ACTIVITY.supportFragmentManager.beginTransaction()
             .replace(R.id.dataContainer, fragment).commit()
     }
 
 }
 
 //шаблонная функцияя для переключения между ФРАГМЕНТАМИ ИЗ ФРАГМЕНТА
-fun Fragment.replaceFragment(fragment: Fragment) {
-    this.parentFragmentManager.beginTransaction()
-        .addToBackStack(null)
-        .replace(R.id.dataContainer, fragment).commit()
-}
+
 
 //метод, который сворацивает клавиатуру после подтверждения введённых данных
 fun hideKeyboard() {
