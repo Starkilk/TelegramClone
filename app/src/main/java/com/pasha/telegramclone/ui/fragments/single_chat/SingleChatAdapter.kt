@@ -62,20 +62,21 @@ class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder
 
     }
 
+
     //функция копирует список, который мы приняли в список с которым работает наш Адаптер
-    @SuppressLint("NotifyDataSetChanged")
-    fun setList(list:List<CommonModel>){
+    //и делает так, чтобы rc не перерисовывался, а дорисовывал только последний элемент
+    fun addItem(item:CommonModel){//получаем новый элемент
+        val newList = mutableListOf<CommonModel>()//создоём новый список
+        newList.addAll(mListMessagesCache)//копируем в него старый список
 
-        //notifyDataSetChanged()//говорим адаптеру, что данные изменены и их надо обработать
-    }
+        if(!newList.contains(item))  {//если список не содержит нового элемента, то (устранили дублирование сообщений)
+            newList.add(item)//добавляем новый элемент
+        }
+        newList.sortBy { it.timeStamp.toString() }//сортируем список по времени отправки
 
-    fun addItem(item:CommonModel){
-        val newList = mutableListOf<CommonModel>()
-        newList.addAll(mListMessagesCache)
-        newList.add(item)
-        //расчитываем разницу между старым и новым листами(списками сообщений)
+        //расчитываем разницу между старым и новым листами(списками сообщений), то-есть  находим новый последний item
         mDiffResult = DiffUtil.calculateDiff(DiffUtilCallback(mListMessagesCache, newList))
-        mDiffResult.dispatchUpdatesTo(this)//говорим адаптеру, что есть разные элементы и в двух листах и их надо перерисовать
+        mDiffResult.dispatchUpdatesTo(this)//говорим адаптеру, что есть разный элемент в двух листах и его надо дорисовать
         mListMessagesCache = newList
     }
 }
