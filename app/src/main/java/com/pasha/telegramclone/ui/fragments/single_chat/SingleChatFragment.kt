@@ -8,6 +8,7 @@ import android.widget.AbsListView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -48,7 +49,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     private var mCountMessages  = 10//хранит количество сообщений, которое нам нужно подгрузить при открытии чата
     private var mIsScrolling = false//состояние скроллинга
     private var mSmoothScrollToPosition = true//переменная, чтобы не перемещаться к последнему сообщению при скролинге чата вверх(обновлении данных)
-    private var mListListeners = mutableListOf<AppChildEventListener>()//список для слушателей "детей"
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
 
 
     override fun onCreateView(
@@ -62,6 +63,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        mSwipeRefreshLayout = binding.chatSwipeRefresh
         initToolbar()
         initRecyclerViev()
     }
@@ -74,16 +76,20 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
         //слушатель изменений в чате
         mMessagesListener = AppChildEventListener{
-            mAdapter.addItem(it.getCommonModel())//передаём в адаптер одно по одному новому сообщению
-            if (mSmoothScrollToPosition == true){
-                mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)//листаем rcView к последнему элементу(чисто визуальноя часть, чтобы час не приходилось листать при новом сообщении)
+            mAdapter.addItem(it.getCommonModel(),mSmoothScrollToPosition){//передаём в адаптер по одному новому сообщению и состояние прокрутки rcView(вверх  или вниз)
+                if (mSmoothScrollToPosition == true){
+                    mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)//листаем rcView к последнему элементу(чисто визуальноя часть, чтобы час не приходилось листать при новом сообщении)
+                }
+
+                mSwipeRefreshLayout.isRefreshing = false//отклёчение значка загрузки после использования "резинки от трусов"
             }
+
+
 
         }
 
         //подключили слушатель к  пути(показали что именно нужно слушать)//ограничиваем последними 10ю сообщениями
         mRefMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
-        mListListeners.add(mMessagesListener)//добавляем слушатель в список, для последущени удаления
 
         mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){//слушатель пролистывания rcView
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {//отслеживаем движение(скролинг)rcView
@@ -101,14 +107,19 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
                 }
             }
         })
+
+        //при натягивании "резинки от трусов" подгружать старые сообщения
+        mSwipeRefreshLayout.setOnRefreshListener { updateData() }
+
     }
 
     private fun updateData() {//функция подгружает сообщения в чате, когда происходит скролл
         mSmoothScrollToPosition = false//перемещаться к последнему элементы не надо
         mIsScrolling = false//состояние скроллинга снова на false
         mCountMessages +=10//указываем, что нужно теперь подгрузить не 10, а 20+ элементов
-        mRefMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)//слушаем  БД, одгружаем последние 20 элементов из неё
-        mListListeners.add(mMessagesListener)//добавляем слушатель в список, для последущени удаления
+        mRefMessages.removeEventListener(mMessagesListener)//удалили старого слушателя
+        mRefMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)//подклющаем нового, подгружаем последние 20 элементов из неё
+
     }
 
     //при открытии чата менять инфу на тулбаре
@@ -163,11 +174,10 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
         //при выходе из чата отключаем слушатель данных собеседника
         mRefUser.removeEventListener(mListenerInfoToolbar)
+        //удалили слушателя
+        mRefMessages.removeEventListener(mMessagesListener)
 
-        mListListeners.forEach{AppChildListener->//бежим по списку слушателей и отключаем их
-            mRefMessages.removeEventListener(AppChildListener)
 
-        }
 
 
     }

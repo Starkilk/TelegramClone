@@ -18,7 +18,7 @@ import com.pasha.telegramclone.utilits.asTime
 
 class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder>() {
 
-    private var mListMessagesCache = emptyList<CommonModel>()
+    private var mListMessagesCache = mutableListOf<CommonModel>()
     private lateinit var mDiffResult: DiffUtil.DiffResult//результат проверки элементов из старого и нового листов
 
     class SingleChatHolder(view: View):RecyclerView.ViewHolder(view){
@@ -63,21 +63,24 @@ class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder
     }
 
 
-    //функция копирует список, который мы приняли в список с которым работает наш Адаптер
-    //и делает так, чтобы rc не перерисовывался, а дорисовывал только последний элемент
-    fun addItem(item:CommonModel){//получаем новый элемент
-        val newList = mutableListOf<CommonModel>()//создоём новый список
-        newList.addAll(mListMessagesCache)//копируем в него старый список
+    //функция принимает каждое новое сообщение, добавляет его в список и дорисовывает его
+    fun addItem(item:CommonModel, toBottom:Boolean, onSuccess:() -> Unit){//получаем новый элемент
+        if (toBottom){//если в нужно переместиться к последнему сообщению при его отправке
+            if (!mListMessagesCache.contains(item)){//устраняем проблему дублирования сообщений, чтобы список на список не накладывался
 
-        if(!newList.contains(item))  {//если список не содержит нового элемента, то (устранили дублирование сообщений)
-            newList.add(item)//добавляем новый элемент
+                mListMessagesCache.add(item)//добавляем элемент в список
+                notifyItemInserted(mListMessagesCache.size)//говорит адаптеру обновить элемент списка по переданному номеру(последний элемент, в нашем случае)
+            }
+
+        }else{//если нужно пролистать вверх для дорисовки старых сообщений
+            if (!mListMessagesCache.contains(item)){//устраняем проблему дублирования сообщений, чтобы список на список не накладывался
+                mListMessagesCache.add(item)//добавляем элемент в список
+                mListMessagesCache.sortBy { it.timeStamp.toString() }//сортеруем список от последнего сообщения к самому старому
+                notifyItemInserted(0)//говорит адаптеру обновить элемент списка по переданному номеру(первый элемент, в нашем случае, тк отсортировали от меньшего к большему)
+
+            }
         }
-        newList.sortBy { it.timeStamp.toString() }//сортируем список по времени отправки
-
-        //расчитываем разницу между старым и новым листами(списками сообщений), то-есть  находим новый последний item
-        mDiffResult = DiffUtil.calculateDiff(DiffUtilCallback(mListMessagesCache, newList))
-        mDiffResult.dispatchUpdatesTo(this)//говорим адаптеру, что есть разный элемент в двух листах и его надо дорисовать
-        mListMessagesCache = newList
+        onSuccess()//callback, говорим, что всё выполнено
     }
 }
 
