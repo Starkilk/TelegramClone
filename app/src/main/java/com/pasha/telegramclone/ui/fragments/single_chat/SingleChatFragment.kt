@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.database.DatabaseReference
@@ -43,10 +44,11 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     private lateinit var mAdapter: SingleChatAdapter
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mMessagesListener: AppChildEventListener//слушатель изменений ребёнка основной ноды
-    private var mCountMessages  = 10//хранит количество сообщений, которое нам нужно подгрузить при открытии чата
+    private var mCountMessages  = 15//хранит количество сообщений, которое нам нужно подгрузить при открытии чата
     private var mIsScrolling = false//состояние скроллинга
     private var mSmoothScrollToPosition = true//переменная, чтобы не перемещаться к последнему сообщению при скролинге чата вверх(обновлении данных)
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var mLayoutManager: LinearLayoutManager//тип отображения сообщений
 
 
     override fun onCreateView(
@@ -60,16 +62,25 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        mSwipeRefreshLayout = binding.chatSwipeRefresh
+        initFields()
+
         initToolbar()
         initRecyclerViev()
+    }
+
+    private fun initFields() {
+        mSwipeRefreshLayout = binding.chatSwipeRefresh
+        mLayoutManager = LinearLayoutManager(this.context)
     }
 
     private fun initRecyclerViev() {
         mRecyclerView = binding.chatRecyclerView
         mAdapter = SingleChatAdapter()
-        mRecyclerView.adapter = mAdapter
         mRefMessages = REF_DATABASE_ROOT.child(NODE_MESSAGES).child(CURRENT_UID).child(contact.id)
+        mRecyclerView.adapter = mAdapter
+        mRecyclerView.setHasFixedSize(true)//оптимизация-указывает, что все view у нас будут одинакового размера
+        mRecyclerView.isNestedScrollingEnabled = false//оптимизация
+        mRecyclerView.layoutManager = mLayoutManager
 
         //слушатель изменений в чате
         mMessagesListener = AppChildEventListener{
@@ -100,7 +111,8 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {//отробатывает, когда произошло изменение rcView
                 super.onScrolled(recyclerView, dx, dy)
-                if(mIsScrolling && dy < 0){//если есть движения(НАВЕРХ), то обновляем даннные
+                //если есть движения(НАВЕРХ), то обновляем даннные && если это скролл длинной в 3 itemHoler(a)(это чтобы rc не дорисовывал +10 элементов при каждом, незначительном скролле вверх)
+                if(mIsScrolling && dy < 0 && mLayoutManager.findFirstVisibleItemPosition() <= 3){
                     updateData()
                 }
             }

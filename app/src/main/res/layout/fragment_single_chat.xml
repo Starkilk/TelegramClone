@@ -19,7 +19,7 @@
             android:id="@+id/chatRecyclerView"
             android:background="@color/color_blue_wish"
             android:layout_width="match_parent"
-            app:layoutManager = "androidx.recyclerview.widget.LinearLayoutManager"
+
             tools:listitem="@layout/message_item"
             android:layout_height="0dp"/>
 
