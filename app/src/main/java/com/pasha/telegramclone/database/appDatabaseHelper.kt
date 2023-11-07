@@ -142,8 +142,8 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     mapMessage[CHILD_FROM] = CURRENT_UID
     mapMessage[CHILD_TYPE] = typeText
     mapMessage[CHILD_TEXT] = message
-    mapMessage[CHILD_TIME_STAMP] =
-        ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
+    mapMessage[CHILD_ID] = messageKey.toString()//cilde id уникальный номер сообщения
+    mapMessage[CHILD_TIME_STAMP] = ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
 
     //мапа, где ключ - это путь, а значение - само сообщение(тоже мапа, реализованная выше)
     val mapDialog = hashMapOf<String, Any>()

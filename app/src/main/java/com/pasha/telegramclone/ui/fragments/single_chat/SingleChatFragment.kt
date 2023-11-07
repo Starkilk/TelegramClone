@@ -9,9 +9,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentSingleChatBinding
@@ -76,16 +73,17 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
         //слушатель изменений в чате
         mMessagesListener = AppChildEventListener{
-            mAdapter.addItem(it.getCommonModel(),mSmoothScrollToPosition){//передаём в адаптер по одному новому сообщению и состояние прокрутки rcView(вверх  или вниз)
-                if (mSmoothScrollToPosition == true){
+            val message = it.getCommonModel()//получили сообщение из объекта
+
+            if (mSmoothScrollToPosition){//если нужно добавить сообщение вниз
+                mAdapter.addItemToBottom(message){//отправляем сообщение в адаптер
                     mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)//листаем rcView к последнему элементу(чисто визуальноя часть, чтобы час не приходилось листать при новом сообщении)
                 }
-
-                mSwipeRefreshLayout.isRefreshing = false//отклёчение значка загрузки после использования "резинки от трусов"
+            }else{//если нужно дорисовать старые сообщения сверху
+                mAdapter.addItemToTop(message){//отправляем сообщение в адаптер
+                    mSwipeRefreshLayout.isRefreshing = false//отклёчение значка загрузки после использования "резинки от трусов"
+                }
             }
-
-
-
         }
 
         //подключили слушатель к  пути(показали что именно нужно слушать)//ограничиваем последними 10ю сообщениями

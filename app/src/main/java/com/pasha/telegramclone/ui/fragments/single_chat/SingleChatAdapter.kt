@@ -1,6 +1,5 @@
 package com.pasha.telegramclone.ui.fragments.single_chat
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.MessageItemBinding
 import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.database.CURRENT_UID
-import com.pasha.telegramclone.utilits.DiffUtilCallback
 import com.pasha.telegramclone.utilits.asTime
 
 
@@ -62,26 +60,28 @@ class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder
 
     }
 
+    //добавление сообщение(отправка) вних списка, когда перемещаемся к последнему отпраленному сообщению
+    fun addItemToBottom(item:CommonModel, onSuccess:() -> Unit){
+        if (!mListMessagesCache.contains(item)){//устраняем проблему дублирования сообщений, чтобы список на список не накладывался(сравниваем объекты по id с помощью equels в модели CommonModel)
 
-    //функция принимает каждое новое сообщение, добавляет его в список и дорисовывает его
-    fun addItem(item:CommonModel, toBottom:Boolean, onSuccess:() -> Unit){//получаем новый элемент
-        if (toBottom){//если в нужно переместиться к последнему сообщению при его отправке
-            if (!mListMessagesCache.contains(item)){//устраняем проблему дублирования сообщений, чтобы список на список не накладывался
-
-                mListMessagesCache.add(item)//добавляем элемент в список
-                notifyItemInserted(mListMessagesCache.size)//говорит адаптеру обновить элемент списка по переданному номеру(последний элемент, в нашем случае)
-            }
-
-        }else{//если нужно пролистать вверх для дорисовки старых сообщений
-            if (!mListMessagesCache.contains(item)){//устраняем проблему дублирования сообщений, чтобы список на список не накладывался
-                mListMessagesCache.add(item)//добавляем элемент в список
-                mListMessagesCache.sortBy { it.timeStamp.toString() }//сортеруем список от последнего сообщения к самому старому
-                notifyItemInserted(0)//говорит адаптеру обновить элемент списка по переданному номеру(первый элемент, в нашем случае, тк отсортировали от меньшего к большему)
-
-            }
+            mListMessagesCache.add(item)//добавляем элемент в список
+            notifyItemInserted(mListMessagesCache.size)//говорит адаптеру обновить элемент списка по переданному номеру(последний элемент, в нашем случае)
         }
         onSuccess()//callback, говорим, что всё выполнено
     }
+
+    ////если нужно пролистать вверх для дорисовки старых сообщений
+    fun addItemToTop(item:CommonModel, onSuccess:() -> Unit){
+        if (!mListMessagesCache.contains(item)){//устраняем проблему дублирования сообщений, чтобы список на список не накладывался
+            mListMessagesCache.add(item)//добавляем элемент в список
+            mListMessagesCache.sortBy { it.timeStamp.toString() }//сортеруем список от последнего сообщения к самому старому
+            notifyItemInserted(0)//говорит адаптеру обновить элемент списка по переданному номеру(первый элемент, в нашем случае, тк отсортировали от меньшего к большему)
+
+        }
+        onSuccess()//callback, говорим, что всё выполнено
+    }
+
+
 }
 
 
