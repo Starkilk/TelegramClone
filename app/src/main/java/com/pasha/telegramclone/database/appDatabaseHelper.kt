@@ -13,6 +13,7 @@ import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.models.UserModel
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
+import com.pasha.telegramclone.utilits.TYPE_MESSAGE_IMAGE
 import com.pasha.telegramclone.utilits.showToast
 
 lateinit var AUTH: FirebaseAuth
@@ -31,6 +32,7 @@ const val NODE_PHONES = "phones"
 const val NODE_PHONES_CONTACTS = "phones_contacts"
 
 const val FOLDER_PROFILE_IMAGE = "profile_image"//название ветки в Firebase Storage
+const val FOLDER_MESSAGE_IMAGE = "message_image"
 
 const val CHILD_ID = "id"
 const val CHILD_PHONE = "phone"
@@ -46,6 +48,7 @@ const val CHILD_TEXT = "text"
 const val CHILD_TYPE = "type"
 const val CHILD_FROM = "from"
 const val CHILD_TIME_STAMP = "timeStamp"
+const val CHILD_IMAGE_URL = "imageUrl"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -203,4 +206,26 @@ fun setNameToDatabase(fullname: String) {
             APP_ACTIVITY.mAppDrawer.updateHeader()//обновляем информацию в Header
             APP_ACTIVITY.supportFragmentManager.popBackStack()//вернулись назад по стэку
         }.addOnFailureListener { showToast(it.message.toString()) }
+}
+
+ fun sendMessageAsImage(receivingUserId: String, imageUrl: String, messageKey: String) {
+     val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"//путь: сообщения->наш id->id собеседника
+     val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"//путь: сообщения->id собеседника->наш id
+
+     //мапа, которую заполняем данными одного сообщения
+     val mapMessage = hashMapOf<String, Any>()//ключ, значение
+     mapMessage[CHILD_FROM] = CURRENT_UID
+     mapMessage[CHILD_TYPE] = TYPE_MESSAGE_IMAGE
+     mapMessage[CHILD_ID] = messageKey//cilde id уникальный номер сообщения
+     mapMessage[CHILD_TIME_STAMP] = ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
+     mapMessage[CHILD_IMAGE_URL] = imageUrl
+
+     //мапа, где ключ - это путь, а значение - само сообщение(тоже мапа, реализованная выше)
+     val mapDialog = hashMapOf<String, Any>()
+     mapDialog["$refDialogUser/$messageKey"] = mapMessage
+     mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
+
+     REF_DATABASE_ROOT
+         .updateChildren(mapDialog)
+         .addOnFailureListener { showToast(it.message.toString()) }
 }

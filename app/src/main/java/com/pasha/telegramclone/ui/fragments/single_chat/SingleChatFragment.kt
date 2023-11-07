@@ -1,5 +1,7 @@
 package com.pasha.telegramclone.ui.fragments.single_chat
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,16 +21,27 @@ import com.pasha.telegramclone.ui.fragments.BaseFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
 import com.pasha.telegramclone.database.CURRENT_UID
+import com.pasha.telegramclone.database.FOLDER_MESSAGE_IMAGE
+import com.pasha.telegramclone.database.FOLDER_PROFILE_IMAGE
 import com.pasha.telegramclone.database.NODE_MESSAGES
 import com.pasha.telegramclone.database.NODE_USERS
 import com.pasha.telegramclone.database.REF_DATABASE_ROOT
+import com.pasha.telegramclone.database.REF_STORAGE_ROOT
 import com.pasha.telegramclone.database.TYPE_TEXT
+import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.database.getCommonModel
+import com.pasha.telegramclone.database.getUrlFromStorage
 import com.pasha.telegramclone.database.getUserModel
+import com.pasha.telegramclone.database.putImageToStorage
+import com.pasha.telegramclone.database.putUrlToDatabase
 import com.pasha.telegramclone.database.sendMessage
+import com.pasha.telegramclone.database.sendMessageAsImage
 import com.pasha.telegramclone.utilits.AppChildEventListener
+import com.pasha.telegramclone.utilits.AppTextWatcher
 import com.pasha.telegramclone.utilits.showToast
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import de.hdodenhof.circleimageview.CircleImageView
 
 //contact - наш собеседник(все его данные)
@@ -63,14 +76,35 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     override fun onResume() {
         super.onResume()
         initFields()
-
         initToolbar()
         initRecyclerViev()
+
     }
 
     private fun initFields() {
         mSwipeRefreshLayout = binding.chatSwipeRefresh
         mLayoutManager = LinearLayoutManager(this.context)
+        //отправка картинки\отправка сообщения
+        binding.chatInputMessage.addTextChangedListener (AppTextWatcher{
+            val string = binding.chatInputMessage.text.toString()
+            if(string.isEmpty()){
+                binding.bChatSendMessage.visibility = View.GONE
+                binding.bChatAttach.visibility = View.VISIBLE
+            }else{
+                binding.bChatSendMessage.visibility = View.VISIBLE
+                binding.bChatAttach.visibility = View.GONE
+            }
+        })
+
+        //слушатель на скрепку(запускает функцию отправки файлов)
+        binding.bChatAttach.setOnClickListener { attachFile() }
+    }
+
+    private fun attachFile() {
+        CropImage.activity()
+            .setAspectRatio(1,1)//указали, что кропер будет пропорционален
+            .setRequestedSize(250,250)//обрезаем картинку, чтобы она занимала меньше места
+            .start(APP_ACTIVITY, this)
     }
 
     private fun initRecyclerViev() {
@@ -178,6 +212,28 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     }
 
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
+            && resultCode == Activity.RESULT_OK && data != null){
+
+            val uri = CropImage.getActivityResult(data).uri//получаем результат обрезания
+            val messageKey =  REF_DATABASE_ROOT.child(NODE_MESSAGES).child(CURRENT_UID).child(contact.id).push().key.toString()
+            val path = REF_STORAGE_ROOT
+                .child(FOLDER_MESSAGE_IMAGE)//путь
+                .child(messageKey)
+
+            putImageToStorage(uri,path){
+                //этот код запистится после отработки слушателя
+                getUrlFromStorage(path){ourUrl ->
+                    sendMessageAsImage(contact.id, ourUrl,messageKey)
+                }
+            }
+        }
+    }
+
+
+
     override fun onPause() {
         super.onPause()
         mToolbarInfo.visibility = View.GONE
@@ -186,10 +242,6 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         mRefUser.removeEventListener(mListenerInfoToolbar)
         //удалили слушателя
         mRefMessages.removeEventListener(mMessagesListener)
-
-
-
-
     }
 
 

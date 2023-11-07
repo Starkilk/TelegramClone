@@ -74,7 +74,7 @@ private lateinit var binding:FragmentSettingsBinding
     private fun changePhotoUser() {
         CropImage.activity()
             .setAspectRatio(1,1)//указали, что кропер будет пропорционален
-            .setRequestedSize(600,600)//обрезаем картинку, чтобы она занимала меньше места
+            .setRequestedSize(250,250)//обрезаем картинку, чтобы она занимала меньше места
             .setCropShape(CropImageView.CropShape.OVAL)//делаем картинку овальной
             .start(APP_ACTIVITY, this)
     }
