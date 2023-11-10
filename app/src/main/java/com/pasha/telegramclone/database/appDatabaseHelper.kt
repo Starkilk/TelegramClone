@@ -72,7 +72,7 @@ inline fun putUrlToDatabase(url: String, crossinline function: () -> Unit) {
 
 //лямбда функция
 inline fun getUrlFromStorage(path: StorageReference, crossinline function: (url: String) -> Unit) {
-    path.downloadUrl
+    path.downloadUrl//скачали картину из бд
         .addOnSuccessListener { function(it.toString()) }
         .addOnFailureListener { showToast(it.message.toString())/*живой шаблон ste*/ }//если ошибка
 }
@@ -80,8 +80,8 @@ inline fun getUrlFromStorage(path: StorageReference, crossinline function: (url:
 //лямбда функция
 inline fun putImageToStorage(uri: Uri, path: StorageReference, crossinline function: () -> Unit) {
     //как только отработает этот слушатель, сразу отработает ЛЯМБРА function
-    path.putFile(uri)
-        .addOnSuccessListener { function() }
+    path.putFile(uri)//отправили картинку в БД
+        .addOnSuccessListener { function() }//запустить следующую функцию
         .addOnFailureListener { showToast(it.message.toString())/*живой шаблон ste*/ }//если ошибка
 }
 
@@ -208,6 +208,7 @@ fun setNameToDatabase(fullname: String) {
         }.addOnFailureListener { showToast(it.message.toString()) }
 }
 
+
  fun sendMessageAsImage(receivingUserId: String, imageUrl: String, messageKey: String) {
      val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"//путь: сообщения->наш id->id собеседника
      val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"//путь: сообщения->id собеседника->наш id
@@ -215,7 +216,7 @@ fun setNameToDatabase(fullname: String) {
      //мапа, которую заполняем данными одного сообщения
      val mapMessage = hashMapOf<String, Any>()//ключ, значение
      mapMessage[CHILD_FROM] = CURRENT_UID
-     mapMessage[CHILD_TYPE] = TYPE_MESSAGE_IMAGE
+     mapMessage[CHILD_TYPE] = TYPE_MESSAGE_IMAGE//тип сообщения - картинка
      mapMessage[CHILD_ID] = messageKey//cilde id уникальный номер сообщения
      mapMessage[CHILD_TIME_STAMP] = ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
      mapMessage[CHILD_IMAGE_URL] = imageUrl

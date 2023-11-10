@@ -197,6 +197,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         }
     }
 
+
     //присвоили нашему toolbar(у) информацию о пользователе (Картинка, Имя, Статус)
     private fun initInfoToolbar() {
         if (mReceivingUser.fullname.isEmpty()) {//если пользователь не назвал себя
@@ -223,10 +224,11 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
                 .child(FOLDER_MESSAGE_IMAGE)//путь
                 .child(messageKey)
 
-            putImageToStorage(uri,path){
+            putImageToStorage(uri,path){//отправили картинку в бд
                 //этот код запистится после отработки слушателя
-                getUrlFromStorage(path){ourUrl ->
-                    sendMessageAsImage(contact.id, ourUrl,messageKey)
+                getUrlFromStorage(path){ourUrl ->//получили картинку из бд
+                    sendMessageAsImage(contact.id, ourUrl,messageKey)//отправляем картинку
+                    mSmoothScrollToPosition = true//перемещаться к последнему сообщению
                 }
             }
         }

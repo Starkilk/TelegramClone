@@ -3,6 +3,7 @@ package com.pasha.telegramclone.ui.fragments.single_chat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
@@ -11,17 +12,21 @@ import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.MessageItemBinding
 import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.database.CURRENT_UID
+import com.pasha.telegramclone.utilits.TYPE_MESSAGE_IMAGE
+import com.pasha.telegramclone.utilits.TYPE_MESSAGE_TEXT
 import com.pasha.telegramclone.utilits.asTime
+import com.pasha.telegramclone.utilits.downloadAndSetImage
 
 
 class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder>() {
 
     private var mListMessagesCache = mutableListOf<CommonModel>()
-    private lateinit var mDiffResult: DiffUtil.DiffResult//результат проверки элементов из старого и нового листов
+    //private lateinit var mDiffResult: DiffUtil.DiffResult//результат проверки элементов из старого и нового листов
 
     class SingleChatHolder(view: View):RecyclerView.ViewHolder(view){
         private val binding = MessageItemBinding.bind(view)
 
+        //////TEXT
         //проинициализировали вьюшки
         //для отправляющего сообщения пользователя
         val blocUserMessage: ConstraintLayout = binding.blocUserMessage
@@ -30,9 +35,20 @@ class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder
 
         //для принимающего сообщения пользователя
         val blocReceivedMessage:ConstraintLayout = binding.blocReceivedMessage
-        val chatReceiveMessage:TextView = binding.chatReceivedMessage
-        val chatReceiveMessageTime:TextView = binding.chatReceivedMessageTime
+        val chatReceivedMessage:TextView = binding.chatReceivedMessage
+        val chatReceivedMessageTime:TextView = binding.chatReceivedMessageTime
 
+
+        ///////IMAGE
+        //для отправляющего сообщения пользователя
+        val blocUserImageMessage:ConstraintLayout = binding.blocUserImageMessage
+        val chatUserImage:ImageView = binding.chatUserImage
+        val chatUserImageMessageTime: TextView = binding.chatUserImageMessageTime
+
+        //для принимающего сообщения пользователя
+        val blocReceivedImageMessage:ConstraintLayout = binding.blocReceivedImageMessage
+        val chatReceivedImage:ImageView = binding.chatReceivedImage
+        val chatReceivedImageMessageTime: TextView = binding.chatReceivedImageMessageTime
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SingleChatHolder {
@@ -43,21 +59,53 @@ class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder
     override fun getItemCount(): Int = mListMessagesCache.size//передали размер нашего списка
 
     override fun onBindViewHolder(holder: SingleChatHolder, position: Int) {
+        when(mListMessagesCache[position].type){
+            TYPE_MESSAGE_TEXT -> drawMessageText(holder, position)//отрисовать текстовое сообщение
+            TYPE_MESSAGE_IMAGE -> drawMessageImage(holder, position)//отрисовать image message
+        }
+
+    }
+
+    //пользователь/пользователю отправил/отправили КАРТИНКУ
+    private fun drawMessageImage(holder: SingleChatAdapter.SingleChatHolder, position: Int) {
+        //отключаем блоки относящиеся к текстовуму сообщению
+        holder.blocUserMessage.visibility = View.GONE
+        holder.blocReceivedMessage.visibility = View.GONE
         if(mListMessagesCache[position].from == CURRENT_UID){//если сообщение от текущего пользователя(от нас)
+            //отрисовали сообщение отправленое НАМИ
+            holder.blocReceivedImageMessage.visibility = View.GONE//скрыли левое View
+            holder.blocUserImageMessage.visibility = View.VISIBLE//отрисовали ПРАВОЕ View
+            holder.chatUserImage.downloadAndSetImage(mListMessagesCache[position].imageUrl)//передали картинку, которую нужно отправить в чат
+            holder.chatUserImageMessageTime.text = mListMessagesCache[position].timeStamp.toString().asTime()//присваиваем время
+
+        }else{//если сообщение от собеседника
+            //отрисовали сообщение отправленое СОБЕСЕДНИКОМ
+            holder.blocReceivedImageMessage.visibility = View.VISIBLE//отрисовали ЛЕВОЕ View
+            holder.blocUserImageMessage.visibility = View.GONE//скрыли правое View
+            holder.chatReceivedImage.downloadAndSetImage(mListMessagesCache[position].imageUrl)//передали картинку, которую нужно отправить в чат
+            holder.chatReceivedImageMessageTime.text = mListMessagesCache[position].timeStamp.toString().asTime()//присваиваем время
+        }
+    }
+
+    //пользователь/пользователю отправил/отправили ТЕКСТ
+    private fun drawMessageText(holder: SingleChatHolder, position: Int) {
+        //отключаем блоки относящиеся к image message
+        holder.blocReceivedImageMessage.visibility = View.GONE
+        holder.blocUserImageMessage.visibility = View.GONE
+        if(mListMessagesCache[position].from == CURRENT_UID){//если сообщение от текущего пользователя(от нас), то рисуем  правую View
             holder.blocUserMessage.visibility = View.VISIBLE
             holder.blocReceivedMessage.visibility = View.GONE
 
             holder.chatUserMessage.text = mListMessagesCache[position].text//присваиваем текст сообщения
             holder.chatUserMessageTime.text = mListMessagesCache[position].timeStamp.toString().asTime()//присваиваем время
 
-        }else{//если сообщение от собеседника
+        }else{//если сообщение от собеседника, рисуем левую View
             holder.blocUserMessage.visibility = View.GONE
             holder.blocReceivedMessage.visibility = View.VISIBLE
 
-            holder.chatReceiveMessage.text = mListMessagesCache[position].text//присваиваем текст сообщения
-            holder.chatReceiveMessageTime.text = mListMessagesCache[position].timeStamp.toString().asTime()//присваиваем время
+            holder.chatReceivedMessage.text = mListMessagesCache[position].text//присваиваем текст сообщения
+            holder.chatReceivedMessageTime.text = mListMessagesCache[position].timeStamp.toString().asTime()//присваиваем время
         }
-
     }
 
     //добавление сообщение(отправка) вних списка, когда перемещаемся к последнему отпраленному сообщению
