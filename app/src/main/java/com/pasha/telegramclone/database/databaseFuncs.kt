@@ -3,7 +3,6 @@ package com.pasha.telegramclone.database
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import com.google.firebase.storage.FirebaseStorage
@@ -13,42 +12,7 @@ import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.models.UserModel
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
-import com.pasha.telegramclone.utilits.TYPE_MESSAGE_IMAGE
 import com.pasha.telegramclone.utilits.showToast
-
-lateinit var AUTH: FirebaseAuth
-lateinit var REF_DATABASE_ROOT: DatabaseReference
-lateinit var REF_STORAGE_ROOT: StorageReference//связь со Storage в Firebase
-lateinit var USER: UserModel//наш юзер
-lateinit var CURRENT_UID: String//уникальный идэнтификатор пользователя
-
-const val TYPE_TEXT = "text"//тип отсылаемого сообщения
-
-
-//константы в которые мы запишем данные польхователя(для работы с Database)
-const val NODE_USERS = "users"
-const val NODE_USERNAMES = "usernames"
-const val NODE_PHONES = "phones"
-const val NODE_PHONES_CONTACTS = "phones_contacts"
-
-const val FOLDER_PROFILE_IMAGE = "profile_image"//название ветки в Firebase Storage
-const val FOLDER_MESSAGE_IMAGE = "message_image"
-
-const val CHILD_ID = "id"
-const val CHILD_PHONE = "phone"
-const val CHILD_USERNAME = "username"
-const val CHILD_FULLNAME = "fullname"
-const val CHILD_BIO = "bio"
-const val CHILD_PHOTO_URL = "photoUrl"
-const val CHILD_STATE = "state"
-
-const val NODE_MESSAGES = "messages"
-
-const val CHILD_TEXT = "text"
-const val CHILD_TYPE = "type"
-const val CHILD_FROM = "from"
-const val CHILD_TIME_STAMP = "timeStamp"
-const val CHILD_FILE_URL = "fileUrl"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -59,7 +23,6 @@ fun initFirebase() {
 
 
 }
-
 
 //функции высшего порядка
 //inline функции не создаются и не вызываются(за место вызова "подставляется когд, который лежит в теле inline функции")функциональное програм-ие
@@ -78,7 +41,7 @@ inline fun getUrlFromStorage(path: StorageReference, crossinline function: (url:
 }
 
 //лямбда функция
-inline fun putImageToStorage(uri: Uri, path: StorageReference, crossinline function: () -> Unit) {
+inline fun putFileToStorage(uri: Uri, path: StorageReference, crossinline function: () -> Unit) {
     //как только отработает этот слушатель, сразу отработает ЛЯМБРА function
     path.putFile(uri)//отправили картинку в БД
         .addOnSuccessListener { function() }//запустить следующую функцию
@@ -97,7 +60,6 @@ inline fun initUser(crossinline function: () -> Unit) {
             function()
         })
 }
-
 
 fun updatePhonesToDataBase(arrayContacts: ArrayList<CommonModel>) {
     if (AUTH.currentUser != null) {//проверка на авторизованность
@@ -146,7 +108,8 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     mapMessage[CHILD_TYPE] = typeText
     mapMessage[CHILD_TEXT] = message
     mapMessage[CHILD_ID] = messageKey.toString()//cilde id уникальный номер сообщения
-    mapMessage[CHILD_TIME_STAMP] = ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
+    mapMessage[CHILD_TIME_STAMP] =
+        ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
 
     //мапа, где ключ - это путь, а значение - само сообщение(тоже мапа, реализованная выше)
     val mapDialog = hashMapOf<String, Any>()
@@ -208,18 +171,18 @@ fun setNameToDatabase(fullname: String) {
         }.addOnFailureListener { showToast(it.message.toString()) }
 }
 
-
- fun sendMessageAsImage(receivingUserId: String, imageUrl: String, messageKey: String) {
+fun sendMessageAsFile(receivingUserId: String, fileUrl: String, messageKey: String, typeMessage: String) {
      val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"//путь: сообщения->наш id->id собеседника
      val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"//путь: сообщения->id собеседника->наш id
 
      //мапа, которую заполняем данными одного сообщения
      val mapMessage = hashMapOf<String, Any>()//ключ, значение
      mapMessage[CHILD_FROM] = CURRENT_UID
-     mapMessage[CHILD_TYPE] = TYPE_MESSAGE_IMAGE//тип сообщения - картинка
+     mapMessage[CHILD_TYPE] = typeMessage//тип сообщения
      mapMessage[CHILD_ID] = messageKey//cilde id уникальный номер сообщения
-     mapMessage[CHILD_TIME_STAMP] = ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
-     mapMessage[CHILD_FILE_URL] = imageUrl
+     mapMessage[CHILD_TIME_STAMP] =
+         ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
+     mapMessage[CHILD_FILE_URL] = fileUrl
 
      //мапа, где ключ - это путь, а значение - само сообщение(тоже мапа, реализованная выше)
      val mapDialog = hashMapOf<String, Any>()
@@ -239,6 +202,13 @@ fun setNameToDatabase(fullname: String) {
 }
 
 //загружаем файл в хранилище
-fun uploadFileToStorage(uri:Uri, messageKey:String){
+fun uploadFileToStorage(uri: Uri, messageKey:String, receivedID:String, typeMessage:String){
+    val path = REF_STORAGE_ROOT.child(FOLDER_FILES).child(messageKey)//путь к файлам
 
+    putFileToStorage(uri, path) {//отправили файл в хранилище
+        //этот код запистится после отработки слушателя
+        getUrlFromStorage(path) { ourUrl ->//получили файл из хранилища
+            sendMessageAsFile(receivedID, ourUrl, messageKey, typeMessage)//отправляем файл
+        }
+    }
 }

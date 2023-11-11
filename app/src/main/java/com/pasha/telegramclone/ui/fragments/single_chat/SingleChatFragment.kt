@@ -25,25 +25,22 @@ import com.pasha.telegramclone.ui.fragments.BaseFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
 import com.pasha.telegramclone.database.CURRENT_UID
-import com.pasha.telegramclone.database.FOLDER_MESSAGE_IMAGE
 import com.pasha.telegramclone.database.NODE_MESSAGES
 import com.pasha.telegramclone.database.NODE_USERS
 import com.pasha.telegramclone.database.REF_DATABASE_ROOT
-import com.pasha.telegramclone.database.REF_STORAGE_ROOT
 import com.pasha.telegramclone.database.TYPE_TEXT
 import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.database.getCommonModel
 import com.pasha.telegramclone.database.getMessageKey
-import com.pasha.telegramclone.database.getUrlFromStorage
 import com.pasha.telegramclone.database.getUserModel
-import com.pasha.telegramclone.database.putImageToStorage
 import com.pasha.telegramclone.database.sendMessage
-import com.pasha.telegramclone.database.sendMessageAsImage
 import com.pasha.telegramclone.database.uploadFileToStorage
 import com.pasha.telegramclone.utilits.AppChildEventListener
 import com.pasha.telegramclone.utilits.AppTextWatcher
 import com.pasha.telegramclone.utilits.AppVoiceRecorder
 import com.pasha.telegramclone.utilits.RECORD_AUDIO
+import com.pasha.telegramclone.utilits.TYPE_MESSAGE_IMAGE
+import com.pasha.telegramclone.utilits.TYPE_MESSAGE_VOICE
 import com.pasha.telegramclone.utilits.checkPermissions
 import com.pasha.telegramclone.utilits.showToast
 import com.theartofdev.edmodo.cropper.CropImage
@@ -130,7 +127,9 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
                         binding.chatInputMessage.setText("")
                         binding.bChatVoice.colorFilter = null//сбрасываем цвет
                         mAppVoiceRecorder.stopRecord{file, messageKey->//остановили запись
-                            uploadFileToStorage(Uri.fromFile(file), messageKey)//загружаем файл в хранилище
+                            uploadFileToStorage(Uri.fromFile(file),messageKey,contact.id, TYPE_MESSAGE_VOICE)//загружаем файл в хранилище
+                            mSmoothScrollToPosition = true
+
                         }
                     }
                 }
@@ -261,17 +260,9 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
             val uri = CropImage.getActivityResult(data).uri//получаем результат обрезания
             val messageKey = getMessageKey(contact.id)//получаем уникальный ключ сообщения
-            val path = REF_STORAGE_ROOT
-                .child(FOLDER_MESSAGE_IMAGE)//путь
-                .child(messageKey)
 
-            putImageToStorage(uri,path){//отправили картинку в бд
-                //этот код запистится после отработки слушателя
-                getUrlFromStorage(path){ourUrl ->//получили картинку из бд
-                    sendMessageAsImage(contact.id, ourUrl,messageKey)//отправляем картинку
-                    mSmoothScrollToPosition = true//перемещаться к последнему сообщению
-                }
-            }
+            uploadFileToStorage(uri,messageKey,contact.id, TYPE_MESSAGE_IMAGE)
+            mSmoothScrollToPosition = true
         }
     }
 

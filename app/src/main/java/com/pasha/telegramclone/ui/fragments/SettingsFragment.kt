@@ -20,7 +20,7 @@ import com.pasha.telegramclone.database.CURRENT_UID
 import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.database.getUrlFromStorage
-import com.pasha.telegramclone.database.putImageToStorage
+import com.pasha.telegramclone.database.putFileToStorage
 import com.pasha.telegramclone.database.putUrlToDatabase
 import com.pasha.telegramclone.utilits.replaceFragment
 import com.pasha.telegramclone.utilits.restartActivity
@@ -110,7 +110,7 @@ private lateinit var binding:FragmentSettingsBinding
             val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)//путь
                 .child(CURRENT_UID)
             
-            putImageToStorage(uri,path){
+            putFileToStorage(uri,path){
                 //этот код запистится после отработки слушателя
                 getUrlFromStorage(path){ourUrl ->
                     putUrlToDatabase(ourUrl){
