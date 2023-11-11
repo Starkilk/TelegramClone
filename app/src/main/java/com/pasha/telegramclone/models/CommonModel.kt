@@ -10,7 +10,7 @@ data class CommonModel(
     var phone: String = "",
     var photoUrl: String = "empty",
 
-    //поля отвечающие за сообщенияя в чатах
+    //поля отвечающие за сообщения в чатах
     var text: String = "",
     var type: String = "",
     var from: String = "",

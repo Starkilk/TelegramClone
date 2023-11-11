@@ -62,7 +62,19 @@
         android:background="@color/color_accent"
         android:src="@drawable/ic_attach"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/b_chat_voice"
+        app:layout_constraintTop_toTopOf="@id/chatInputMessage" />
+
+    <ImageView
+        android:id="@+id/b_chat_voice"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:padding="@dimen/appPadding"
+        android:background="@color/color_accent"
+        android:src="@drawable/ic_voice"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/chatInputMessage" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

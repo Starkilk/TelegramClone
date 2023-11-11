@@ -8,7 +8,8 @@ import androidx.core.content.ContextCompat
 
 //файл, который управляет всеми "разрешиниями" данного приложения
 
-const val READ_CONTACTS = Manifest.permission.READ_CONTACTS//
+const val READ_CONTACTS = Manifest.permission.READ_CONTACTS//разрешение на доступ к контактам пользователя
+const val RECORD_AUDIO = Manifest.permission.RECORD_AUDIO//разрешение на запись звука с микрофона
 const val PERMISSION_REQUEST = 200
 
 

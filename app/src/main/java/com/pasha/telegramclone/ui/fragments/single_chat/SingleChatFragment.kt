@@ -1,14 +1,17 @@
 package com.pasha.telegramclone.ui.fragments.single_chat
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -39,10 +42,16 @@ import com.pasha.telegramclone.database.sendMessage
 import com.pasha.telegramclone.database.sendMessageAsImage
 import com.pasha.telegramclone.utilits.AppChildEventListener
 import com.pasha.telegramclone.utilits.AppTextWatcher
+import com.pasha.telegramclone.utilits.RECORD_AUDIO
+import com.pasha.telegramclone.utilits.checkPermissions
 import com.pasha.telegramclone.utilits.showToast
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import de.hdodenhof.circleimageview.CircleImageView
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 //contact - наш собеседник(все его данные)
 class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
@@ -81,23 +90,49 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
         mSwipeRefreshLayout = binding.chatSwipeRefresh
         mLayoutManager = LinearLayoutManager(this.context)
         //отправка картинки\отправка сообщения
         binding.chatInputMessage.addTextChangedListener (AppTextWatcher{
             val string = binding.chatInputMessage.text.toString()
-            if(string.isEmpty()){
+            if(string.isEmpty() || string == "Recording"){//показываем "скрепка" и "микрофон"
                 binding.bChatSendMessage.visibility = View.GONE
                 binding.bChatAttach.visibility = View.VISIBLE
-            }else{
+                binding.bChatVoice.visibility = View.VISIBLE
+            }else{//показываем "отправить"
                 binding.bChatSendMessage.visibility = View.VISIBLE
                 binding.bChatAttach.visibility = View.GONE
+                binding.bChatVoice.visibility = View.GONE
+
             }
         })
 
         //слушатель на скрепку(запускает функцию отправки файлов)
         binding.bChatAttach.setOnClickListener { attachFile() }
+
+        //отдельная корутина
+        CoroutineScope(Dispatchers.IO).launch {
+            //слушатель удерживания кнопки "голосового сообщения"(View, event)
+            binding.bChatVoice.setOnTouchListener { v, event ->
+                if(checkPermissions(RECORD_AUDIO)){//если есть разрешение на запись голоса
+                    if (event.action == MotionEvent.ACTION_DOWN){//если кнопка нажата
+                        //TODO record
+                        binding.chatInputMessage.setText("Recording")
+                        binding.bChatVoice.setColorFilter(ContextCompat.getColor(APP_ACTIVITY, com.mikepenz.materialize.R.color.primary))//меняем цвет
+                    }else if(event.action == MotionEvent.ACTION_UP){//если кнопку отжали
+                        //TODO stop record
+                        binding.chatInputMessage.setText("")
+                        binding.bChatVoice.colorFilter = null//сбрасываем цвет
+
+                    }
+                }
+                true
+            }
+        }
+
+
     }
 
     private fun attachFile() {

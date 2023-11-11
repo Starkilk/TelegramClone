@@ -4,6 +4,8 @@
 
     <!--разрешение на чтение контоктов с устройства пользователя-->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <!--разрешение на считывания звука микрофоном(для голосовых сообщений)-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <!--image cropper - разрешения для работы с памятью-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
