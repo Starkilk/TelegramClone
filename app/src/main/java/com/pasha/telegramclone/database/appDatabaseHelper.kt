@@ -48,7 +48,7 @@ const val CHILD_TEXT = "text"
 const val CHILD_TYPE = "type"
 const val CHILD_FROM = "from"
 const val CHILD_TIME_STAMP = "timeStamp"
-const val CHILD_IMAGE_URL = "imageUrl"
+const val CHILD_FILE_URL = "fileUrl"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -219,7 +219,7 @@ fun setNameToDatabase(fullname: String) {
      mapMessage[CHILD_TYPE] = TYPE_MESSAGE_IMAGE//тип сообщения - картинка
      mapMessage[CHILD_ID] = messageKey//cilde id уникальный номер сообщения
      mapMessage[CHILD_TIME_STAMP] = ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
-     mapMessage[CHILD_IMAGE_URL] = imageUrl
+     mapMessage[CHILD_FILE_URL] = imageUrl
 
      //мапа, где ключ - это путь, а значение - само сообщение(тоже мапа, реализованная выше)
      val mapDialog = hashMapOf<String, Any>()
@@ -229,4 +229,16 @@ fun setNameToDatabase(fullname: String) {
      REF_DATABASE_ROOT
          .updateChildren(mapDialog)
          .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+//получаем ключ сообщения id - это идентификатор собеседника
+ fun getMessageKey(id: String): String {
+    val messageKey = REF_DATABASE_ROOT.child(NODE_MESSAGES).child(CURRENT_UID).child(id)
+        .push().key.toString()
+    return messageKey
+}
+
+//загружаем файл в хранилище
+fun uploadFileToStorage(uri:Uri, messageKey:String){
+
 }

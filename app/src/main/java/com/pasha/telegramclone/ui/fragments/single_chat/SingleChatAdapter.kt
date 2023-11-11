@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.MessageItemBinding
@@ -75,14 +74,14 @@ class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder
             //отрисовали сообщение отправленое НАМИ
             holder.blocReceivedImageMessage.visibility = View.GONE//скрыли левое View
             holder.blocUserImageMessage.visibility = View.VISIBLE//отрисовали ПРАВОЕ View
-            holder.chatUserImage.downloadAndSetImage(mListMessagesCache[position].imageUrl)//передали картинку, которую нужно отправить в чат
+            holder.chatUserImage.downloadAndSetImage(mListMessagesCache[position].fileUrl)//передали картинку, которую нужно отправить в чат
             holder.chatUserImageMessageTime.text = mListMessagesCache[position].timeStamp.toString().asTime()//присваиваем время
 
         }else{//если сообщение от собеседника
             //отрисовали сообщение отправленое СОБЕСЕДНИКОМ
             holder.blocReceivedImageMessage.visibility = View.VISIBLE//отрисовали ЛЕВОЕ View
             holder.blocUserImageMessage.visibility = View.GONE//скрыли правое View
-            holder.chatReceivedImage.downloadAndSetImage(mListMessagesCache[position].imageUrl)//передали картинку, которую нужно отправить в чат
+            holder.chatReceivedImage.downloadAndSetImage(mListMessagesCache[position].fileUrl)//передали картинку, которую нужно отправить в чат
             holder.chatReceivedImageMessageTime.text = mListMessagesCache[position].timeStamp.toString().asTime()//присваиваем время
         }
     }

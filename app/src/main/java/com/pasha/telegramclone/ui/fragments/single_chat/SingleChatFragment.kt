@@ -3,6 +3,7 @@ package com.pasha.telegramclone.ui.fragments.single_chat
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -25,28 +26,27 @@ import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
 import com.pasha.telegramclone.database.CURRENT_UID
 import com.pasha.telegramclone.database.FOLDER_MESSAGE_IMAGE
-import com.pasha.telegramclone.database.FOLDER_PROFILE_IMAGE
 import com.pasha.telegramclone.database.NODE_MESSAGES
 import com.pasha.telegramclone.database.NODE_USERS
 import com.pasha.telegramclone.database.REF_DATABASE_ROOT
 import com.pasha.telegramclone.database.REF_STORAGE_ROOT
 import com.pasha.telegramclone.database.TYPE_TEXT
-import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.database.getCommonModel
+import com.pasha.telegramclone.database.getMessageKey
 import com.pasha.telegramclone.database.getUrlFromStorage
 import com.pasha.telegramclone.database.getUserModel
 import com.pasha.telegramclone.database.putImageToStorage
-import com.pasha.telegramclone.database.putUrlToDatabase
 import com.pasha.telegramclone.database.sendMessage
 import com.pasha.telegramclone.database.sendMessageAsImage
+import com.pasha.telegramclone.database.uploadFileToStorage
 import com.pasha.telegramclone.utilits.AppChildEventListener
 import com.pasha.telegramclone.utilits.AppTextWatcher
+import com.pasha.telegramclone.utilits.AppVoiceRecorder
 import com.pasha.telegramclone.utilits.RECORD_AUDIO
 import com.pasha.telegramclone.utilits.checkPermissions
 import com.pasha.telegramclone.utilits.showToast
 import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import de.hdodenhof.circleimageview.CircleImageView
 
 import kotlinx.coroutines.CoroutineScope
@@ -71,6 +71,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     private var mSmoothScrollToPosition = true//переменная, чтобы не перемещаться к последнему сообщению при скролинге чата вверх(обновлении данных)
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mLayoutManager: LinearLayoutManager//тип отображения сообщений
+    private lateinit var mAppVoiceRecorder:AppVoiceRecorder//экземпляр войс рекодера
 
 
     override fun onCreateView(
@@ -92,6 +93,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
+        mAppVoiceRecorder = AppVoiceRecorder()
         mSwipeRefreshLayout = binding.chatSwipeRefresh
         mLayoutManager = LinearLayoutManager(this.context)
         //отправка картинки\отправка сообщения
@@ -121,19 +123,23 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
                         //TODO record
                         binding.chatInputMessage.setText("Recording")
                         binding.bChatVoice.setColorFilter(ContextCompat.getColor(APP_ACTIVITY, com.mikepenz.materialize.R.color.primary))//меняем цвет
+                        val messageKey = getMessageKey(contact.id)//получаем уникальный ключ сообщения
+                        mAppVoiceRecorder.startRecord(messageKey)//начали запись
                     }else if(event.action == MotionEvent.ACTION_UP){//если кнопку отжали
                         //TODO stop record
                         binding.chatInputMessage.setText("")
                         binding.bChatVoice.colorFilter = null//сбрасываем цвет
-
+                        mAppVoiceRecorder.stopRecord{file, messageKey->//остановили запись
+                            uploadFileToStorage(Uri.fromFile(file), messageKey)//загружаем файл в хранилище
+                        }
                     }
                 }
                 true
             }
         }
-
-
     }
+
+
 
     private fun attachFile() {
         CropImage.activity()
@@ -254,7 +260,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
             && resultCode == Activity.RESULT_OK && data != null){
 
             val uri = CropImage.getActivityResult(data).uri//получаем результат обрезания
-            val messageKey =  REF_DATABASE_ROOT.child(NODE_MESSAGES).child(CURRENT_UID).child(contact.id).push().key.toString()
+            val messageKey = getMessageKey(contact.id)//получаем уникальный ключ сообщения
             val path = REF_STORAGE_ROOT
                 .child(FOLDER_MESSAGE_IMAGE)//путь
                 .child(messageKey)
@@ -281,5 +287,9 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         mRefMessages.removeEventListener(mMessagesListener)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mAppVoiceRecorder.releaseRecorder()//удалили рекодер, когда вышли из чата
+    }
 
 }
