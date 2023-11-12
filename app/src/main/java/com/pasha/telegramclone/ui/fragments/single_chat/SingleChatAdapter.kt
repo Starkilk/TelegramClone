@@ -7,6 +7,7 @@ import com.pasha.telegramclone.database.CURRENT_UID
 import com.pasha.telegramclone.ui.fragments.message_recycler_view.view_holders.AppHolderFactory
 import com.pasha.telegramclone.ui.fragments.message_recycler_view.view_holders.HolderImageMessage
 import com.pasha.telegramclone.ui.fragments.message_recycler_view.view_holders.HolderTextMessage
+import com.pasha.telegramclone.ui.fragments.message_recycler_view.view_holders.HolderVoiceMessage
 import com.pasha.telegramclone.ui.fragments.message_recycler_view.views.MessageView
 import com.pasha.telegramclone.utilits.asTime
 import com.pasha.telegramclone.utilits.downloadAndSetImage
@@ -33,47 +34,12 @@ class SingleChatAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     //в зависимости от типа холдера, отрисовываем(заполняем надутую разметку) то или иное view
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is HolderImageMessage -> drawMessageImage(holder,position)
-            is HolderTextMessage -> drawMessageText(holder,position)
+            is HolderImageMessage -> holder.drawMessageImage(holder,mListMessagesCache[position])
+            is HolderTextMessage -> holder.drawMessageText(holder,mListMessagesCache[position])
+            is HolderVoiceMessage -> holder.drawMessageVoice(holder,mListMessagesCache[position])
             else ->{
 
             }
-        }
-    }
-
-    //пользователь/пользователю отправил/отправили КАРТИНКУ
-    private fun drawMessageImage(holder: HolderImageMessage, position: Int) {
-        if(mListMessagesCache[position].from == CURRENT_UID){//если сообщение от текущего пользователя(от нас)
-            //отрисовали сообщение отправленое НАМИ
-            holder.blocReceivedImageMessage.visibility = View.GONE//скрыли левое View
-            holder.blocUserImageMessage.visibility = View.VISIBLE//отрисовали ПРАВОЕ View
-            holder.chatUserImage.downloadAndSetImage(mListMessagesCache[position].fileUrl)//передали картинку, которую нужно отправить в чат
-            holder.chatUserImageMessageTime.text = mListMessagesCache[position].timeStamp.asTime()//присваиваем время
-
-        }else{//если сообщение от собеседника
-            //отрисовали сообщение отправленое СОБЕСЕДНИКОМ
-            holder.blocReceivedImageMessage.visibility = View.VISIBLE//отрисовали ЛЕВОЕ View
-            holder.blocUserImageMessage.visibility = View.GONE//скрыли правое View
-            holder.chatReceivedImage.downloadAndSetImage(mListMessagesCache[position].fileUrl)//передали картинку, которую нужно отправить в чат
-            holder.chatReceivedImageMessageTime.text = mListMessagesCache[position].timeStamp.asTime()//присваиваем время
-        }
-    }
-
-    //пользователь/пользователю отправил/отправили ТЕКСТ
-    private fun drawMessageText(holder: HolderTextMessage, position: Int) {
-        if(mListMessagesCache[position].from == CURRENT_UID){//если сообщение от текущего пользователя(от нас), то рисуем  правую View
-            holder.blocUserMessage.visibility = View.VISIBLE
-            holder.blocReceivedMessage.visibility = View.GONE
-
-            holder.chatUserMessage.text = mListMessagesCache[position].text//присваиваем текст сообщения
-            holder.chatUserMessageTime.text = mListMessagesCache[position].timeStamp.asTime()//присваиваем время
-
-        }else{//если сообщение от собеседника, рисуем левую View
-            holder.blocUserMessage.visibility = View.GONE
-            holder.blocReceivedMessage.visibility = View.VISIBLE
-
-            holder.chatReceivedMessage.text = mListMessagesCache[position].text//присваиваем текст сообщения
-            holder.chatReceivedMessageTime.text = mListMessagesCache[position].timeStamp.asTime()//присваиваем время
         }
     }
 

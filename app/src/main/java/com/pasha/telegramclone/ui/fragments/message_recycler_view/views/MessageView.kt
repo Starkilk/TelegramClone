@@ -18,6 +18,9 @@ interface MessageView {
         //тип TEXT это 1
         val MESSAGE_TEXT: Int
             get() = 1
+
+        val MESSAGE_VOICE:Int
+            get() = 2
     }
 
     //возвращает тип View
