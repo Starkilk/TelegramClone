@@ -1,15 +1,12 @@
-package com.pasha.telegramclone.ui.fragments
+package com.pasha.telegramclone.ui.screens
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentChangeUsernameBinding
 import com.pasha.telegramclone.utilits.AppValueEventListener
-import com.pasha.telegramclone.database.CHILD_USERNAME
 import com.pasha.telegramclone.database.NODE_USERNAMES
-import com.pasha.telegramclone.database.NODE_USERS
 import com.pasha.telegramclone.database.REF_DATABASE_ROOT
 import com.pasha.telegramclone.database.CURRENT_UID
 import com.pasha.telegramclone.database.USER

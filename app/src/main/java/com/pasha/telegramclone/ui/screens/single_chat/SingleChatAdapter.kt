@@ -1,16 +1,12 @@
-package com.pasha.telegramclone.ui.fragments.single_chat
+package com.pasha.telegramclone.ui.screens.single_chat
 
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.pasha.telegramclone.database.CURRENT_UID
-import com.pasha.telegramclone.ui.fragments.message_recycler_view.view_holders.AppHolderFactory
-import com.pasha.telegramclone.ui.fragments.message_recycler_view.view_holders.HolderImageMessage
-import com.pasha.telegramclone.ui.fragments.message_recycler_view.view_holders.HolderTextMessage
-import com.pasha.telegramclone.ui.fragments.message_recycler_view.view_holders.HolderVoiceMessage
-import com.pasha.telegramclone.ui.fragments.message_recycler_view.views.MessageView
-import com.pasha.telegramclone.utilits.asTime
-import com.pasha.telegramclone.utilits.downloadAndSetImage
+import com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders.AppHolderFactory
+import com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders.HolderImageMessage
+import com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders.HolderTextMessage
+import com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders.HolderVoiceMessage
+import com.pasha.telegramclone.ui.screens.message_recycler_view.views.MessageView
 
 
 class SingleChatAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {

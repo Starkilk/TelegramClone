@@ -8,8 +8,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.pasha.telegramclone.databinding.ActivityMainBinding
-import com.pasha.telegramclone.ui.fragments.MainFragment
-import com.pasha.telegramclone.ui.fragments.register.EnterPhoneNumberFragment
+import com.pasha.telegramclone.ui.screens.MainFragment
+import com.pasha.telegramclone.ui.screens.register.EnterPhoneNumberFragment
 import com.pasha.telegramclone.ui.objects.AppDrawer
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.database.AUTH

@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.fragments.message_recycler_view.views
+package com.pasha.telegramclone.ui.screens.message_recycler_view.views
 
 import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.utilits.TYPE_MESSAGE_IMAGE

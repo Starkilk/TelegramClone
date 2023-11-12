@@ -1,18 +1,12 @@
-package com.pasha.telegramclone.ui.fragments
+package com.pasha.telegramclone.ui.screens
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentChangeBioBinding
-import com.pasha.telegramclone.database.CHILD_BIO
-import com.pasha.telegramclone.database.NODE_USERS
-import com.pasha.telegramclone.database.REF_DATABASE_ROOT
-import com.pasha.telegramclone.database.CURRENT_UID
 import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.database.setBioToDatabase
-import com.pasha.telegramclone.utilits.showToast
 
 
 class ChangeBioFragment : BaseChangeFragment() {

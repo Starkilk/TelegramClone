@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.fragments.message_recycler_view.view_holders
+package com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders
 
 import android.view.View
 import android.widget.ImageView
@@ -6,9 +6,8 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.pasha.telegramclone.database.CURRENT_UID
-import com.pasha.telegramclone.databinding.MessageItemImageBinding
 import com.pasha.telegramclone.databinding.MessageItemVoiceBinding
-import com.pasha.telegramclone.ui.fragments.message_recycler_view.views.MessageView
+import com.pasha.telegramclone.ui.screens.message_recycler_view.views.MessageView
 import com.pasha.telegramclone.utilits.asTime
 
 //холдер для отправки изображений

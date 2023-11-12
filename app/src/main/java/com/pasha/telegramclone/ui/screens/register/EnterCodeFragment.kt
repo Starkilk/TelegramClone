@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.fragments.register
+package com.pasha.telegramclone.ui.screens.register
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.fragments.message_recycler_view.views
+package com.pasha.telegramclone.ui.screens.message_recycler_view.views
 
 //View отправки текстового сообщения
 

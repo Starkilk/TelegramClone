@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.fragments.single_chat
+package com.pasha.telegramclone.ui.screens.single_chat
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -21,7 +21,7 @@ import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentSingleChatBinding
 import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.models.UserModel
-import com.pasha.telegramclone.ui.fragments.BaseFragment
+import com.pasha.telegramclone.ui.screens.BaseFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
 import com.pasha.telegramclone.database.CURRENT_UID
@@ -35,7 +35,7 @@ import com.pasha.telegramclone.database.getMessageKey
 import com.pasha.telegramclone.database.getUserModel
 import com.pasha.telegramclone.database.sendMessage
 import com.pasha.telegramclone.database.uploadFileToStorage
-import com.pasha.telegramclone.ui.fragments.message_recycler_view.views.AppViewFactory
+import com.pasha.telegramclone.ui.screens.message_recycler_view.views.AppViewFactory
 import com.pasha.telegramclone.utilits.AppChildEventListener
 import com.pasha.telegramclone.utilits.AppTextWatcher
 import com.pasha.telegramclone.utilits.AppVoiceRecorder

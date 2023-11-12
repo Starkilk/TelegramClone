@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.fragments
+package com.pasha.telegramclone.ui.screens
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent

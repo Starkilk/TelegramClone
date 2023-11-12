@@ -1,11 +1,10 @@
-package com.pasha.telegramclone.ui.fragments.message_recycler_view.view_holders
+package com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pasha.telegramclone.R
-import com.pasha.telegramclone.ui.fragments.message_recycler_view.views.MessageView
-import com.pasha.telegramclone.utilits.TYPE_MESSAGE_IMAGE
+import com.pasha.telegramclone.ui.screens.message_recycler_view.views.MessageView
 
 //фабричный метод
 class AppHolderFactory {
