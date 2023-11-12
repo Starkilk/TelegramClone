@@ -9,7 +9,7 @@ import com.pasha.telegramclone.databinding.MessageItemTextBinding
 import com.pasha.telegramclone.ui.screens.message_recycler_view.views.MessageView
 import com.pasha.telegramclone.utilits.asTime
 
-class HolderTextMessage(view: View):RecyclerView.ViewHolder(view) {
+class HolderTextMessage(view: View):RecyclerView.ViewHolder(view), MessageHolder {
     private val binding = MessageItemTextBinding.bind(view)
 
     //////TEXT
@@ -24,21 +24,22 @@ class HolderTextMessage(view: View):RecyclerView.ViewHolder(view) {
     val chatReceivedMessage: TextView = binding.chatReceivedMessage
     val chatReceivedMessageTime: TextView = binding.chatReceivedMessageTime
 
-    //пользователь/пользователю отправил/отправили ТЕКСТ
-     fun drawMessageText(holder: HolderTextMessage, view:MessageView) {
-        if(view.from == CURRENT_UID){//если сообщение от текущего пользователя(от нас), то рисуем  правую View
-            holder.blocUserMessage.visibility = View.VISIBLE
-            holder.blocReceivedMessage.visibility = View.GONE
 
-            holder.chatUserMessage.text = view.text//присваиваем текст сообщения
-            holder.chatUserMessageTime.text = view.timeStamp.asTime()//присваиваем время
+    //пользователь/пользователю отправил/отправили ТЕКСТ
+    override fun drawMessage(view: MessageView) {
+        if(view.from == CURRENT_UID){//если сообщение от текущего пользователя(от нас), то рисуем  правую View
+            blocUserMessage.visibility = View.VISIBLE
+            blocReceivedMessage.visibility = View.GONE
+
+            chatUserMessage.text = view.text//присваиваем текст сообщения
+            chatUserMessageTime.text = view.timeStamp.asTime()//присваиваем время
 
         }else{//если сообщение от собеседника, рисуем левую View
-            holder.blocUserMessage.visibility = View.GONE
-            holder.blocReceivedMessage.visibility = View.VISIBLE
+            blocUserMessage.visibility = View.GONE
+            blocReceivedMessage.visibility = View.VISIBLE
 
-            holder.chatReceivedMessage.text = view.text//присваиваем текст сообщения
-            holder.chatReceivedMessageTime.text = view.timeStamp.asTime()//присваиваем время
+            chatReceivedMessage.text = view.text//присваиваем текст сообщения
+            chatReceivedMessageTime.text = view.timeStamp.asTime()//присваиваем время
         }
     }
 }

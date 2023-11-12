@@ -13,7 +13,7 @@ import com.pasha.telegramclone.utilits.downloadAndSetImage
 
 //холдер для отправки изображений
 
-class HolderImageMessage(view:View):RecyclerView.ViewHolder(view) {
+class HolderImageMessage(view:View):RecyclerView.ViewHolder(view), MessageHolder {
     private val binding = MessageItemImageBinding.bind(view)
 
     ///////IMAGE
@@ -27,21 +27,22 @@ class HolderImageMessage(view:View):RecyclerView.ViewHolder(view) {
     val chatReceivedImage: ImageView = binding.chatReceivedImage
     val chatReceivedImageMessageTime: TextView = binding.chatReceivedImageMessageTime
 
+
     //пользователь/пользователю отправил/отправили КАРТИНКУ
-     fun drawMessageImage(holder: HolderImageMessage, view:MessageView) {
+    override fun drawMessage(view: MessageView) {
         if(view.from == CURRENT_UID){//если сообщение от текущего пользователя(от нас)
             //отрисовали сообщение отправленое НАМИ
-            holder.blocReceivedImageMessage.visibility = View.GONE//скрыли левое View
-            holder.blocUserImageMessage.visibility = View.VISIBLE//отрисовали ПРАВОЕ View
-            holder.chatUserImage.downloadAndSetImage(view.fileUrl)//передали картинку, которую нужно отправить в чат
-            holder.chatUserImageMessageTime.text = view.timeStamp.asTime()//присваиваем время
+            blocReceivedImageMessage.visibility = View.GONE//скрыли левое View
+            blocUserImageMessage.visibility = View.VISIBLE//отрисовали ПРАВОЕ View
+            chatUserImage.downloadAndSetImage(view.fileUrl)//передали картинку, которую нужно отправить в чат
+            chatUserImageMessageTime.text = view.timeStamp.asTime()//присваиваем время
 
         }else{//если сообщение от собеседника
             //отрисовали сообщение отправленое СОБЕСЕДНИКОМ
-            holder.blocReceivedImageMessage.visibility = View.VISIBLE//отрисовали ЛЕВОЕ View
-            holder.blocUserImageMessage.visibility = View.GONE//скрыли правое View
-            holder.chatReceivedImage.downloadAndSetImage(view.fileUrl)//передали картинку, которую нужно отправить в чат
-            holder.chatReceivedImageMessageTime.text = view.timeStamp.asTime()//присваиваем время
+            blocReceivedImageMessage.visibility = View.VISIBLE//отрисовали ЛЕВОЕ View
+            blocUserImageMessage.visibility = View.GONE//скрыли правое View
+            chatReceivedImage.downloadAndSetImage(view.fileUrl)//передали картинку, которую нужно отправить в чат
+            chatReceivedImageMessageTime.text = view.timeStamp.asTime()//присваиваем время
         }
     }
 }

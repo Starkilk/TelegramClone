@@ -12,7 +12,7 @@ import com.pasha.telegramclone.utilits.asTime
 
 //холдер для отправки изображений
 
-class HolderVoiceMessage(view:View):RecyclerView.ViewHolder(view) {
+class HolderVoiceMessage(view:View):RecyclerView.ViewHolder(view), MessageHolder {
     private val binding = MessageItemVoiceBinding.bind(view)
 
     ///////IMAGE
@@ -31,19 +31,20 @@ class HolderVoiceMessage(view:View):RecyclerView.ViewHolder(view) {
     val bChatReceivedPlay:ImageView = binding.bChatReceivedPlay
     val bChatReceivedStop:ImageView = binding.bChatReceivedStop
 
+
     //пользователь/пользователю отправил/отправили ГОЛОСОВОЕ сообщение
-     fun drawMessageVoice(holder: HolderVoiceMessage, view: MessageView) {
+    override fun drawMessage(view: MessageView) {
         if(view.from == CURRENT_UID){//если сообщение от текущего пользователя(от нас)
             //отрисовали сообщение отправленое НАМИ
-            holder.blocReceivedVoiceMessage.visibility = View.GONE//скрыли левое View
-            holder.blocUserVoiceMessage.visibility = View.VISIBLE//отрисовали ПРАВОЕ View
-            holder.chatUserVoiceMessageTime.text = view.timeStamp.asTime()//присваиваем время
+            blocReceivedVoiceMessage.visibility = View.GONE//скрыли левое View
+            blocUserVoiceMessage.visibility = View.VISIBLE//отрисовали ПРАВОЕ View
+            chatUserVoiceMessageTime.text = view.timeStamp.asTime()//присваиваем время
 
         }else{//если сообщение от собеседника
             //отрисовали сообщение отправленое СОБЕСЕДНИКОМ
-            holder.blocReceivedVoiceMessage.visibility = View.VISIBLE//отрисовали ЛЕВОЕ View
-            holder.blocUserVoiceMessage.visibility = View.GONE//скрыли правое View
-            holder.chatReceivedVoiceMessageTime.text = view.timeStamp.asTime()//присваиваем время
+            blocReceivedVoiceMessage.visibility = View.VISIBLE//отрисовали ЛЕВОЕ View
+            blocUserVoiceMessage.visibility = View.GONE//скрыли правое View
+            chatReceivedVoiceMessageTime.text = view.timeStamp.asTime()//присваиваем время
         }
     }
 

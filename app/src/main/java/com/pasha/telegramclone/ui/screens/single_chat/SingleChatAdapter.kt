@@ -6,6 +6,7 @@ import com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders.App
 import com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders.HolderImageMessage
 import com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders.HolderTextMessage
 import com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders.HolderVoiceMessage
+import com.pasha.telegramclone.ui.screens.message_recycler_view.view_holders.MessageHolder
 import com.pasha.telegramclone.ui.screens.message_recycler_view.views.MessageView
 
 
@@ -27,16 +28,9 @@ class SingleChatAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = mListMessagesCache.size//передали размер нашего списка
 
-    //в зависимости от типа холдера, отрисовываем(заполняем надутую разметку) то или иное view
+    //отрисовываем(заполняем надутую разметку) той или иное view
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder){
-            is HolderImageMessage -> holder.drawMessageImage(holder,mListMessagesCache[position])
-            is HolderTextMessage -> holder.drawMessageText(holder,mListMessagesCache[position])
-            is HolderVoiceMessage -> holder.drawMessageVoice(holder,mListMessagesCache[position])
-            else ->{
-
-            }
-        }
+        (holder as MessageHolder).drawMessage(mListMessagesCache[position])
     }
 
     //добавление сообщение(отправка) вних списка, когда перемещаемся к последнему отпраленному сообщению
