@@ -35,6 +35,7 @@ import com.pasha.telegramclone.database.getMessageKey
 import com.pasha.telegramclone.database.getUserModel
 import com.pasha.telegramclone.database.sendMessage
 import com.pasha.telegramclone.database.uploadFileToStorage
+import com.pasha.telegramclone.ui.fragments.message_recycler_view.views.AppViewFactory
 import com.pasha.telegramclone.utilits.AppChildEventListener
 import com.pasha.telegramclone.utilits.AppTextWatcher
 import com.pasha.telegramclone.utilits.AppVoiceRecorder
@@ -161,11 +162,11 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
             val message = it.getCommonModel()//получили сообщение из объекта
 
             if (mSmoothScrollToPosition){//если нужно добавить сообщение вниз
-                mAdapter.addItemToBottom(message){//отправляем сообщение в адаптер
+                mAdapter.addItemToBottom(AppViewFactory.getView(message)){//отправляем (объект)сообщение в адаптер
                     mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)//листаем rcView к последнему элементу(чисто визуальноя часть, чтобы час не приходилось листать при новом сообщении)
                 }
             }else{//если нужно дорисовать старые сообщения сверху
-                mAdapter.addItemToTop(message){//отправляем сообщение в адаптер
+                mAdapter.addItemToTop(AppViewFactory.getView(message)){//отправляем (объект)сообщение в адаптер
                     mSwipeRefreshLayout.isRefreshing = false//отклёчение значка загрузки после использования "резинки от трусов"
                 }
             }
