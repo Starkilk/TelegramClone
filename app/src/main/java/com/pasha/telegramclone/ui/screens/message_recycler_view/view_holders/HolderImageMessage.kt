@@ -18,14 +18,14 @@ class HolderImageMessage(view:View):RecyclerView.ViewHolder(view), MessageHolder
 
     ///////IMAGE
     //для отправляющего сообщения пользователя
-    val blocUserImageMessage: ConstraintLayout = binding.blocUserImageMessage
-    val chatUserImage: ImageView = binding.chatUserImage
-    val chatUserImageMessageTime: TextView = binding.chatUserImageMessageTime
+    private val blocUserImageMessage: ConstraintLayout = binding.blocUserImageMessage
+    private val chatUserImage: ImageView = binding.chatUserImage
+    private val chatUserImageMessageTime: TextView = binding.chatUserImageMessageTime
 
     //для принимающего сообщения пользователя
-    val blocReceivedImageMessage: ConstraintLayout = binding.blocReceivedImageMessage
-    val chatReceivedImage: ImageView = binding.chatReceivedImage
-    val chatReceivedImageMessageTime: TextView = binding.chatReceivedImageMessageTime
+    private val blocReceivedImageMessage: ConstraintLayout = binding.blocReceivedImageMessage
+    private val chatReceivedImage: ImageView = binding.chatReceivedImage
+    private val chatReceivedImageMessageTime: TextView = binding.chatReceivedImageMessageTime
 
 
     //пользователь/пользователю отправил/отправили КАРТИНКУ
@@ -44,5 +44,13 @@ class HolderImageMessage(view:View):RecyclerView.ViewHolder(view), MessageHolder
             chatReceivedImage.downloadAndSetImage(view.fileUrl)//передали картинку, которую нужно отправить в чат
             chatReceivedImageMessageTime.text = view.timeStamp.asTime()//присваиваем время
         }
+    }
+
+    override fun onAttach(view: MessageView) {
+
+    }
+
+    override fun onDettach() {
+
     }
 }

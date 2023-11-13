@@ -15,14 +15,14 @@ class HolderTextMessage(view: View):RecyclerView.ViewHolder(view), MessageHolder
     //////TEXT
     //проинициализировали вьюшки
     //для отправляющего сообщения пользователя
-    val blocUserMessage: ConstraintLayout = binding.blocUserMessage
-    val chatUserMessage: TextView = binding.chatUserMessage
-    val chatUserMessageTime: TextView = binding.chatUserMessageTime
+    private val blocUserMessage: ConstraintLayout = binding.blocUserMessage
+    private val chatUserMessage: TextView = binding.chatUserMessage
+    private val chatUserMessageTime: TextView = binding.chatUserMessageTime
 
     //для принимающего сообщения пользователя
-    val blocReceivedMessage: ConstraintLayout = binding.blocReceivedMessage
-    val chatReceivedMessage: TextView = binding.chatReceivedMessage
-    val chatReceivedMessageTime: TextView = binding.chatReceivedMessageTime
+    private val blocReceivedMessage: ConstraintLayout = binding.blocReceivedMessage
+    private val chatReceivedMessage: TextView = binding.chatReceivedMessage
+    private val chatReceivedMessageTime: TextView = binding.chatReceivedMessageTime
 
 
     //пользователь/пользователю отправил/отправили ТЕКСТ
@@ -41,5 +41,13 @@ class HolderTextMessage(view: View):RecyclerView.ViewHolder(view), MessageHolder
             chatReceivedMessage.text = view.text//присваиваем текст сообщения
             chatReceivedMessageTime.text = view.timeStamp.asTime()//присваиваем время
         }
+    }
+
+    override fun onAttach(view: MessageView) {
+
+    }
+
+    override fun onDettach() {
+
     }
 }

@@ -33,6 +33,18 @@ class SingleChatAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         (holder as MessageHolder).drawMessage(mListMessagesCache[position])
     }
 
+    //функция отрабатывает, когда наш holder(View) появляется на экране, и можем производить ненкие действия с эти вью
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {//когда holder в поле зрения
+        (holder as MessageHolder).onAttach(mListMessagesCache[holder.bindingAdapterPosition])//применяем к нему соответствующую функцию
+        super.onViewAttachedToWindow(holder)
+    }
+
+    //функция срабатывает, когда holder пропадает из поля зрения пользователя
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {//когда holder вне поля зрения
+        (holder as MessageHolder).onDettach()//применяем к нему соответствующую функцию
+        super.onViewDetachedFromWindow(holder)
+    }
+
     //добавление сообщение(отправка) вних списка, когда перемещаемся к последнему отпраленному сообщению
     fun addItemToBottom(item:MessageView, onSuccess:() -> Unit){
         if (!mListMessagesCache.contains(item)){//устраняем проблему дублирования сообщений, чтобы список на список не накладывался(сравниваем объекты по id с помощью equels в модели CommonModel)

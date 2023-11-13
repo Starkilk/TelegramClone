@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pasha.telegramclone.database.CURRENT_UID
 import com.pasha.telegramclone.databinding.MessageItemVoiceBinding
 import com.pasha.telegramclone.ui.screens.message_recycler_view.views.MessageView
+import com.pasha.telegramclone.utilits.AppVoicePlayer
 import com.pasha.telegramclone.utilits.asTime
 
 //холдер для отправки изображений
@@ -15,21 +16,23 @@ import com.pasha.telegramclone.utilits.asTime
 class HolderVoiceMessage(view:View):RecyclerView.ViewHolder(view), MessageHolder {
     private val binding = MessageItemVoiceBinding.bind(view)
 
+    private val mAppVoicePlayer = AppVoicePlayer()//проигрыватель ГС
+
     ///////IMAGE
     //для отправляющего сообщения пользователя
-    val blocUserVoiceMessage: ConstraintLayout = binding.blocUserVoiceMessage
-    val chatUserVoiceMessageTime: TextView = binding.chatUserVoiceMessageTime
+    private val blocUserVoiceMessage: ConstraintLayout = binding.blocUserVoiceMessage
+    private val chatUserVoiceMessageTime: TextView = binding.chatUserVoiceMessageTime
 
     //для принимающего сообщения пользователя
-    val blocReceivedVoiceMessage: ConstraintLayout = binding.blocReceivedVoiceMessage
+    private val blocReceivedVoiceMessage: ConstraintLayout = binding.blocReceivedVoiceMessage
     val chatReceivedVoiceMessageTime: TextView = binding.chatReceivedVoiceMessageTime
 
     //кнопки: слушать, остановить Для Нас
-    val bChatUserPlay:ImageView = binding.bChatUserPlay
-    val bChatUserStop:ImageView = binding.bChatUserStop
+    private val bChatUserPlay:ImageView = binding.bChatUserPlay
+    private val bChatUserStop:ImageView = binding.bChatUserStop
     //кнопки: слушать, остановить Для Собеседника
-    val bChatReceivedPlay:ImageView = binding.bChatReceivedPlay
-    val bChatReceivedStop:ImageView = binding.bChatReceivedStop
+    private val bChatReceivedPlay:ImageView = binding.bChatReceivedPlay
+    private val bChatReceivedStop:ImageView = binding.bChatReceivedStop
 
 
     //пользователь/пользователю отправил/отправили ГОЛОСОВОЕ сообщение
@@ -46,6 +49,64 @@ class HolderVoiceMessage(view:View):RecyclerView.ViewHolder(view), MessageHolder
             blocUserVoiceMessage.visibility = View.GONE//скрыли правое View
             chatReceivedVoiceMessageTime.text = view.timeStamp.asTime()//присваиваем время
         }
+    }
+
+    override fun onAttach(view: MessageView) {//VoiceHolder в поле зрения
+        mAppVoicePlayer.initPlayer()//создали экземпляр плейера
+        if(view.from == CURRENT_UID){//проверка: мы написали сообщение или собеседник
+            bChatUserPlay.setOnClickListener { //слушатель событий на кнопку "прослушать ГС на наше сообщение"
+                bChatUserPlay.visibility = View.GONE
+                bChatUserStop.visibility = View.VISIBLE//после нажатия на старт, появляется кнопка стоп
+                bChatUserStop.setOnClickListener {//слушатель на кнопку "stop"
+                    stop {//функция стоп сработала и мы меняем иконки
+                        bChatUserPlay.visibility = View.VISIBLE
+                        bChatUserStop.visibility = View.GONE
+                    }
+                }
+                play(view){//запускаем прослушиваение нашего ГС
+                    //проигрывание закончилось, меняем кнопки
+                    bChatUserPlay.visibility = View.VISIBLE
+                    bChatUserStop.visibility = View.GONE
+
+                }
+            }
+        }else{
+            bChatReceivedPlay.setOnClickListener { //слушатель событий на кнопку "прослушать ГС на сообщение собеседника"
+                bChatReceivedPlay.visibility = View.GONE
+                bChatReceivedStop.visibility = View.VISIBLE//после нажатия на старт, появляется кнопка стоп
+                bChatReceivedStop.setOnClickListener {//слушатель на кнопку "stop"
+                    stop {//функция стоп сработала и мы меняем иконки
+                        bChatReceivedPlay.visibility = View.VISIBLE
+                        bChatReceivedStop.visibility = View.GONE
+                    }
+                }
+                play(view){//запускаем прослушиваение ГС собеседника
+                    //проигрывание закончилось, меняем кнопки
+                    bChatReceivedPlay.visibility = View.VISIBLE
+                    bChatReceivedStop.visibility = View.GONE
+
+                }
+            }
+        }
+    }
+
+    private fun play(view: MessageView, function: () -> Unit) {
+        mAppVoicePlayer.play(view.id,view.fileUrl){//запускаем прослушиваение ГС/передали(клющ сообщения, url файла)
+            function()
+        }
+    }
+
+    fun stop(function: () -> Unit){
+        mAppVoicePlayer.stopPlay {
+            function()
+        }
+    }
+
+    override fun onDettach() {//VoiceHolder вне поле зрения
+        //удаляем слушатель, чтобы не занимать память
+        bChatUserPlay.setOnClickListener (null)
+        bChatReceivedPlay.setOnClickListener (null)
+        mAppVoicePlayer.release()//уничтожили проигрыватель
     }
 
 }

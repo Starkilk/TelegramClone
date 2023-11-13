@@ -13,6 +13,7 @@ import com.pasha.telegramclone.models.UserModel
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
 import com.pasha.telegramclone.utilits.showToast
+import java.io.File
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -98,9 +99,12 @@ fun DataSnapshot.getUserModel(): UserModel = this.getValue(UserModel::class.java
 
 //в БД видно какую структуру строит этот код
 fun sendMessage(message: String, receivingUserId: String, typeText: String, function: () -> Unit) {
-    val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"//путь: сообщения->наш id->id собеседника
-    val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"//путь: сообщения->id собеседника->наш id
-    val messageKey = REF_DATABASE_ROOT.child(refDialogUser).push().key//уникальный ключ для каждого сообзения
+    val refDialogUser =
+        "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"//путь: сообщения->наш id->id собеседника
+    val refDialogReceivingUser =
+        "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"//путь: сообщения->id собеседника->наш id
+    val messageKey =
+        REF_DATABASE_ROOT.child(refDialogUser).push().key//уникальный ключ для каждого сообзения
 
     //мапа, которую заполняем данными одного сообщения
     val mapMessage = hashMapOf<String, Any>()//ключ, значение
@@ -171,37 +175,45 @@ fun setNameToDatabase(fullname: String) {
         }.addOnFailureListener { showToast(it.message.toString()) }
 }
 
-fun sendMessageAsFile(receivingUserId: String, fileUrl: String, messageKey: String, typeMessage: String) {
-     val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"//путь: сообщения->наш id->id собеседника
-     val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"//путь: сообщения->id собеседника->наш id
+fun sendMessageAsFile(
+    receivingUserId: String,
+    fileUrl: String,
+    messageKey: String,
+    typeMessage: String
+) {
+    val refDialogUser =
+        "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"//путь: сообщения->наш id->id собеседника
+    val refDialogReceivingUser =
+        "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"//путь: сообщения->id собеседника->наш id
 
-     //мапа, которую заполняем данными одного сообщения
-     val mapMessage = hashMapOf<String, Any>()//ключ, значение
-     mapMessage[CHILD_FROM] = CURRENT_UID
-     mapMessage[CHILD_TYPE] = typeMessage//тип сообщения
-     mapMessage[CHILD_ID] = messageKey//cilde id уникальный номер сообщения
-     mapMessage[CHILD_TIME_STAMP] = ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
-     mapMessage[CHILD_FILE_URL] = fileUrl
+    //мапа, которую заполняем данными одного сообщения
+    val mapMessage = hashMapOf<String, Any>()//ключ, значение
+    mapMessage[CHILD_FROM] = CURRENT_UID
+    mapMessage[CHILD_TYPE] = typeMessage//тип сообщения
+    mapMessage[CHILD_ID] = messageKey//cilde id уникальный номер сообщения
+    mapMessage[CHILD_TIME_STAMP] =
+        ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
+    mapMessage[CHILD_FILE_URL] = fileUrl
 
-     //мапа, где ключ - это путь, а значение - само сообщение(тоже мапа, реализованная выше)
-     val mapDialog = hashMapOf<String, Any>()
-     mapDialog["$refDialogUser/$messageKey"] = mapMessage
-     mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
+    //мапа, где ключ - это путь, а значение - само сообщение(тоже мапа, реализованная выше)
+    val mapDialog = hashMapOf<String, Any>()
+    mapDialog["$refDialogUser/$messageKey"] = mapMessage
+    mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
 
-     REF_DATABASE_ROOT
-         .updateChildren(mapDialog)
-         .addOnFailureListener { showToast(it.message.toString()) }
+    REF_DATABASE_ROOT
+        .updateChildren(mapDialog)
+        .addOnFailureListener { showToast(it.message.toString()) }
 }
 
 //получаем ключ сообщения id - это идентификатор собеседника
- fun getMessageKey(id: String): String {
+fun getMessageKey(id: String): String {
     val messageKey = REF_DATABASE_ROOT.child(NODE_MESSAGES).child(CURRENT_UID).child(id)
         .push().key.toString()
     return messageKey
 }
 
 //загружаем файл в хранилище
-fun uploadFileToStorage(uri: Uri, messageKey:String, receivedID:String, typeMessage:String){
+fun uploadFileToStorage(uri: Uri, messageKey: String, receivedID: String, typeMessage: String) {
     val path = REF_STORAGE_ROOT.child(FOLDER_FILES).child(messageKey)//путь к файлам
 
     putFileToStorage(uri, path) {//отправили файл в хранилище
@@ -210,4 +222,12 @@ fun uploadFileToStorage(uri: Uri, messageKey:String, receivedID:String, typeMess
             sendMessageAsFile(receivedID, ourUrl, messageKey, typeMessage)//отправляем файл
         }
     }
+}
+
+//скачивание файла с хранилища
+fun getFileFromStorage(mFile: File, fileUrl: String, function: () -> Unit) {
+    val path = REF_STORAGE_ROOT.storage.getReferenceFromUrl(fileUrl)//путь к url файла
+    path.getFile(mFile)//получаем url
+        .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
 }
