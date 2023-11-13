@@ -59,6 +59,7 @@ class HolderVoiceMessage(view:View):RecyclerView.ViewHolder(view), MessageHolder
                 bChatUserStop.visibility = View.VISIBLE//после нажатия на старт, появляется кнопка стоп
                 bChatUserStop.setOnClickListener {//слушатель на кнопку "stop"
                     stop {//функция стоп сработала и мы меняем иконки
+                        bChatUserStop.setOnClickListener(null)
                         bChatUserPlay.visibility = View.VISIBLE
                         bChatUserStop.visibility = View.GONE
                     }
@@ -76,6 +77,7 @@ class HolderVoiceMessage(view:View):RecyclerView.ViewHolder(view), MessageHolder
                 bChatReceivedStop.visibility = View.VISIBLE//после нажатия на старт, появляется кнопка стоп
                 bChatReceivedStop.setOnClickListener {//слушатель на кнопку "stop"
                     stop {//функция стоп сработала и мы меняем иконки
+                        bChatReceivedStop.setOnClickListener(null)
                         bChatReceivedPlay.visibility = View.VISIBLE
                         bChatReceivedStop.visibility = View.GONE
                     }
@@ -102,7 +104,7 @@ class HolderVoiceMessage(view:View):RecyclerView.ViewHolder(view), MessageHolder
         }
     }
 
-    override fun onDettach() {//VoiceHolder вне поле зрения
+    override fun onDetach() {//VoiceHolder вне поле зрения
         //удаляем слушатель, чтобы не занимать память
         bChatUserPlay.setOnClickListener (null)
         bChatReceivedPlay.setOnClickListener (null)

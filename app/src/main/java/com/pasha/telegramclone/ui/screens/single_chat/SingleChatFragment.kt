@@ -279,9 +279,10 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         mRefMessages.removeEventListener(mMessagesListener)
     }
 
-    override fun onDestroy() {
+    override fun onDestroy() {//при выходе из чата
         super.onDestroy()
         mAppVoiceRecorder.releaseRecorder()//удалили рекодер, когда вышли из чата
+        mAdapter.onDestroy()//удаляем слушатели нажатий
     }
 
 }
