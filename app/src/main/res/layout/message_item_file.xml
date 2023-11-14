@@ -9,7 +9,7 @@
 
     <!--ГОЛОСОВОЕ СООБЩЕНИЕ ОТ СОБЕСЕДНИКА-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/blocReceivedVoiceMessage"
+        android:id="@+id/blocReceivedFileMessage"
         android:layout_width="@dimen/chat_common_width"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/bg_receiving_message"
@@ -18,28 +18,17 @@
         android:layout_height="@dimen/chat_common_height">
 
     <ImageView
-        android:id="@+id/bChatReceivedPlay"
+        android:id="@+id/bChatReceivedDownload"
         android:layout_width="@dimen/b_chat_width"
         android:layout_height="@dimen/b_chat_height"
-        android:src="@drawable/ic_play_blue"
+        android:src="@drawable/ic_file_blue"
+        android:layout_marginStart="@dimen/downloan_file_margin_start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-        <ImageView
-            android:id="@+id/bChatReceivedStop"
-            android:layout_width="@dimen/b_chat_width"
-            android:layout_height="@dimen/b_chat_height"
-            android:src="@drawable/ic_stop_blue"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-
-
         <TextView
-            android:id="@+id/chatReceivedVoiceMessageTime"
+            android:id="@+id/chatReceivedFileMessageTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text = "7:30 PM"
@@ -48,11 +37,22 @@
             android:layout_marginEnd="@dimen/app_small_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/chatReceivedFilename"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/app_small_margin"
+            app:layout_constraintBottom_toTopOf="@id/chatReceivedFileMessageTime"
+            app:layout_constraintStart_toEndOf="@id/bChatReceivedDownload"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--ГОЛОСОВОЕ СООБЩЕНИЕ ОТ СОБЕСЕДНИКА-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/blocUserVoiceMessage"
+        android:id="@+id/blocUserFileMessage"
         android:layout_width="@dimen/chat_common_width"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/bg_user_message"
@@ -61,28 +61,18 @@
         android:layout_height="@dimen/chat_common_height">
 
         <ImageView
-            android:id="@+id/bChatUserPlay"
+            android:id="@+id/bChatUserDownload"
             android:layout_width="@dimen/b_chat_width"
             android:layout_height="@dimen/b_chat_height"
-            android:src="@drawable/ic_play_green"
+            android:layout_marginStart="@dimen/downloan_file_margin_start"
+            android:src="@drawable/ic_file_green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageView
-            android:id="@+id/bChatUserStop"
-            android:layout_width="@dimen/b_chat_width"
-            android:layout_height="@dimen/b_chat_height"
-            android:src="@drawable/ic_stop_green"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
 
 
         <TextView
-            android:id="@+id/chatUserVoiceMessageTime"
+            android:id="@+id/chatUserFileMessageTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text = "7:30 PM"
@@ -91,6 +81,17 @@
             android:layout_marginEnd="@dimen/app_small_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/chatUserFilename"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/app_small_margin"
+            app:layout_constraintBottom_toTopOf="@id/chatUserFileMessageTime"
+            app:layout_constraintStart_toEndOf="@id/bChatUserDownload"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
