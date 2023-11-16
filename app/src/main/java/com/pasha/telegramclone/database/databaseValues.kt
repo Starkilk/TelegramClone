@@ -32,3 +32,5 @@ const val CHILD_TYPE = "type"
 const val CHILD_FROM = "from"
 const val CHILD_TIME_STAMP = "timeStamp"
 const val CHILD_FILE_URL = "fileUrl"
+
+const val NODE_MAIN_LIST = "main_list"

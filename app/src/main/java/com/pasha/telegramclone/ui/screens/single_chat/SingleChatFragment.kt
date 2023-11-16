@@ -35,6 +35,7 @@ import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.database.getCommonModel
 import com.pasha.telegramclone.database.getMessageKey
 import com.pasha.telegramclone.database.getUserModel
+import com.pasha.telegramclone.database.saveToMainList
 import com.pasha.telegramclone.database.sendMessage
 import com.pasha.telegramclone.database.uploadFileToStorage
 import com.pasha.telegramclone.ui.screens.message_recycler_view.views.AppViewFactory
@@ -43,6 +44,7 @@ import com.pasha.telegramclone.utilits.AppTextWatcher
 import com.pasha.telegramclone.utilits.AppVoiceRecorder
 import com.pasha.telegramclone.utilits.PICK_FILE_REQUEST_CODE
 import com.pasha.telegramclone.utilits.RECORD_AUDIO
+import com.pasha.telegramclone.utilits.TYPE_CHAT
 import com.pasha.telegramclone.utilits.TYPE_MESSAGE_FILE
 import com.pasha.telegramclone.utilits.TYPE_MESSAGE_IMAGE
 import com.pasha.telegramclone.utilits.TYPE_MESSAGE_VOICE
@@ -257,11 +259,15 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
                 contact.id,
                 TYPE_TEXT)
             {
+                saveToMainList(contact.id, TYPE_CHAT,)
+
                 binding.chatInputMessage.setText("")//чистим поле после отправки текста
             }
 
         }
     }
+
+
 
 
     //присвоили нашему toolbar(у) информацию о пользователе (Картинка, Имя, Статус)

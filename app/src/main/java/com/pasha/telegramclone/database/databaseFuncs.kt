@@ -215,13 +215,25 @@ fun getMessageKey(id: String): String {
 }
 
 //загружаем файл в хранилище
-fun uploadFileToStorage(uri: Uri, messageKey: String, receivedID: String, typeMessage: String, filename:String = "") {
+fun uploadFileToStorage(
+    uri: Uri,
+    messageKey: String,
+    receivedID: String,
+    typeMessage: String,
+    filename: String = ""
+) {
     val path = REF_STORAGE_ROOT.child(FOLDER_FILES).child(messageKey)//путь к файлам
 
     putFileToStorage(uri, path) {//отправили файл в хранилище
         //этот код запистится после отработки слушателя
         getUrlFromStorage(path) { ourUrl ->//получили файл из хранилища
-            sendMessageAsFile(receivedID, ourUrl, messageKey, typeMessage, filename)//отправляем файл
+            sendMessageAsFile(
+                receivedID,
+                ourUrl,
+                messageKey,
+                typeMessage,
+                filename
+            )//отправляем файл
         }
     }
 }
@@ -231,5 +243,27 @@ fun getFileFromStorage(mFile: File, fileUrl: String, function: () -> Unit) {
     val path = REF_STORAGE_ROOT.storage.getReferenceFromUrl(fileUrl)//путь к url файла
     path.getFile(mFile)//получаем url
         .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+//сохранение чата в БД - для того, чтобы отображать все чаты на главном фрагменте
+fun saveToMainList(id: String, type: String) {
+    val refUser = "$NODE_MAIN_LIST/$CURRENT_UID/$id"
+    val refReceived = "$NODE_MAIN_LIST/$id/$CURRENT_UID"
+
+    val mapUser = hashMapOf<String,Any>()
+    val mapReceived = hashMapOf<String,Any>()
+
+    mapUser[CHILD_ID] = id
+    mapUser[CHILD_TYPE] = type
+
+    mapReceived[CHILD_ID] = CURRENT_UID
+    mapReceived[CHILD_TYPE] = type
+
+    val commonMap = hashMapOf<String, Any>()
+    commonMap[refUser] = mapUser
+    commonMap[refReceived] = mapReceived
+
+    REF_DATABASE_ROOT.updateChildren(commonMap)
         .addOnFailureListener { showToast(it.message.toString()) }
 }
