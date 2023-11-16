@@ -22,6 +22,11 @@ class AppHolderFactory {
                     HolderVoiceMessage(view)
                 }
 
+                MessageView.MESSAGE_FILE-> {//разметка item_file
+                    val view = LayoutInflater.from(parent.context).inflate(R.layout.message_item_file, parent, false)
+                    HolderFileMessage(view)
+                }
+
                 else->{//разметка item_text
                     val view = LayoutInflater.from(parent.context).inflate(R.layout.message_item_text, parent, false)
                     HolderTextMessage(view)

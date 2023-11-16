@@ -6,4 +6,5 @@ interface MessageHolder {
     fun drawMessage(view:MessageView)
     fun onAttach(view: MessageView)//срабатывает, когда holder ПОВЛЯЕТСЯ в поле зрения пользователя
     fun onDetach()//срабатывает, когда holder ПРОПАДАЕТ из поля зрения пользоватеоя
+
 }

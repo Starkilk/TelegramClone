@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 
 const val READ_CONTACTS = Manifest.permission.READ_CONTACTS//разрешение на доступ к контактам пользователя
 const val RECORD_AUDIO = Manifest.permission.RECORD_AUDIO//разрешение на запись звука с микрофона
+const val WRITE_FILES = Manifest.permission.WRITE_EXTERNAL_STORAGE//разрешение на счачивание файлов из приложения
 const val PERMISSION_REQUEST = 200
 
 

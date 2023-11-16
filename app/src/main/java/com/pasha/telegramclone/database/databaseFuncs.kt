@@ -179,7 +179,8 @@ fun sendMessageAsFile(
     receivingUserId: String,
     fileUrl: String,
     messageKey: String,
-    typeMessage: String
+    typeMessage: String,
+    filename: String
 ) {
     val refDialogUser =
         "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"//путь: сообщения->наш id->id собеседника
@@ -194,6 +195,7 @@ fun sendMessageAsFile(
     mapMessage[CHILD_TIME_STAMP] =
         ServerValue.TIMESTAMP//время отправки сообщения(время берём с самого сервера)
     mapMessage[CHILD_FILE_URL] = fileUrl
+    mapMessage[CHILD_TEXT] = filename
 
     //мапа, где ключ - это путь, а значение - само сообщение(тоже мапа, реализованная выше)
     val mapDialog = hashMapOf<String, Any>()
@@ -213,13 +215,13 @@ fun getMessageKey(id: String): String {
 }
 
 //загружаем файл в хранилище
-fun uploadFileToStorage(uri: Uri, messageKey: String, receivedID: String, typeMessage: String) {
+fun uploadFileToStorage(uri: Uri, messageKey: String, receivedID: String, typeMessage: String, filename:String = "") {
     val path = REF_STORAGE_ROOT.child(FOLDER_FILES).child(messageKey)//путь к файлам
 
     putFileToStorage(uri, path) {//отправили файл в хранилище
         //этот код запистится после отработки слушателя
         getUrlFromStorage(path) { ourUrl ->//получили файл из хранилища
-            sendMessageAsFile(receivedID, ourUrl, messageKey, typeMessage)//отправляем файл
+            sendMessageAsFile(receivedID, ourUrl, messageKey, typeMessage, filename)//отправляем файл
         }
     }
 }

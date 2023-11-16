@@ -1,7 +1,6 @@
 package com.pasha.telegramclone.ui.screens.single_chat
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -48,6 +47,7 @@ import com.pasha.telegramclone.utilits.TYPE_MESSAGE_FILE
 import com.pasha.telegramclone.utilits.TYPE_MESSAGE_IMAGE
 import com.pasha.telegramclone.utilits.TYPE_MESSAGE_VOICE
 import com.pasha.telegramclone.utilits.checkPermissions
+import com.pasha.telegramclone.utilits.getFilenameFromUri
 import com.pasha.telegramclone.utilits.showToast
 import com.theartofdev.edmodo.cropper.CropImage
 import de.hdodenhof.circleimageview.CircleImageView
@@ -293,7 +293,8 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
                 PICK_FILE_REQUEST_CODE ->{
                     val uri = data.data
                     val messageKey = getMessageKey(contact.id)//получаем уникальный ключ сообщения
-                    uri?.let { uploadFileToStorage(it,messageKey,contact.id, TYPE_MESSAGE_FILE) }//скачали файл в БД с хранилища
+                    val filename = getFilenameFromUri(uri!!)//получаем название файла по uri
+                    uploadFileToStorage(uri,messageKey,contact.id, TYPE_MESSAGE_FILE,filename) //скачали файл в БД с хранилища
                     mSmoothScrollToPosition = true
                 }
             }
