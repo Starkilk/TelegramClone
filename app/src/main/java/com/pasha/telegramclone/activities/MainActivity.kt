@@ -8,7 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.pasha.telegramclone.databinding.ActivityMainBinding
-import com.pasha.telegramclone.ui.screens.MainFragment
+
 import com.pasha.telegramclone.ui.screens.register.EnterPhoneNumberFragment
 import com.pasha.telegramclone.ui.objects.AppDrawer
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
@@ -18,6 +18,7 @@ import com.pasha.telegramclone.utilits.READ_CONTACTS
 import com.pasha.telegramclone.utilits.initContacts
 import com.pasha.telegramclone.database.initFirebase
 import com.pasha.telegramclone.database.initUser
+import com.pasha.telegramclone.ui.screens.main_list.MainListFragment
 import com.pasha.telegramclone.utilits.replaceFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         if(AUTH.currentUser != null){
             //если АВТОРИЗОВАН
             mAppDrawer.create()//вызвали методы, которы находятся в нашем классе AppDrawer
-            replaceFragment(MainFragment(),false)//при запускек активити - открыть фрагмент с чатами
+            replaceFragment(MainListFragment(),false)//при запускек активити - открыть фрагмент с чатами
         }else{
             //если НЕ АВТОРИЗОВАН
             replaceFragment(EnterPhoneNumberFragment(), false)
