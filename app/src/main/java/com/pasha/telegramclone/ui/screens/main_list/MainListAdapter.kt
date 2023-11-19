@@ -12,7 +12,7 @@ import com.pasha.telegramclone.utilits.downloadAndSetImage
 import de.hdodenhof.circleimageview.CircleImageView
 
 
-class MaimListAdapter:RecyclerView.Adapter<MaimListAdapter.MainListHolder>() {
+class MainListAdapter:RecyclerView.Adapter<MainListAdapter.MainListHolder>() {
 
     private var listItems = mutableListOf<CommonModel>()
 
