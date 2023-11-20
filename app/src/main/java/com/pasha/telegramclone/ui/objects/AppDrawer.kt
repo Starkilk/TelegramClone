@@ -18,7 +18,7 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.pasha.telegramclone.R
 import com.pasha.telegramclone.ui.screens.ContactsFragment
-import com.pasha.telegramclone.ui.screens.SettingsFragment
+import com.pasha.telegramclone.ui.screens.settings.SettingsFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.utilits.downloadAndSetImage

@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.screens
+package com.pasha.telegramclone.ui.screens.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import com.pasha.telegramclone.database.REF_DATABASE_ROOT
 import com.pasha.telegramclone.database.CURRENT_UID
 import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.database.updateCurrentUsername
+import com.pasha.telegramclone.ui.screens.BaseChangeFragment
 import com.pasha.telegramclone.utilits.showToast
 import java.util.Locale
 

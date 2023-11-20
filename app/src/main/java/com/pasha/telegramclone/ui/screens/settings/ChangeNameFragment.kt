@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.screens
+package com.pasha.telegramclone.ui.screens.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentChangeNameBinding
 import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.database.setNameToDatabase
+import com.pasha.telegramclone.ui.screens.BaseChangeFragment
 import com.pasha.telegramclone.utilits.showToast
 
 
