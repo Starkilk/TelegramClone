@@ -66,7 +66,13 @@ class MainListFragment : Fragment() {
                     //обращаемся к ноде с сообщениями по ID и берём оттуда последний элемент(ТОЕСТЬ ПОСЛЕДНЕЕ СООБЩЕНИЕ)
                     mRefMessages.child(model.id).limitToFirst(1).addListenerForSingleValueEvent(AppValueEventListener{ dataSnapshot2 ->
                         val tempList = dataSnapshot2.children.map { it.getCommonModel() }//помещаем последнее сообщение в список
-                        newModel.lastMessage = tempList[0].text//помещаем последнее сообщение в модель
+
+                        if(tempList.isEmpty()){
+                            newModel.lastMessage = "Chat clear"
+                        }else{
+                            newModel.lastMessage = tempList[0].text//помещаем последнее сообщение в модель
+                        }
+
                         if(newModel.fullname.isEmpty()){//если нет имени пользователя
                             newModel.fullname = newModel.phone
                         }

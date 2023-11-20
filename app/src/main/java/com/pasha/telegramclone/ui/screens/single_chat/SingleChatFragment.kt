@@ -35,6 +35,8 @@ import com.pasha.telegramclone.database.NODE_MESSAGES
 import com.pasha.telegramclone.database.NODE_USERS
 import com.pasha.telegramclone.database.REF_DATABASE_ROOT
 import com.pasha.telegramclone.database.TYPE_TEXT
+import com.pasha.telegramclone.database.clearChat
+import com.pasha.telegramclone.database.deleteChat
 import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.database.getCommonModel
 import com.pasha.telegramclone.database.getMessageKey
@@ -42,6 +44,7 @@ import com.pasha.telegramclone.database.getUserModel
 import com.pasha.telegramclone.database.saveToMainList
 import com.pasha.telegramclone.database.sendMessage
 import com.pasha.telegramclone.database.uploadFileToStorage
+import com.pasha.telegramclone.ui.screens.main_list.MainListFragment
 import com.pasha.telegramclone.ui.screens.message_recycler_view.views.AppViewFactory
 import com.pasha.telegramclone.ui.screens.settings.ChangeNameFragment
 import com.pasha.telegramclone.utilits.AppChildEventListener
@@ -326,10 +329,19 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     //функция для действий при нажатии на пункты иеню на тулбаре настроек
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){//слошаем что нажал юзер
-
+            R.id.menuClearChat -> clearChat(contact.id){//нажал очистить чат
+                showToast("Chat clear")
+                replaceFragment(MainListFragment())
+            }
+            R.id.menuDeleteChat -> deleteChat(contact.id){//нажал удалить чат
+                showToast("Chat deleted")
+                replaceFragment(MainListFragment())
+            }
         }
         return true
     }
+
+
 
 
     override fun onPause() {
