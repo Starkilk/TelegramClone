@@ -5,6 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.database.DatabaseReference
 import com.pasha.telegramclone.R
+import com.pasha.telegramclone.database.AUTH
 import com.pasha.telegramclone.databinding.FragmentSingleChatBinding
 import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.models.UserModel
@@ -39,7 +43,9 @@ import com.pasha.telegramclone.database.saveToMainList
 import com.pasha.telegramclone.database.sendMessage
 import com.pasha.telegramclone.database.uploadFileToStorage
 import com.pasha.telegramclone.ui.screens.message_recycler_view.views.AppViewFactory
+import com.pasha.telegramclone.ui.screens.settings.ChangeNameFragment
 import com.pasha.telegramclone.utilits.AppChildEventListener
+import com.pasha.telegramclone.utilits.AppStates
 import com.pasha.telegramclone.utilits.AppTextWatcher
 import com.pasha.telegramclone.utilits.AppVoiceRecorder
 import com.pasha.telegramclone.utilits.PICK_FILE_REQUEST_CODE
@@ -50,6 +56,8 @@ import com.pasha.telegramclone.utilits.TYPE_MESSAGE_IMAGE
 import com.pasha.telegramclone.utilits.TYPE_MESSAGE_VOICE
 import com.pasha.telegramclone.utilits.checkPermissions
 import com.pasha.telegramclone.utilits.getFilenameFromUri
+import com.pasha.telegramclone.utilits.replaceFragment
+import com.pasha.telegramclone.utilits.restartActivity
 import com.pasha.telegramclone.utilits.showToast
 import com.theartofdev.edmodo.cropper.CropImage
 import de.hdodenhof.circleimageview.CircleImageView
@@ -99,6 +107,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
+        setHasOptionsMenu(true)//разрешение МЕНЮ
         //экземпляр нашего выдвижного меню с выбором того, что оправить
         mBottomSheetBehavior = BottomSheetBehavior.from(binding.coordinator.findViewById<LinearLayout>(R.id.bottomSheetChoice))
         mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN//изначально меню скрыто
@@ -309,6 +318,18 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        activity?.menuInflater?.inflate(R.menu.single_chat_action_menu,menu)//определили меню на этом фрагменте
+    }
+
+    //функция для действий при нажатии на пункты иеню на тулбаре настроек
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){//слошаем что нажал юзер
+
+        }
+        return true
+    }
 
 
     override fun onPause() {

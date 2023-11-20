@@ -25,4 +25,6 @@
     <string name="settings_hint_input_username">username</string>
     <string name="settings_input_bio">bio</string>
     <string name="chat_enter_a_message">Enter a message</string>
+    <string name="clear_chat">Clear chat</string>
+    <string name="delete_chat">Delete chat</string>
 </resources>
