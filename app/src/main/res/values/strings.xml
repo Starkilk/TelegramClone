@@ -27,4 +27,5 @@
     <string name="chat_enter_a_message">Enter a message</string>
     <string name="clear_chat">Clear chat</string>
     <string name="delete_chat">Delete chat</string>
+    <string name="create_group">Create Group</string>
 </resources>

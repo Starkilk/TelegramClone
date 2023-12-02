@@ -17,12 +17,14 @@ import com.pasha.telegramclone.databinding.FragmentAddContactsBinding
 
 import com.pasha.telegramclone.databinding.FragmentMainListBinding
 import com.pasha.telegramclone.models.CommonModel
+import com.pasha.telegramclone.ui.screens.base.BaseFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
 import com.pasha.telegramclone.utilits.hideKeyboard
+import com.pasha.telegramclone.utilits.replaceFragment
 
 
-class AddContactsFragment : Fragment() {
+class AddContactsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAddContactsBinding
     private lateinit var mRecyclerView: RecyclerView
@@ -47,7 +49,10 @@ class AddContactsFragment : Fragment() {
         APP_ACTIVITY.mAppDrawer.enableDrawer()
         hideKeyboard()
         initRecyclerView()
-        binding.bAddContactsNext.setOnClickListener { listContacts.forEach { println(it.id) } }
+        binding.bAddContactsNext.setOnClickListener {
+            //переходим во фрагмент с дальнейшеё настройкой группы, передаёв на него выбранных участников
+            replaceFragment(CreateGroupFragment(listContacts))
+        }
     }
 
     private fun initRecyclerView() {
