@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.screens
+package com.pasha.telegramclone.ui.screens.contacts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +22,7 @@ import com.pasha.telegramclone.database.NODE_USERS
 import com.pasha.telegramclone.database.REF_DATABASE_ROOT
 import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.database.getCommonModel
+import com.pasha.telegramclone.ui.screens.base.BaseFragment
 import com.pasha.telegramclone.utilits.replaceFragment
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -63,7 +64,7 @@ private var mapListeners = hashMapOf<DatabaseReference, AppValueEventListener>()
             .setQuery(mRefContacts, CommonModel::class.java)//запрос на считываение из Firebase(путь, куда сохраняем)
             .build()
 
-        mAdapter = object :FirebaseRecyclerAdapter<CommonModel,ContactsHolder>(options){
+        mAdapter = object :FirebaseRecyclerAdapter<CommonModel, ContactsHolder>(options){
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsHolder {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.contact_item, parent, false)//надули разметку
                 return ContactsHolder(view)//передали разметку в Holder, там эта разметка заполнится инициализируется

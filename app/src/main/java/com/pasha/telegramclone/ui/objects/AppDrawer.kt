@@ -17,10 +17,11 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.pasha.telegramclone.R
-import com.pasha.telegramclone.ui.screens.ContactsFragment
+import com.pasha.telegramclone.ui.screens.contacts.ContactsFragment
 import com.pasha.telegramclone.ui.screens.settings.SettingsFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.database.USER
+import com.pasha.telegramclone.ui.screens.groups.AddContactsFragment
 import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.utilits.replaceFragment
 
@@ -142,8 +143,10 @@ class AppDrawer() {
     private fun clickToItem(position:Int){
         //дейстрие при нажатии на пункт по позиции
         when(position){
+            1-> replaceFragment(AddContactsFragment())
             6 -> replaceFragment(SettingsFragment())
             2 -> replaceFragment(ContactsFragment())
+
         }
     }
 

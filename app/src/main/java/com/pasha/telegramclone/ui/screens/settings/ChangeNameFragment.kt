@@ -8,7 +8,7 @@ import com.pasha.telegramclone.R
 import com.pasha.telegramclone.databinding.FragmentChangeNameBinding
 import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.database.setNameToDatabase
-import com.pasha.telegramclone.ui.screens.BaseChangeFragment
+import com.pasha.telegramclone.ui.screens.base.BaseChangeFragment
 import com.pasha.telegramclone.utilits.showToast
 
 

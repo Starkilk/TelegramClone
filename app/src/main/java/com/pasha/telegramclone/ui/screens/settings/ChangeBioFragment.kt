@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.pasha.telegramclone.databinding.FragmentChangeBioBinding
 import com.pasha.telegramclone.database.USER
 import com.pasha.telegramclone.database.setBioToDatabase
-import com.pasha.telegramclone.ui.screens.BaseChangeFragment
+import com.pasha.telegramclone.ui.screens.base.BaseChangeFragment
 
 
 class ChangeBioFragment : BaseChangeFragment() {

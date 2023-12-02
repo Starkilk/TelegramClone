@@ -1,4 +1,4 @@
-package com.pasha.telegramclone.ui.screens
+package com.pasha.telegramclone.ui.screens.base
 
 import androidx.fragment.app.Fragment
 import android.view.Menu

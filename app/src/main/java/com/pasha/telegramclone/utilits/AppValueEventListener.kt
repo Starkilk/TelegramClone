@@ -11,7 +11,7 @@ class AppValueEventListener(val onSucces:(DataSnapshot) ->Unit):ValueEventListen
     }
 
     override fun onCancelled(error: DatabaseError) {
-        TODO("Not yet implemented")
+
     }
 
 }

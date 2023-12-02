@@ -22,7 +22,7 @@ import com.pasha.telegramclone.utilits.downloadAndSetImage
 import com.pasha.telegramclone.database.getUrlFromStorage
 import com.pasha.telegramclone.database.putFileToStorage
 import com.pasha.telegramclone.database.putUrlToDatabase
-import com.pasha.telegramclone.ui.screens.BaseFragment
+import com.pasha.telegramclone.ui.screens.base.BaseFragment
 import com.pasha.telegramclone.utilits.replaceFragment
 import com.pasha.telegramclone.utilits.restartActivity
 import com.pasha.telegramclone.utilits.showToast

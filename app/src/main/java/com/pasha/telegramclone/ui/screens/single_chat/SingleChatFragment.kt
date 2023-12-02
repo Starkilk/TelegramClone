@@ -23,11 +23,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.database.DatabaseReference
 import com.pasha.telegramclone.R
-import com.pasha.telegramclone.database.AUTH
 import com.pasha.telegramclone.databinding.FragmentSingleChatBinding
 import com.pasha.telegramclone.models.CommonModel
 import com.pasha.telegramclone.models.UserModel
-import com.pasha.telegramclone.ui.screens.BaseFragment
+import com.pasha.telegramclone.ui.screens.base.BaseFragment
 import com.pasha.telegramclone.utilits.APP_ACTIVITY
 import com.pasha.telegramclone.utilits.AppValueEventListener
 import com.pasha.telegramclone.database.CURRENT_UID
@@ -46,9 +45,7 @@ import com.pasha.telegramclone.database.sendMessage
 import com.pasha.telegramclone.database.uploadFileToStorage
 import com.pasha.telegramclone.ui.screens.main_list.MainListFragment
 import com.pasha.telegramclone.ui.screens.message_recycler_view.views.AppViewFactory
-import com.pasha.telegramclone.ui.screens.settings.ChangeNameFragment
 import com.pasha.telegramclone.utilits.AppChildEventListener
-import com.pasha.telegramclone.utilits.AppStates
 import com.pasha.telegramclone.utilits.AppTextWatcher
 import com.pasha.telegramclone.utilits.AppVoiceRecorder
 import com.pasha.telegramclone.utilits.PICK_FILE_REQUEST_CODE
@@ -60,7 +57,6 @@ import com.pasha.telegramclone.utilits.TYPE_MESSAGE_VOICE
 import com.pasha.telegramclone.utilits.checkPermissions
 import com.pasha.telegramclone.utilits.getFilenameFromUri
 import com.pasha.telegramclone.utilits.replaceFragment
-import com.pasha.telegramclone.utilits.restartActivity
 import com.pasha.telegramclone.utilits.showToast
 import com.theartofdev.edmodo.cropper.CropImage
 import de.hdodenhof.circleimageview.CircleImageView
